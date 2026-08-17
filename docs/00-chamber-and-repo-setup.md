@@ -248,6 +248,7 @@ matching reality, fix `pe-env.sh` and update this table in the same commit.
 | Verisium Debug | `verisiumdebug/2403/24.03.001` | `/apps/VDEBUG2403/24.03.001/tools/bin/verisium` |
 | Pegasus (DRC/LVS) | `pegasus/232/23.24.000` | `/apps/PEGASUS232/23.24.000/bin/pegasus` |
 | Tempus (signoff STA) | `ssv/251/25.12.000` | `/apps/SSV251/25.12.000/bin/tempus` |
+| Assura (DRC/LVS) | `assura/41/618/04.17.001` | `/apps/ASSURA41/04.17.001-618/tools/bin/assura` |
 
 Genus and Innovus are deliberately pinned to the **same 21.18 release family**
 because they share database format within a family. The catalog default
@@ -264,11 +265,19 @@ digital kit is `gsclib045`, a separate IP library underneath it:
 ├── lef/gsclib045_macro.lef               cell abstracts for place and route
 ├── verilog/slow_vdd1v0_basicCells.v      behavioural models -> gate-level sim
 ├── cdl/gsclib045.cdl                     transistor netlist -> LVS
-└── gds/                                  cell layout -> GDS streamout
+└── gds/gsclib045.gds                     cell layout -> GDS streamout
 ```
 
 Stream-out layer map: `/process/hosted/gpdk/gpdk045/oa/v6p0/soce/streamOut.map`
 
-Physical verification rule decks ship for **Assura** and **Diva**
-(`/process/hosted/gpdk/gpdk045/oa/v6p0/{assura,diva}/`). There is no Pegasus
-deck for this kit, which shapes what week 10 does, see that handout.
+Physical verification uses **Assura**, which is installed and resolves. gsclib045
+ships Assura and Diva decks at `/process/hosted/gpdk/gpdk045/oa/v6p0/{assura,diva}/`
+(`assuraDRC.rul`, `extract.rul`, `compare.rul`). There is no Pegasus deck for
+this kit, so steps 09 and 10 are Assura even though `pegasus` is also installed.
+
+Python: `/bin/python` is 2.7.5. Python 3.6.0 is at `/grid/common/bin/python3`
+and is not on the default PATH. Step 01 invokes it through `$PE_PYTHON`.
+
+Sky130 is also on the chamber under `/process/hosted/skywater/`. The program
+does not use it. Lambda has proven Sky130 signoffs through the open-source flow,
+so it stays available as a fallback if something goes wrong with gsclib045.

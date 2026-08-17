@@ -44,6 +44,7 @@ fi
 : "${VERISIUM_MODULE:=verisiumdebug/2403/24.03.001}"  # -> /apps/VDEBUG2403/24.03.001/tools/bin/verisium
 : "${PEGASUS_MODULE:=pegasus/232/23.24.000}"      # -> /apps/PEGASUS232/23.24.000/bin/pegasus
 : "${SSV_MODULE:=ssv/251/25.12.000}"              # -> /apps/SSV251/25.12.000/bin/tempus
+: "${ASSURA_MODULE:=assura/41/618/04.17.001}"     # -> /apps/ASSURA41/04.17.001-618/tools/bin/assura
 
 # ---- PDK: gsclib045 -------------------------------------------------------
 # GPDK045 itself is analog only and ships no digital standard cells. The
@@ -67,8 +68,23 @@ fi
 # Transistor-level netlist of the standard cells. Step 10 compares against it.
 : "${STDCELL_CDL:=$GSCLIB/cdl/gsclib045.cdl}"
 
+# Cell layout, merged into your GDS at streamOut so the result is a complete
+# layout rather than a frame full of references to cells that are not in it.
+: "${STDCELL_GDS:=$GSCLIB/gds/gsclib045.gds}"
+
 # GDS layer-number map for streamOut.
 : "${STREAM_MAP:=/process/hosted/gpdk/gpdk045/oa/v6p0/soce/streamOut.map}"
+
+# Assura rule decks for steps 09 and 10. These live under the gpdk045 OA tree,
+# not under gsclib045.
+: "${ASSURA_DIR:=/process/hosted/gpdk/gpdk045/oa/v6p0/assura}"
+: "${ASSURA_DRC_RUL:=$ASSURA_DIR/assuraDRC.rul}"
+: "${ASSURA_EXT_RUL:=$ASSURA_DIR/extract.rul}"
+: "${ASSURA_CMP_RUL:=$ASSURA_DIR/compare.rul}"
+
+# Python 3.6.0 lives here and is not on the default PATH. /bin/python is 2.7.5,
+# so the golden-model generator in step 01 must be invoked through this.
+: "${PE_PYTHON:=/grid/common/bin/python3}"
 
 # ---- Bootstrap module() in non-interactive bash ---------------------------
 # The chamber logs you into csh and defines `module` as a csh function, which
@@ -94,7 +110,9 @@ if [[ ! -w "$PE_WORK" ]]; then
 fi
 
 export PE_ROOT PE_WORK PE_LOGS PE_FAST
-export GSCLIB LIB_SS LIB_FF LEF_TECH LEF_MACRO STDCELL_V STDCELL_CDL STREAM_MAP
+export GSCLIB LIB_SS LIB_FF LEF_TECH LEF_MACRO STDCELL_V STDCELL_CDL
+export STDCELL_GDS STREAM_MAP ASSURA_DIR ASSURA_DRC_RUL ASSURA_EXT_RUL ASSURA_CMP_RUL
+export PE_PYTHON
 
 # ---- pe_require_tool <MODULE_SPEC> <binary> -------------------------------
 # Load a module and verify the binary actually lands on PATH.
