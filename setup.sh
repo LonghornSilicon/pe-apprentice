@@ -3,7 +3,7 @@
 #   % bash
 #   % qsh -q normal.q -now n -V
 #   % bash
-#   % source ~/longhorn-apprentice/pe-apprentice/tools/setup.sh
+#   % source ~/pe-apprentice/tools/setup.sh
 
 if ! type module >/dev/null 2>&1; then
   [ -f "${MODULESHOME}/init/bash" ] && . "${MODULESHOME}/init/bash"

@@ -1,61 +1,54 @@
 # pe-apprentice
 
-Longhorn Silicon apprentice program. One processing element, specification to
-GDS, on the Cadence chamber, in ten weeks.
+You write one processing element and take it all the way to a GDS: a real chip
+layout, on the same Cadence tools the Lambda team uses.
 
-You write one PE, a single cell of the systolic array inside Lambda's matmul
-engine, then push it through every stage of an ASIC flow yourself.
+## Where things are
 
-## The flow
+**All Verilog lives in `rtl/`.** The only file you write is `rtl/pe.sv`.
 
-Ten steps, numbered to match Cornell ECE 6745 labs 6 and 7, with this chamber's
-Cadence tools in place of their Synopsys and Mentor ones.
+```
+rtl/
+  pe.sv                 <-- YOU WRITE THIS, in week 3
+  fxp.sv                given: fixed-point add and multiply
+  pe_smoke_tb.sv        given: the week 3 test
+  pe_vendor_drop.sv     given: a PE someone else wrote, for week 5
+  pe_array_2x2.sv       given: four of your PEs in a grid, for weeks 9 and 10
+```
 
-| Step | Tool | What it does | Week |
+**One folder per week.** Each has a `README.md` that is that week's lab handout.
+Do them in order.
+
+| Folder | Week | What you do | Tool |
 |---|---|---|---|
-| `01-golden-model` | python3 | Computes what the PE should output | 5 |
-| `02-xcelium-rtlsim` | Xcelium | Simulates your RTL | 3, 5 |
-| `03-genus-synth` | Genus | RTL to a netlist of standard cells | 7 |
-| `04-xcelium-ffglsim` | Xcelium | Simulates the netlist | 7 |
-| `05-innovus-pnr` | Innovus | Netlist to a layout | 9 |
-| `06-tempus-sta` | Tempus | Timing with the wires that got built | 10 |
-| `07-xcelium-baglsim` | Xcelium | Simulates with wire delays | optional |
-| `08-voltus-pwr` | Voltus | Power from switching activity | optional |
-| `09-drc` | Assura | Is the layout manufacturable | 10 |
-| `10-lvs` | Assura | Is the layout the circuit you drew | 10 |
+| `week01-overview/` | 1 | Read about the whole chip design flow | none |
+| `week02-spec/` | 2 | Write the PE's specification and timing diagrams | none |
+| `week03-rtl/` | 3 | **Write `rtl/pe.sv`** and simulate it | Xcelium |
+| `week04-test-plan/` | 4 | Plan how to break it | none |
+| `week05-verification/` | 5 | Build the testbench, hunt bugs | Xcelium |
+| `week06-timing/` | 6 | Learn timing, predict your slow path | none |
+| `week07-synthesis/` | 7 | Turn your RTL into gates | Genus |
+| `week08-floorplan/` | 8 | Plan the physical layout | none |
+| `week09-pnr/` | 9 | Place and route it | Innovus |
+| `week10-signoff/` | 10 | Timing, DRC, LVS | Tempus, Assura |
+| `week11-demo/` | 11 | Present it | none |
 
-Each step directory holds a `README.md` with the exact commands for that step.
-Start there, not here.
+Weeks with no tool are reading and paper. Weeks with a tool are hands on the
+chamber. They alternate on purpose: you learn the idea, then you do it.
 
-Every step follows the same shape: run the tool by hand first, one command at a
-time, then save what worked into a `run` script. You write those scripts
-yourself as you go.
+## First thing
 
-You work inside the step directory and its output stays there. Step 04 reads
-`../03-genus-synth/post-synth.v`. That is the whole dependency model.
+Read `SETUP.md` and get the chamber working. Do that before week 2.
 
-## Start here
+## How each tool week works
 
-1. `docs/00-chamber-and-repo-setup.md`
-2. `docs/longhorn-silicon-apprentice-program.md`
-3. Your week's handout in `docs/`, which points you at the step to work through
+Same shape every time, borrowed from Cornell ECE 6745:
 
-## Files
+1. Run the tool by hand, one command at a time, and look at what happens.
+2. Once it works, save the commands into a `run` script in that week's folder.
+3. From then on, `./run` repeats it.
 
-| Path | What |
-|---|---|
-| `rtl/pe.sv` | Yours. Ports and MAC given, you write the three always blocks. |
-| `rtl/fxp.sv` | Given. Q8.8 add and multiply. |
-| `rtl/pe_array_2x2.sv` | Given. Four of your PEs in a grid, for weeks 9 and 10. |
-| `vendor/pe_vendor_drop.sv` | A PE someone else wrote. Week 5. |
-| `tools/setup.sh` | Source once per session. Loads tools, sets PDK paths. |
+You build those scripts yourself. Nothing is handed to you finished.
 
-## Technology
-
-gsclib045, the Cadence generic 45 nm standard-cell library on the chamber.
-Lambda tapes out on TSMC N16FFC, which is under NDA and not on this chamber.
-
-## For leads
-
-Answer keys, the reference PE, and the defect list are in the private
-`pe-apprentice-staff` repository.
+Each week works inside its own folder. Week 9 reads
+`../week07-synthesis/post-synth.v`. That is the whole dependency model.
