@@ -114,32 +114,21 @@ bundle:
 
 ---
 
-## 3. Install the tooling
+## 3. Load the tools
 
 ```
-% bash ~/longhorn-apprentice/pe-apprentice/tools/install.sh
+% source ~/longhorn-apprentice/pe-apprentice/tools/setup.sh
 ```
 
-This symlinks the helper scripts into `~/bin/`, creates your run area at
-`~/work/pe/`, and runs `chamber-diagnose`. It is idempotent; re-run it any time.
-
-### Where things live, and why it matters
-
-| | Path | Written by | Survives? |
-|---|---|---|---|
-| Source | `~/longhorn-apprentice/pe-apprentice` | you | it is git; treat it as the truth |
-| Runs | `~/work/pe` | tools | not in git, never cleaned by git |
-| Scratch | `/tmp/$USER-pe` | tools, as fallback | wiped on reboot |
-
-Tool output goes **outside** the repo on purpose. A `git checkout` can never
-destroy a run, and a run can never dirty your `git status`. Do not fight this by
-running tools from inside the repo.
+This loads the tool modules and sets the PDK paths. It prints where each tool
+resolved to. Source it once per session, every session, after you get onto a
+compute node.
 
 ### Disk is tight
 
 Home directories are **20 GB**, on NFS, and that is the only persistent
 writable space you have. An Innovus place-and-route run directory is easily
-1–3 GB. Four or five runs will fill your account, and a full home fails in
+1 to 3 GB. Four or five runs will fill your account, and a full home fails in
 confusing ways rather than with a clean "disk full."
 
 Check yours before week 8, and check it again during weeks 9 and 10:
@@ -148,57 +137,63 @@ Check yours before week 8, and check it again during weeks 9 and 10:
 % df -h ~
 ```
 
-Each step directory keeps every run so you can compare a broken run against the
-last good one, which is useful and is also what fills your disk. Delete old run directories you have finished with:
-
-```
-% ls -lt ~/work/pe/05-innovus-pnr/          # oldest at the bottom
-% rm -rf ~/work/pe/05-innovus-pnr/20260901-141233
-```
+Tool output lands in the step directory you are working in. Innovus in
+particular leaves several GB behind. Clean it out when you finish a step.
 
 ---
 
 ## 4. Checks that must pass before week 2
 
-Two checks. Do not skip the second one: it is the only thing that proves the
-license problem in §0 has actually been cleared for your account, and finding
-that out now instead of in week 7 is the entire reason this section exists.
+Three checks. Do not skip the third: it is the only thing that proves the
+license problem in section 0 has been cleared for your account, and finding that
+out now instead of in week 7 is why this section exists.
 
-### 4a. Environment
+### 4a. Tools resolve
 
 ```
-% chamber-diagnose
+% source ~/longhorn-apprentice/pe-apprentice/tools/setup.sh
 ```
 
-Every line should read `[OK]`. If anything reads `[FAIL]`, the output tells you
-what to do about it. The two common ones are `$DISPLAY` unset (fix it at the
-ETX/X11 layer) and a tool not resolving (get a fresh compute shell with
-`qsh -q normal.q -now n -V`, the compute farm is not uniform and a different
-node will usually have it).
+Every line it prints should show a path. If any says `MISSING`, get a fresh
+compute shell with `qsh -q normal.q -now n -V` and try again. The compute farm
+is not uniform and a different node will usually have it. If it still says
+`MISSING`, get a lead.
 
 ### 4b. Simulator
 
 ```
+% cd ~/longhorn-apprentice/pe-apprentice/02-xcelium-rtlsim
+% xrun -sv ../rtl/fxp.sv ../rtl/pe.sv pe_smoke_tb.sv
+```
+
+This runs the smoke testbench against the empty `rtl/pe.sv` stub, so **it is
+supposed to fail its checks.** You have not written the PE yet. What matters is
+that Xcelium starts, compiles, and prints a test report. If you see the report,
+your simulator works.
+
+### 4c. Synthesis, and the license
+
+```
 % cd ~/longhorn-apprentice/pe-apprentice
-% ./02-xcelium-rtlsim/run
+% echo 'module smoke(input logic a, b, output logic y); assign y = a & b; endmodule' > /tmp/smoke.sv
+% genus -no_gui -files /dev/stdin <<EOF
+set_db library \$env(LIB_SS)
+read_hdl -sv /tmp/smoke.sv
+elaborate smoke
+syn_generic
+syn_map
+report_area
+exit
+EOF
 ```
 
-This compiles the provided smoke testbench against the empty `rtl/pe.sv` stub.
-**It is supposed to FAIL its checks**, you have not written the PE yet. What
-matters is that Xcelium starts, compiles, runs, and prints a result. If you see
-the test report at all, your simulator works.
+You should get a small area report. The number does not matter; the tool
+starting and finding the library does.
 
-### 4c. Synthesis and the license check
+If it dies with a **license** error, stop and send a lead the exact message.
+That is the problem in section 0 and it needs an admin, not you.
 
-```
-% ./03-genus-synth/run
-```
-
-Genus will synthesize the stub. As with 4b, the result does not matter; the
-tool starting does. If it dies with a **license** error, stop and report it to a
-lead with the exact message, that is §0, and it needs an admin to fix, not you.
-
-If all three of these behave, you are set up. Go to week 1.
+If all three behave, you are set up. Go to week 1.
 
 ---
 
@@ -221,16 +216,15 @@ For code and tool output, package your commits as a bundle:
 
 Then transfer `<your-username>-weekN.bundle` off the chamber. Each week's
 handout tells you exactly which files to add, nothing more. Do not commit run
-output; that is what `$PE_WORK` is for.
+output.
 
 ---
 
 ## Verified chamber state
 
 Everything below was confirmed live on compute node `ip-10-2-6-219` on
-**2026-08-16**. `tools/lib/pe-env.sh` is the single place these are written
-down, do not hardcode any of them anywhere else. If something here stops
-matching reality, fix `pe-env.sh` and update this table in the same commit.
+**2026-08-16**. `tools/setup.sh` is the single place these are written down, do not hardcode any of them anywhere else. If something here stops
+matching reality, fix `tools/setup.sh` and update this table in the same commit.
 
 | | |
 |---|---|

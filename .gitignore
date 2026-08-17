@@ -1,20 +1,26 @@
-# Tool output must never land in the repo. The run scripts send everything to
-# $PE_WORK (~/work/pe). These patterns are a backstop for the times someone
-# runs a tool by hand from inside the tree.
-*.log
-*.shm/
+# Tool output lands in the step directory you are working in.
 xcelium.d/
+*.shm/
+xrun.log
 xrun.history
 xrun.key
 INCA_libs/
-genus.cmd*
 genus.log*
-innovus.cmd*
+genus.cmd*
 innovus.log*
+innovus.cmd*
+fv/
+post-synth.v
+post-synth.sdc
+post-pnr.v
+post-pnr.sdc
+post-pnr.spef
+post-pnr.sdf
+*.gds
+*.rpt
+*.saif
 .simvision/
-reports/
-outputs/
-work/
-*.vcd
 *.diag
+__pycache__/
+*.pyc
 .DS_Store
