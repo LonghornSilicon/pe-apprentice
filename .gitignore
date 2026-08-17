@@ -1,0 +1,20 @@
+# Tool output must never land in the repo. The run scripts send everything to
+# $PE_WORK (~/work/pe). These patterns are a backstop for the times someone
+# runs a tool by hand from inside the tree.
+*.log
+*.shm/
+xcelium.d/
+xrun.history
+xrun.key
+INCA_libs/
+genus.cmd*
+genus.log*
+innovus.cmd*
+innovus.log*
+.simvision/
+reports/
+outputs/
+work/
+*.vcd
+*.diag
+.DS_Store

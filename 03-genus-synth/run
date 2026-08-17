@@ -1,0 +1,51 @@
+#!/usr/bin/env bash
+# ============================================================================
+# 03-genus-synth/run — synthesize your PE against gsclib045.
+# ----------------------------------------------------------------------------
+# Week 7.  ./03-genus-synth/run          headless, uses run.tcl
+#          ./03-genus-synth/run --shell  interactive Genus REPL (do this FIRST)
+#
+# Outputs: $PE_WORK/03-genus-synth/<run-id>/{reports,outputs}/
+# ============================================================================
+set -euo pipefail
+HERE="$(cd -P "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+# shellcheck source=../tools/lib/pe-env.sh
+source "$HERE/../tools/lib/pe-env.sh"
+
+pe_require_tool "$GENUS_MODULE" genus || exit 1
+
+for f in "$LIB_SS" "$LIB_FF"; do
+    [[ -r "$f" ]] || { echo "ERROR: cannot read Liberty file: $f" >&2
+                       echo "       (check GSCLIB in tools/lib/pe-env.sh)" >&2; exit 1; }
+done
+
+RUN="$(pe_rundir 03-genus-synth)" || exit 1
+cp "$HERE/constraints.sdc" "$RUN/"
+echo "Genus ($GENUS_MODULE), Common UI"
+echo "  run dir: $RUN"
+echo "  library: $LIB_SS"
+echo ""
+cd "$RUN"
+
+if [[ "${1:-}" == "--shell" ]]; then
+    # Interactive. Source run.tcl by hand a stage at a time:
+    #   genus:/> source $PE_ROOT/03-genus-synth/run.tcl
+    # or paste the commands one by one, which is what week 7 asks you to do.
+    exec genus -no_gui -log genus.log
+fi
+
+rc=0
+genus -no_gui -files "$HERE/run.tcl" -log genus 2>&1 | tee genus.console.log || rc=${PIPESTATUS[0]}
+pe_finish "$RUN" "$rc"
+
+echo ""
+if [[ "$rc" == "0" ]]; then
+    echo "PASS. Now go read, in this order:"
+    echo "   $RUN/reports/qor.rpt"
+    echo "   $RUN/reports/timing_setup.rpt   <- find the WNS line"
+    echo "Compare the critical path you see there against the one you"
+    echo "predicted in week 6. If they differ, that difference is your writeup."
+else
+    echo "FAIL (rc=$rc) — read $RUN/genus.log"
+fi
+exit "$rc"
