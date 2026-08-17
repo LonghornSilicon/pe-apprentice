@@ -1,0 +1,40 @@
+#!/usr/bin/env bash
+# ============================================================================
+# 01-golden-model/run  --  generate the test vectors your scoreboard checks.
+# Week 5.
+# ============================================================================
+set -euo pipefail
+HERE="$(cd -P "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+# shellcheck source=../tools/lib/pe-env.sh
+source "$HERE/../tools/lib/pe-env.sh"
+
+# /bin/python on this chamber is 2.7. Python 3 is installed but is not on the
+# default PATH, so it gets invoked by full path.
+if [[ ! -x "$PE_PYTHON" ]]; then
+    echo "ERROR: no python3 at $PE_PYTHON" >&2
+    echo "       set PE_PYTHON in ~/.longhorn/pe.env to wherever python3 lives" >&2
+    exit 1
+fi
+
+RUN="$(pe_rundir 01-golden-model)" || exit 1
+echo "$("$PE_PYTHON" -V 2>&1)  ($PE_PYTHON)"
+echo "  run dir: $RUN"
+echo ""
+cd "$RUN"
+
+rc=0
+"$PE_PYTHON" "$HERE/gen_pe_vectors.py" || rc=$?
+pe_finish "$RUN" "$rc"
+
+if [[ "$rc" == "0" ]]; then
+    echo ""
+    echo "PASS. Vectors at $RUN/pe_vectors.txt"
+    echo "Step 02 reads them from 01-golden-model/latest/."
+    # Stable path for step 02 to consume, independent of run-id.
+    ln -sfn "$RUN/pe_vectors.txt" "$PE_WORK/01-golden-model/pe_vectors.txt" 2>/dev/null || true
+else
+    echo ""
+    echo "FAIL (rc=$rc). If this is a NotImplementedError, that is expected"
+    echo "until you fill in the TODO blocks in 01-golden-model/gen_pe_vectors.py"
+fi
+exit "$rc"

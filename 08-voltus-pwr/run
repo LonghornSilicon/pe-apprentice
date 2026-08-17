@@ -1,0 +1,16 @@
+#!/usr/bin/env bash
+# 08-voltus-pwr/run  --  Voltus, power analysis from switching activity. Not written yet.
+set -euo pipefail
+cat >&2 <<'MSG'
+This step is not implemented yet.
+
+  step   : 08-voltus-pwr
+  tool   : Voltus
+  does   : power analysis from switching activity
+  used in: stretch
+  status : license not yet confirmed
+
+This is a gap in the repo, not a mistake on your end. Tell a lead which step
+you hit and they will tell you where it stands.
+MSG
+exit 1

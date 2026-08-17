@@ -1,0 +1,66 @@
+#!/usr/bin/env bash
+# ============================================================================
+# 04-xcelium-ffglsim/run  --  simulate the SYNTHESIZED NETLIST, not the RTL.
+# ----------------------------------------------------------------------------
+# Week 7, after step 03 passes.
+#
+# Takes the gate netlist Genus wrote, links it against the behavioural models of
+# the gsclib045 cells, and runs your own testbench against it. Same tests, same
+# golden vectors, different design under test.
+#
+# Zero-delay mode, so this is a pure functional question: did synthesis preserve
+# what your RTL did, yes or no. Wire delay comes later, in step 07.
+# ============================================================================
+set -euo pipefail
+HERE="$(cd -P "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+# shellcheck source=../tools/lib/pe-env.sh
+source "$HERE/../tools/lib/pe-env.sh"
+
+SYNTH="$PE_WORK/03-genus-synth/latest/outputs/pe_synth.v"
+if [[ ! -r "$SYNTH" ]]; then
+    echo "ERROR: no synthesized netlist at" >&2
+    echo "       $SYNTH" >&2
+    echo "" >&2
+    echo "Run ./03-genus-synth/run first and confirm it passed:" >&2
+    echo "       cat $PE_WORK/03-genus-synth/latest/STATUS" >&2
+    exit 1
+fi
+if [[ ! -r "$STDCELL_V" ]]; then
+    echo "ERROR: cannot read cell models: $STDCELL_V" >&2
+    exit 1
+fi
+
+pe_require_tool "$XCELIUM_MODULE" xrun || exit 1
+
+RUN="$(pe_rundir 04-xcelium-ffglsim)" || exit 1
+echo "Xcelium ($XCELIUM_MODULE), gate-level, zero delay"
+echo "  netlist: $SYNTH"
+echo "  cells:   $STDCELL_V"
+echo "  run dir: $RUN"
+echo ""
+cd "$RUN"
+
+# +delay_mode_zero strips the timing out of the cell models so this checks
+# function alone. -xprop=tmerge keeps X values pessimistic instead of letting
+# the simulator optimistically resolve them, which is what makes an unreset
+# flop show up as a failure rather than as luck.
+rc=0
+xrun -sv -access +rwc \
+     -xprop=tmerge \
+     +delay_mode_zero \
+     "$STDCELL_V" \
+     "$SYNTH" \
+     "$HERE/../02-xcelium-rtlsim/pe_smoke_tb.sv" \
+     -l xrun.log || rc=$?
+
+pe_finish "$RUN" "$rc"
+
+echo ""
+if [[ "$rc" == "0" ]]; then
+    echo "PASS. The netlist behaves like the RTL did."
+else
+    echo "FAIL (rc=$rc). Read $RUN/xrun.log."
+    echo "A testbench that passed on RTL and fails on gates is exactly the"
+    echo "class of bug this step exists to catch. Believe it."
+fi
+exit "$rc"

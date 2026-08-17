@@ -1,0 +1,16 @@
+#!/usr/bin/env bash
+# 07-xcelium-baglsim/run  --  Xcelium, back-annotated gate-level simulation. Not written yet.
+set -euo pipefail
+cat >&2 <<'MSG'
+This step is not implemented yet.
+
+  step   : 07-xcelium-baglsim
+  tool   : Xcelium
+  does   : back-annotated gate-level simulation
+  used in: stretch
+  status : SAIF dump path not yet confirmed
+
+This is a gap in the repo, not a mistake on your end. Tell a lead which step
+you hit and they will tell you where it stands.
+MSG
+exit 1

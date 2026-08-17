@@ -1,0 +1,16 @@
+#!/usr/bin/env bash
+# 05-innovus-pnr/run  --  Innovus, place and route the 2x2 array. Not written yet.
+set -euo pipefail
+cat >&2 <<'MSG'
+This step is not implemented yet.
+
+  step   : 05-innovus-pnr
+  tool   : Innovus
+  does   : place and route the 2x2 array
+  used in: week 9
+  status : Innovus licenses confirmed 2026-08-16; flow script not written
+
+This is a gap in the repo, not a mistake on your end. Tell a lead which step
+you hit and they will tell you where it stands.
+MSG
+exit 1
