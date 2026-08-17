@@ -68,6 +68,7 @@ worked are separate questions with separate answers.
 | Path | What |
 |---|---|
 | `rtl/pe.sv` | Yours. Ports and MAC given, you write the always blocks. |
+| `rtl/pe_array_2x2.sv` | Given. Four of your PEs wired into an array. Weeks 8 to 10. |
 | `rtl/fxp.sv` | Given. Q8.8 fixed-point add and multiply. |
 | `vendor/pe_vendor_drop.sv` | A PE someone else wrote. Week 5 target. Read the header, not the body. |
 | `0N-*/run` | One script per flow step. |

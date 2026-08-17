@@ -15,15 +15,45 @@ Lambda's compute core is a grid of small units called PEs (processing elements),
 A timing diagram is how you show what a signal does, cycle by cycle, against the clock. Every row is a signal. Every column is a clock cycle. If you can't draw one yet, watch the video above again before starting the tasks.
 
 **PE interface**
+
+Grouped by which edge of the PE each signal sits on. A PE in the middle of the
+grid has neighbours on all four sides, and every signal below either comes from
+one neighbour or goes to another.
+
+```systemverilog
+input  logic                clk
+input  logic                rst             // asynchronous, active high
+
+// north, from the PE above
+input  logic signed [15:0]  pe_psum_in
+input  logic signed [15:0]  pe_weight_in
+input  logic                pe_accept_w_in
+
+// west, from the PE to the left
+input  logic signed [15:0]  pe_input_in
+input  logic                pe_valid_in
+input  logic                pe_switch_in
+input  logic                pe_enabled
+
+// south, to the PE below
+output logic signed [15:0]  pe_psum_out
+output logic signed [15:0]  pe_weight_out
+
+// east, to the PE to the right
+output logic signed [15:0]  pe_input_out
+output logic                pe_valid_out
+output logic                pe_switch_out
 ```
-input  clk, rst
-input  signed [15:0] pe_psum_in, pe_weight_in
-input  pe_accept_w_in
-input  signed [15:0] pe_input_in
-input  pe_valid_in, pe_switch_in, pe_enabled
-output signed [15:0] pe_psum_out, pe_weight_out, pe_input_out
-output pe_valid_out, pe_switch_out
-```
+
+**About the numbers**
+The 16-bit values are Q8.8 fixed point: 8 bits of integer including the sign, 8
+bits of fraction. The hardware treats them as ordinary 16-bit signed integers;
+the binary point exists only in the agreement between modules. So 1.0 is stored
+as 256, 2.0 as 512, and the smallest step is 1/256.
+
+You do not need to do fixed-point arithmetic this week. You do need to know that
+`pe_psum_in` and `pe_input_in` are numbers with a fractional part, not counters,
+because it changes what a sensible value looks like on your diagrams.
 
 **Tasks**
 1. Port by port write up. For every port, one plain sentence: what it does and when it changes.
