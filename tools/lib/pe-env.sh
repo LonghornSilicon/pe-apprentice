@@ -1,12 +1,12 @@
 #!/usr/bin/env bash
 # ============================================================================
-# pe-env.sh — chamber environment for the Longhorn Silicon apprentice program.
+# pe-env.sh, chamber environment for the Longhorn Silicon apprentice program.
 # ----------------------------------------------------------------------------
 # Sourced by every run script and by chamber-diagnose. Never run directly.
 #
 # Descended from the Lambda chamber framework (lambda/tools/lib/lambda-env.sh),
 # slimmed to what the apprentice flow needs. Every module pin and PDK path
-# below was verified live on compute node ip-10-2-6-219 on 2026-08-16 — see
+# below was verified live on compute node ip-10-2-6-219 on 2026-08-16, see
 # docs/00-chamber-and-repo-setup.md "Verified chamber state".
 #
 # Per-user overrides go in ~/.longhorn/pe.env (gitignored). It is sourced
@@ -14,7 +14,7 @@
 # override of PE_WORK propagates into the paths derived from it.
 # ============================================================================
 
-# ---- Per-user overrides (sourced FIRST — see precedence note above) --------
+# ---- Per-user overrides (sourced FIRST, see precedence note above) --------
 if [[ -f "$HOME/.longhorn/pe.env" ]]; then
     # shellcheck disable=SC1091
     source "$HOME/.longhorn/pe.env"
@@ -31,8 +31,8 @@ fi
 : "${PE_FAST:=/tmp/${USER}-pe}"
 
 # ---- Cadence module pins --------------------------------------------------
-# Three-level leaves, not two-level. Two-level (e.g. `genus/211`) is legal —
-# Environment Modules resolves to a default leaf — but pinning the leaf buys
+# Three-level leaves, not two-level. Two-level (e.g. `genus/211`) is legal;
+# Environment Modules resolves to a default leaf. Pinning the leaf buys
 # (a) reproducibility against silent default drift between nodes and weeks,
 # and (b) a MATCHED RELEASE FAMILY across Genus and Innovus, which share
 # database format within a family. The newest Genus on this chamber is
@@ -46,9 +46,9 @@ fi
 : "${SSV_MODULE:=ssv/251/25.12.000}"              # -> /apps/SSV251/25.12.000/bin/tempus
 
 # ---- PDK: gsclib045 -------------------------------------------------------
-# GPDK045 itself is ANALOG ONLY — it ships no digital standard cells. The
-# digital kit is gsclib045, a separate IP library underneath it. This trips up
-# everyone once; it is why the path is this deep.
+# GPDK045 itself is analog only and ships no digital standard cells. The
+# digital kit is gsclib045, a separate IP library underneath it. That is why
+# the path is this deep.
 : "${GSCLIB:=/process/hosted/gpdk/gpdk045/ip_libraries/gsclib045/v4p4/gsclib045}"
 
 # Liberty timing. Two corners: slow/1.0V/125C signs off SETUP, fast/1.0V/-40C
@@ -60,11 +60,11 @@ fi
 : "${LEF_TECH:=$GSCLIB/lef/gsclib045_tech.lef}"
 : "${LEF_MACRO:=$GSCLIB/lef/gsclib045_macro.lef}"
 
-# Behavioural Verilog models of the standard cells — the gate-level simulation
-# in step 04 links your synthesized netlist against these.
+# Behavioural Verilog models of the standard cells. Step 04 links your
+# synthesized netlist against these.
 : "${STDCELL_V:=$GSCLIB/verilog/slow_vdd1v0_basicCells.v}"
 
-# Transistor-level netlist of the standard cells — the LVS reference.
+# Transistor-level netlist of the standard cells. Step 10 compares against it.
 : "${STDCELL_CDL:=$GSCLIB/cdl/gsclib045.cdl}"
 
 # GDS layer-number map for streamOut.
@@ -99,7 +99,7 @@ export GSCLIB LIB_SS LIB_FF LEF_TECH LEF_MACRO STDCELL_V STDCELL_CDL STREAM_MAP
 # ---- pe_require_tool <MODULE_SPEC> <binary> -------------------------------
 # Load a module and verify the binary actually lands on PATH.
 #
-# This two-step matters and is not paranoia. /apps/<TOOL> is an AUTOFS mount:
+# Two steps, in this order. /apps/<TOOL> is an AUTOFS mount:
 # the software appears only when something touches the path. `module load`
 # therefore returns 0 even on a node where the tool is not served, and a bare
 # `ls /apps` before loading UNDER-reports what exists. The only meaningful test
@@ -110,7 +110,7 @@ pe_require_tool() {
 
     if ! type module >/dev/null 2>&1; then
         echo "ERROR: 'module' is not available in this shell." >&2
-        echo "Hint:  run chamber-diagnose. If it cannot find the module system," >&2
+        echo "       run chamber-diagnose. If it cannot find the module system," >&2
         echo "       set PE_MODULE_INIT=/path/to/init/bash in ~/.longhorn/pe.env" >&2
         return 1
     fi

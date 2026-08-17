@@ -7,7 +7,7 @@ document gets you from "I have an account" to "the tools run and I can submit
 work." Nothing in weeks 2 through 11 works until it is done.
 
 Budget an hour. If you hit something this document does not cover, stop and get
-a lead — do not improvise around it. A chamber is a shared multi-tenant machine
+a lead, do not improvise around it. A chamber is a shared multi-tenant machine
 and improvising on it affects other people.
 
 ---
@@ -16,21 +16,20 @@ and improvising on it affects other people.
 
 | Thing | Where it comes from |
 |---|---|
-| A Cadence chamber account | Provisioned by Cadence, requested by a lead. **This is not your UT EID** — it is a separate username and password issued to you. |
+| A Cadence chamber account | Provisioned by Cadence, requested by a lead. **This is not your UT EID**, it is a separate username and password issued to you. |
 | UT Austin VPN, connected | The chamber is on a private network. Nothing below works off-VPN. |
 | Your account cleared for tool licenses | A lead has to request this. See §1. Do not skip reading it. |
 
 ### The one thing that will bite you if nobody warns you
 
 New chamber accounts are provisioned as *courseware* accounts, and courseware
-accounts sit on a license-server exclude list for some tools — notably Genus
+accounts sit on a license-server exclude list for some tools, notably Genus
 synthesis. The licenses are free and available; the exclusion is administrative.
 Nothing tells you this until a tool refuses to start in week 7.
 
 **A lead must email the CAD admin to have every apprentice account added before
 week 1.** If you are a lead reading this: do it now, it has lead time. If you
-are an apprentice and §4's smoke test fails on a license error, this is why —
-report it, do not try to work around it.
+are an apprentice and §4's smoke test fails on a license error, this is why, report it, do not try to work around it.
 
 ---
 
@@ -47,8 +46,8 @@ You reach the chamber through **ETX**, a browser-based remote desktop. Plain
 ### Immediately get off the login node
 
 The login node is shared by everyone and is sized for light interactive work.
-Real tool runs belong on a compute node, which is scheduled — your job gets
-guaranteed CPU and memory, and you are not degrading everyone else's session.
+Tool runs belong on a compute node. Compute nodes are scheduled, so your job
+gets guaranteed CPU and memory and you are not degrading anyone else's session.
 
 ```
 % bash                              # the launchers are bash; csh is the login default
@@ -81,9 +80,7 @@ This is the single most common false alarm on this chamber.
 
 ## 2. Get the repo onto the chamber
 
-The chamber cannot reach GitHub, so the repo travels as a **git bundle** — a
-single file holding the full history, which you can clone from exactly like a
-real remote.
+The chamber cannot reach GitHub, so the repo travels as a **git bundle**, a single file holding the full history that you clone from like any remote.
 
 On a machine that has GitHub access:
 
@@ -104,8 +101,8 @@ a lead will show you). Then, on the chamber:
 % git checkout -b <your-chamber-username>
 ```
 
-You now have a real git repo with real history. It just has no live remote —
-§5 covers how work gets back out.
+You now have a git repo with full history. It has no live remote. Section 5
+covers how work gets back out.
 
 When a lead ships an update later in the semester, it arrives as a smaller
 bundle:
@@ -124,7 +121,7 @@ bundle:
 ```
 
 This symlinks the helper scripts into `~/bin/`, creates your run area at
-`~/work/pe/`, and runs `chamber-diagnose`. It is idempotent — re-run it any time.
+`~/work/pe/`, and runs `chamber-diagnose`. It is idempotent; re-run it any time.
 
 ### Where things live, and why it matters
 
@@ -138,7 +135,7 @@ Tool output goes **outside** the repo on purpose. A `git checkout` can never
 destroy a run, and a run can never dirty your `git status`. Do not fight this by
 running tools from inside the repo.
 
-### Disk is tight — this is a real constraint, not boilerplate
+### Disk is tight
 
 Home directories are **20 GB**, on NFS, and that is the only persistent
 writable space you have. An Innovus place-and-route run directory is easily
@@ -152,8 +149,7 @@ Check yours before week 8, and check it again during weeks 9 and 10:
 ```
 
 Each step directory keeps every run so you can compare a broken run against the
-last good one, which is genuinely useful and also the thing that fills your
-disk. Delete old run directories you have finished with:
+last good one, which is useful and is also what fills your disk. Delete old run directories you have finished with:
 
 ```
 % ls -lt ~/work/pe/05-innovus-pnr/          # oldest at the bottom
@@ -162,7 +158,7 @@ disk. Delete old run directories you have finished with:
 
 ---
 
-## 4. Sanity check — this must pass before week 2
+## 4. Checks that must pass before week 2
 
 Two checks. Do not skip the second one: it is the only thing that proves the
 license problem in §0 has actually been cleared for your account, and finding
@@ -177,22 +173,22 @@ that out now instead of in week 7 is the entire reason this section exists.
 Every line should read `[OK]`. If anything reads `[FAIL]`, the output tells you
 what to do about it. The two common ones are `$DISPLAY` unset (fix it at the
 ETX/X11 layer) and a tool not resolving (get a fresh compute shell with
-`qsh -q normal.q -now n -V` — the compute farm is not uniform and a different
+`qsh -q normal.q -now n -V`, the compute farm is not uniform and a different
 node will usually have it).
 
 ### 4b. Simulator
 
 ```
 % cd ~/longhorn-apprentice/pe-apprentice
-% ./01-xcelium-rtlsim/run
+% ./02-xcelium-rtlsim/run
 ```
 
 This compiles the provided smoke testbench against the empty `rtl/pe.sv` stub.
-**It is supposed to FAIL its checks** — you have not written the PE yet. What
+**It is supposed to FAIL its checks**, you have not written the PE yet. What
 matters is that Xcelium starts, compiles, runs, and prints a result. If you see
 the test report at all, your simulator works.
 
-### 4c. Synthesis — the license check
+### 4c. Synthesis and the license check
 
 ```
 % ./03-genus-synth/run
@@ -200,7 +196,7 @@ the test report at all, your simulator works.
 
 Genus will synthesize the stub. As with 4b, the result does not matter; the
 tool starting does. If it dies with a **license** error, stop and report it to a
-lead with the exact message — that is §0, and it needs an admin to fix, not you.
+lead with the exact message, that is §0, and it needs an admin to fix, not you.
 
 If all three of these behave, you are set up. Go to week 1.
 
@@ -210,7 +206,7 @@ If all three of these behave, you are set up. Go to week 1.
 
 Written deliverables (the photo/scan PDFs from weeks 1, 2, 4, 6, and 8) and code
 deliverables both leave the chamber the same way. **Confirm the current transfer
-route with a lead before your first submission** — the chamber's file transfer
+route with a lead before your first submission**, the chamber's file transfer
 is restrictive and the route is the one part of this document most likely to
 change.
 
@@ -224,7 +220,7 @@ For code and tool output, package your commits as a bundle:
 ```
 
 Then transfer `<your-username>-weekN.bundle` off the chamber. Each week's
-handout tells you exactly which files to add — nothing more. Do not commit run
+handout tells you exactly which files to add, nothing more. Do not commit run
 output; that is what `$PE_WORK` is for.
 
 ---
@@ -233,7 +229,7 @@ output; that is what `$PE_WORK` is for.
 
 Everything below was confirmed live on compute node `ip-10-2-6-219` on
 **2026-08-16**. `tools/lib/pe-env.sh` is the single place these are written
-down — do not hardcode any of them anywhere else. If something here stops
+down, do not hardcode any of them anywhere else. If something here stops
 matching reality, fix `pe-env.sh` and update this table in the same commit.
 
 | | |
@@ -257,7 +253,7 @@ Genus and Innovus are deliberately pinned to the **same 21.18 release family**
 because they share database format within a family. The catalog default
 `innovus/251` resolves to 25.14 and would force a cross-version handoff.
 
-PDK — **GPDK045 itself is analog-only and ships no digital standard cells.** The
+PDK, **GPDK045 itself is analog-only and ships no digital standard cells.** The
 digital kit is `gsclib045`, a separate IP library underneath it:
 
 ```
@@ -275,4 +271,4 @@ Stream-out layer map: `/process/hosted/gpdk/gpdk045/oa/v6p0/soce/streamOut.map`
 
 Physical verification rule decks ship for **Assura** and **Diva**
 (`/process/hosted/gpdk/gpdk045/oa/v6p0/{assura,diva}/`). There is no Pegasus
-deck for this kit, which shapes what week 10 does — see that handout.
+deck for this kit, which shapes what week 10 does, see that handout.

@@ -1,5 +1,5 @@
 // ============================================================================
-// pe_vendor_drop.sv — third-party PE delivery. STUDENT-FACING (week 5 DUT).
+// pe_vendor_drop.sv, third-party PE delivery. STUDENT-FACING (week 5 DUT).
 // ----------------------------------------------------------------------------
 // Read this header. Then do not read the body until your testbench passes on
 // your own PE. The whole point of week 5 is that your testbench finds what is
@@ -16,10 +16,10 @@
 // the testbench you built in week 4 and 5, against a spec you understand
 // better than the person who wrote the code did.
 //
-// This one has real defects. They are the same defect classes present today in
+// This one has defects. They are the same defect classes present today in
 // the weight-stationary PE of tiny-tpu, a well-regarded 1.3k-star open-source
 // TPU (https://github.com/tiny-tpu-v2/tiny-tpu, tiny-tpu-hardened/rtl/pe.v).
-// That module is unlicensed upstream so nothing here is copied from it — this
+// That module is unlicensed upstream so nothing here is copied from it, this
 // is an independent implementation that reproduces the same defects. Go read
 // the original after week 5 and confirm for yourself that they are there. The
 // lesson is not "this file is bad." The lesson is that popular, working,

@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 # ============================================================================
-# 01-xcelium-rtlsim/run — simulate your RTL against the smoke test.
+# 01-xcelium-rtlsim/run, simulate your RTL against the smoke test.
 # ----------------------------------------------------------------------------
 # Week 3. Run it from anywhere: ./01-xcelium-rtlsim/run
 #
@@ -25,8 +25,7 @@ echo ""
 cd "$RUN"
 
 # -access +rwc gives read/write/connect access to every signal in the design.
-# Without it the waveform database is empty and SimVision shows you nothing —
-# the simulator optimizes away anything no one is reading. It costs runtime,
+# Without it the waveform database is empty and SimVision shows you nothing, # the simulator optimizes away anything no one is reading. It costs runtime,
 # which is why production regressions leave it off and debug runs turn it on.
 rc=0
 xrun -sv -access +rwc \
@@ -41,15 +40,15 @@ if [[ "$WAVES" == "1" ]]; then
     pe_require_tool "$XCELIUM_MODULE" simvision || exit 1
     echo ""
     echo "Opening waveforms. Compare what you see against your week-2 diagrams."
-    echo "If they disagree, one of the two is wrong — work out which before"
+    echo "If they disagree, one of the two is wrong, work out which before"
     echo "changing any code."
     simvision waves.shm &
 fi
 
 echo ""
 if [[ "$rc" == "0" ]]; then
-    echo "PASS — $RUN/STATUS"
+    echo "PASS, $RUN/STATUS"
 else
-    echo "FAIL (rc=$rc) — read $RUN/xrun.log, then $RUN/STATUS"
+    echo "FAIL (rc=$rc), read $RUN/xrun.log, then $RUN/STATUS"
 fi
 exit "$rc"

@@ -1,12 +1,12 @@
 // ============================================================================
-// pe_smoke_tb.sv — week 3 smoke test. Given to you; do not edit.
+// pe_smoke_tb.sv, week 3 smoke test. Given to you; do not edit.
 // ----------------------------------------------------------------------------
 // This is NOT a verification testbench. It is a smoke test: it proves your PE
 // is alive and roughly does the right thing, so you know your week-3 RTL is
 // worth debugging further. It checks four things and stops.
 //
 // It will pass on designs that are still wrong. That is expected and it is the
-// whole reason weeks 4 and 5 exist — you build the testbench that actually
+// whole reason weeks 4 and 5 exist, you build the testbench that actually
 // tries to break this thing. A green light here means "keep going," not "done."
 //
 // Fixed point: Q8.8, so 1.0 is 16'd256. All expected values below are written
@@ -64,7 +64,7 @@ module pe_smoke_tb;
         $display("");
         $display("=== 1. reset leaves every output defined ===");
         // An output that is X here is a flop you forgot to reset. It will not
-        // just be X in simulation — it powers up unknown in silicon, and since
+        // just be X in simulation, it powers up unknown in silicon, and since
         // partial sums chain down a column, one unknown poisons every PE below.
         expect_q("pe_psum_out",   pe_psum_out,   '0);
         expect_q("pe_input_out",  pe_input_out,  '0);
@@ -102,9 +102,9 @@ module pe_smoke_tb;
         $display("");
         $display("========================================");
         if (errors == 0)
-            $display(" SMOKE TEST PASSED — %0d errors", errors);
+            $display(" SMOKE TEST PASSED, %0d errors", errors);
         else
-            $display(" SMOKE TEST FAILED — %0d errors", errors);
+            $display(" SMOKE TEST FAILED, %0d errors", errors);
         $display("========================================");
         $display("");
         $display("Reminder: passing this does not mean your PE is correct.");
@@ -116,7 +116,7 @@ module pe_smoke_tb;
     // Do not let a hung design run forever in a shared chamber queue.
     initial begin
         #10000;
-        $display("[FAIL] timeout — the testbench never reached $finish");
+        $display("[FAIL] timeout, the testbench never reached $finish");
         $finish;
     end
 

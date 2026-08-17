@@ -1,10 +1,10 @@
 # ============================================================================
-# constraints.sdc — YOUR FILE. You set these numbers in week 7.
+# constraints.sdc.  Yours. You set these numbers in week 7.
 # ----------------------------------------------------------------------------
 # This is a template with placeholder values that are deliberately loose. Your
 # week-6 deliverable was an argument for a specific clock period. Put that
-# number here and be ready to defend it — "it was in the template" is not an
-# answer anyone accepts.
+# number here and be ready to defend it. "It was in the template" is not
+# an answer.
 #
 # SDC is the contract between you and the tool. Synthesis does not know what
 # speed you want, what drives your inputs, or what your outputs drive. If you
@@ -16,7 +16,7 @@
 # ---- Clock -----------------------------------------------------------------
 # gsclib045 is a 45 nm kit; simple datapaths in it typically land somewhere in
 # the 400-700 MHz range at the slow corner. 4.0 ns (250 MHz) is intentionally
-# loose so a first pass closes and you get a real report to read. Once you have
+# loose so the first pass closes and gives you a report to read. Once you have
 # a baseline, tighten it and re-run: 4.0 -> 2.5 -> 2.0 -> 1.5 ns. The period at
 # which slack first goes negative is your design's actual fmax, and finding it
 # is worth more than any single number you could have guessed up front.
@@ -50,7 +50,6 @@ set_load 0.05 [all_outputs]
 # ---- Reset -----------------------------------------------------------------
 # rst is asynchronous, so it is not timed against the clock. Saying so stops
 # the tool from reporting violations on a path that has no meaning. Do NOT
-# reach for set_false_path to silence a path you simply have not fixed — that
-# habit is how real chips fail. Here it is correct because the path genuinely
-# is not synchronous.
+# reach for set_false_path to silence a path you have not fixed. Here it is
+# correct because the path is genuinely not synchronous.
 set_false_path -from [get_ports rst]

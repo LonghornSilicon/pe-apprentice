@@ -1,30 +1,26 @@
 // ============================================================================
-// pe.sv — YOUR FILE. This is the one thing you write in week 3.
+// pe.sv  --  your file. The one thing you write in week 3.
 // ----------------------------------------------------------------------------
-// The module header, the port list, the internal signals, and the two fxp
-// instances are already here. Do not change them, and do not rename anything —
-// the provided testbenches bind to these exact names.
+// The header, port list, internal signals, and the two fxp instances are given.
+// Do not change them and do not rename anything; the provided testbenches bind
+// to these names.
 //
-// Your job is to fill in the always blocks. Write from your OWN week-2 notes
-// and timing diagrams, not from memory of any PE you have seen. If your week-2
-// spec does not answer a question you hit here, that is a gap in your spec —
-// go fix the spec first, then come back. That order is the point of the
-// exercise, and it is the order real design work happens in.
+// You fill in the always blocks. Write from your own week-2 notes and timing
+// diagrams. If your week-2 spec does not answer a question you hit here, fix
+// the spec first, then come back.
 //
-// RULES (week 3 checks these)
-//   - `logic`, never `wire` or `reg`.
-//   - `always_comb` for combinational, `always_ff` for sequential. Never mix
-//     blocking (=) and nonblocking (<=) assignment styles between them:
-//     `=` inside always_comb, `<=` inside always_ff. These two constructs turn
-//     a whole class of mistakes into compile errors instead of silent bugs
-//     you find three weeks later in a waveform.
-//   - Reset is asynchronous, active high: `always_ff @(posedge clk or posedge rst)`.
-//   - Every flop you declare must have a defined value out of reset. Every
-//     single one. If you skip one, it is X in simulation and it powers up
-//     unknown in silicon, and because partial sums chain down a column, one
-//     unknown poisons every PE below it.
+// Rules week 3 checks:
+//   * logic, never wire or reg.
+//   * always_comb for combinational, always_ff for sequential. Blocking (=)
+//     inside always_comb, nonblocking (<=) inside always_ff, never mixed.
+//     These constructs turn a class of mistakes into compile errors.
+//   * Reset is asynchronous, active high:
+//     always_ff @(posedge clk or posedge rst)
+//   * Every flop you declare gets a defined value out of reset. Skip one and
+//     it is X in simulation and unknown at power-up in silicon. Partial sums
+//     chain down a column, so one unknown propagates to every PE below.
 //
-// Build and run:  cd 01-xcelium-rtlsim && ./run
+// Run it: ./02-xcelium-rtlsim/run
 // ============================================================================
 
 `timescale 1ns/1ps
@@ -38,36 +34,36 @@ module pe #(
     input  logic                 clk,
     input  logic                 rst,          // asynchronous, active high
 
-    // ---- north: partial sums and weights arrive from the PE above ----
+    // north: partial sums and weights arrive from the PE above
     input  logic signed [DW-1:0] pe_psum_in,
     input  logic signed [DW-1:0] pe_weight_in,
     input  logic                 pe_accept_w_in,
 
-    // ---- west: activations and control arrive from the PE to the left ----
+    // west: activations and control arrive from the PE to the left
     input  logic signed [DW-1:0] pe_input_in,
     input  logic                 pe_valid_in,
     input  logic                 pe_switch_in,
     input  logic                 pe_enabled,
 
-    // ---- south: to the PE below ----
+    // south: to the PE below
     output logic signed [DW-1:0] pe_psum_out,
     output logic signed [DW-1:0] pe_weight_out,
 
-    // ---- east: to the PE to the right ----
+    // east: to the PE to the right
     output logic signed [DW-1:0] pe_input_out,
     output logic                 pe_valid_out,
     output logic                 pe_switch_out
 );
 
     // ------------------------------------------------------------------
-    // Given: the weight storage and the MAC. You wire the behaviour.
+    // Given: weight storage and the MAC. You write the behaviour.
     // ------------------------------------------------------------------
-    logic signed [DW-1:0] weight_bg;      // background — staged from the north
-    logic signed [DW-1:0] weight_active;  // what the multiplier uses THIS cycle
+    logic signed [DW-1:0] weight_bg;      // background, staged from the north
+    logic signed [DW-1:0] weight_active;  // what the multiplier reads this cycle
 
-    // TODO(week3): `weight_active` is a value, not necessarily a single flop.
-    // Work out from your week-2 diagrams what has to hold it between switches,
-    // and declare whatever additional state you need right here.
+    // TODO(week3): weight_active is a value, not necessarily one flop. Work out
+    // from your week-2 diagrams what holds it between switches and declare any
+    // additional state here.
 
     logic signed [DW-1:0] mult_out, mac_out;
 
@@ -80,44 +76,43 @@ module pe #(
     // ------------------------------------------------------------------
     // TODO(week3): weight promotion.
     //   Which register does the multiplier read, and when does that change?
-    //   Your week-2 timing diagram 2 (preload and switch) is the spec here.
-    //   Whether this block is combinational or sequential is YOUR call to
-    //   make and to defend — it changes the answer to week-2 question 5a and
-    //   it changes where your critical path starts. Decide deliberately.
+    //   Week-2 timing diagram 2 (preload and switch) is the spec.
+    //   Whether this block is combinational or sequential is your call and
+    //   you have to defend it. It decides the answer to week-2 question 5a
+    //   and it decides where your critical path starts.
     // ------------------------------------------------------------------
     always_comb begin
-        weight_active = '0;   // <-- replace
+        weight_active = '0;   // replace
     end
 
     // ------------------------------------------------------------------
     // TODO(week3): weight staging.
-    //   When does `weight_bg` capture from `pe_weight_in`?
-    //   Does `pe_enabled` affect it? Justify your answer either way — this is
-    //   a design decision, not a lookup, and week 11 will ask you about it.
+    //   When does weight_bg capture from pe_weight_in?
+    //   Does pe_enabled affect it? Justify either answer. Week 11 will ask.
     // ------------------------------------------------------------------
     always_ff @(posedge clk or posedge rst) begin
         if (rst) begin
             weight_bg <= '0;
         end else begin
-            // <-- your logic
+            // your logic
         end
     end
 
     // ------------------------------------------------------------------
     // TODO(week3): the streaming datapath.
-    //   Three behaviours, in priority order: reset, disabled, running.
-    //   Running has to drive all five outputs every cycle. Think about what
-    //   each output should be when `pe_valid_in` is LOW — "hold the old value"
-    //   and "drive zero" are different designs with different consequences
-    //   for the PE below you. Your week-2 question 5b answer decides this.
+    //   Three behaviours in priority order: reset, disabled, running.
+    //   Running drives all five outputs every cycle. Decide what each output
+    //   does when pe_valid_in is low. Holding the previous value and driving
+    //   zero are different designs with different consequences for the PE
+    //   below you. Your week-2 question 5b answer settles it.
     // ------------------------------------------------------------------
     always_ff @(posedge clk or posedge rst) begin
         if (rst) begin
-            // <-- every output flop, defined
+            // every output flop, defined
         end else if (!pe_enabled) begin
-            // <-- your logic
+            // your logic
         end else begin
-            // <-- your logic
+            // your logic
         end
     end
 

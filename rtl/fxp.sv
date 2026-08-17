@@ -1,5 +1,5 @@
 // ============================================================================
-// fxp.sv — signed fixed-point add and multiply, Q(QI).(QF)
+// fxp.sv, signed fixed-point add and multiply, Q(QI).(QF)
 // ----------------------------------------------------------------------------
 // Given to you. You do not write or modify this file; you instantiate it.
 //
@@ -7,7 +7,7 @@
 // two's-complement integer that everyone has agreed to read as if a binary
 // point sits QF bits from the right. Q8.8 in 16 bits therefore covers
 // -128.0 .. +127.99609375 in steps of 1/256. The hardware is ordinary integer
-// hardware — the binary point exists only in the contract between modules.
+// hardware, the binary point exists only in the contract between modules.
 // That contract is why these two modules exist: an integer adder is already
 // correct for fixed point, but an integer multiplier is NOT, because
 // Q8.8 x Q8.8 lands in Q16.16 and has to be re-aligned.
@@ -23,7 +23,7 @@
 //            product does not fit). `overflow` tells you the second happened.
 //
 // Both modules report `overflow`. Whether anyone LISTENS to it is a design
-// decision made by the module that instantiates them — see rtl/pe.sv.
+// decision made by the module that instantiates them, see rtl/pe.sv.
 // ============================================================================
 
 `timescale 1ns/1ps
@@ -46,8 +46,7 @@ module fxp_add #(
     // exact mathematical result and cannot itself overflow.
     wire signed [W:0] sum = ina + inb;
 
-    // The sum overflowed W bits exactly when its top two bits disagree —
-    // i.e. bit W is no longer a pure sign extension of bit W-1.
+    // The sum overflowed W bits exactly when its top two bits disagree, // i.e. bit W is no longer a pure sign extension of bit W-1.
     assign overflow = (sum[W] != sum[W-1]);
 
     assign out = overflow

@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 # ============================================================================
-# 03-genus-synth/run — synthesize your PE against gsclib045.
+# 03-genus-synth/run, synthesize your PE against gsclib045.
 # ----------------------------------------------------------------------------
 # Week 7.  ./03-genus-synth/run          headless, uses run.tcl
 #          ./03-genus-synth/run --shell  interactive Genus REPL (do this FIRST)
@@ -46,6 +46,6 @@ if [[ "$rc" == "0" ]]; then
     echo "Compare the critical path you see there against the one you"
     echo "predicted in week 6. If they differ, that difference is your writeup."
 else
-    echo "FAIL (rc=$rc) — read $RUN/genus.log"
+    echo "FAIL (rc=$rc), read $RUN/genus.log"
 fi
 exit "$rc"
