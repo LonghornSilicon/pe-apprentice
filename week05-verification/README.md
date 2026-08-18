@@ -7,14 +7,26 @@ A testbench you have never seen fail is not a testbench, it is a hope. You have
 no evidence it would catch anything, because it has never had to. So this week
 ends by pointing yours at a PE with known defects and finding out.
 
-## What you are building
+## The week in two halves
 
-Six components. Each one is a real thing with a real name, and every industrial
-verification environment has all six. The names in the right column are what
-they are called in UVM, the SystemVerilog verification library used across the
-industry. You are not using UVM this week; you are building the six ideas UVM is
-made of, in plain SystemVerilog, so that when you meet `uvm_driver` at an
-internship you already know what it does.
+**Half A**, most of the week. You build a testbench out of six components in
+plain SystemVerilog, run it on your own PE, then run it on a PE somebody else
+wrote and find their bugs. This is the graded part.
+
+**Half B**, the last session. You are handed *the same testbench* written in real
+UVM, the verification library the industry actually uses. You read it beside
+what you built, write one piece of it, and run it.
+
+Half B is short on purpose. UVM is genuinely large; teams give new engineers a
+month with it and even then they use about a fifth of it. You are not learning
+UVM this week. You are building the ideas UVM is made of, and then seeing what
+they look like once a real framework wraps them, so the vocabulary and the shape
+are familiar the first time you meet it for real.
+
+## The six components
+
+Every industrial verification environment is built from these six, whatever
+framework is around them.
 
 | Component | Job | UVM name |
 |---|---|---|
@@ -228,7 +240,12 @@ stimulus find each defect on its own, or did you have to add a directed test?**
 If one of them needed a directed test, your constraints were not exploring the
 space you thought they were. That is a real finding about your own work.
 
-## 8. Save your commands
+## 8. Save your commands, and mark the end of Half A
+
+Everything above is the graded part of this week. Half B below is one session
+and it is not graded on correctness, only on whether you did it and answered the
+three questions.
+
 
 ```bash
 vi run
@@ -256,25 +273,101 @@ xrun -sv -access +rwc +define+DUT_VENDOR \
 chmod +x run run-vendor
 ```
 
-## 9. What UVM adds
+---
 
-You have now built the six ideas by hand. UVM is a SystemVerilog class library
-that provides them as base classes you extend, plus three things that only start
-to matter at scale:
+# Half B: the same testbench, in real UVM
 
-- **A factory**, so a test can swap in a different driver or sequence without
-  editing the testbench that instantiates it. On a chip with hundreds of tests
-  reusing one environment, that is the difference between changing one line and
-  changing hundreds.
-- **Phases**, a fixed order that every component agrees on for build, connect,
-  run, and report, so components written by different people compose.
-- **A configuration database**, so a component deep in the hierarchy can be
-  handed a handle without every layer between passing it down.
+You have built the six ideas. Now look at what they turn into when a real
+framework wraps them.
 
-None of that earns its keep on a PE with five control signals. All of it earns
-its keep on a block with a dozen interfaces and forty engineers. The six ideas
-are the same either way, which is why building them by hand first is the faster
-route to understanding UVM than starting with UVM.
+## 9. Read it
+
+```bash
+less uvm/pe_uvm_tb.sv
+```
+
+One file, about 350 lines. A production UVM environment is eight or nine
+separate files plus a package; this is all of it in one place so you can read it
+top to bottom in a sitting. Nothing in it is faked or simplified.
+
+Read it with your own testbench open beside it. Every section is numbered to
+match, and the comment above each one says what changed and why.
+
+| Yours (Half A) | UVM | What the extra layer buys |
+|---|---|---|
+| `pe_txn` class | `pe_item extends uvm_sequence_item` | factory registration; free print, copy, compare |
+| `generator` task | `pe_seq extends uvm_sequence` | many sequences can share one driver |
+| `driver` task | `pe_driver extends uvm_driver` | a two-way handshake, so a sequence can react to the DUT |
+| `monitor` task | `pe_monitor extends uvm_monitor` | broadcasts to any number of listeners, not one mailbox |
+| `scoreboard` task | `pe_scoreboard extends uvm_subscriber` | subscribes to a broadcast rather than being wired to one source |
+| your `initial` block | `pe_env` + `pe_test` | stimulus swaps without touching any other file |
+| signals in the module | `interface` + `uvm_config_db` | components four levels deep get a handle without every layer passing it down |
+
+**The one thing that did not change is `pe_model`.** Your reference model drops
+into the UVM scoreboard unmodified. That is worth sitting with: the model is
+design knowledge and it is the valuable part, while everything around it is
+plumbing and it is replaceable.
+
+## 10. Write the sequence
+
+One `TODO(week5)` in that file, in `pe_seq::body()`. Five lines.
+
+```bash
+vi uvm/pe_uvm_tb.sv
+```
+
+Note `pe_item::type_id::create("it")` rather than `new()`. That is the factory:
+it looks up which class to actually build, so a test can substitute a different
+item type without this line changing. `new()` would hardcode the type.
+
+## 11. Run it
+
+```bash
+cd ~/pe-apprentice/week05-verification
+xrun -sv -uvm -access +rwc \
+    ../rtl/fxp.sv ../rtl/pe.sv \
+    uvm/pe_uvm_tb.sv
+```
+
+`-uvm` links the UVM library, which ships with Xcelium. You should see UVM's
+banner, then a report at the end from your scoreboard's `report_phase`.
+
+The numbers should match what your own testbench reported. Same stimulus, same
+model, same DUT. If they do not, one of the two testbenches is wrong and finding
+out which is a real debugging exercise.
+
+## 12. Three questions
+
+Answer these in writing. They are the point of Half B and they can only be
+answered by someone who built the simple version first.
+
+1. Your driver took transactions with `mailbox.get()`. UVM's uses
+   `seq_item_port.get_next_item()` and then `item_done()`. What can a sequence
+   do with the second half of that handshake that yours could not?
+
+2. Half A chose which DUT to test with `+define+DUT_VENDOR`, a compile-time
+   switch. UVM has the factory instead. If a chip had two hundred tests sharing
+   one environment, what does a compile-time switch cost you that a factory
+   override does not?
+
+3. Your components found each other by being declared in the same module. UVM's
+   use `uvm_config_db` to pass the interface handle. Why does that matter when
+   the driver is four levels down a hierarchy that somebody else wrote?
+
+## What you have and have not learned
+
+You have seen a real UVM environment and written a piece of one. That is a
+taste, not fluency, and the difference is worth being honest about.
+
+Not covered, and each is a real topic: agents, the register abstraction layer,
+virtual sequences, callbacks, TLM sockets, and most of the phase list. Teams
+budget a month to get someone productive in UVM and reckon they use about a
+fifth of it day to day.
+
+What you do have is the part that transfers: you know what a driver, a monitor,
+a sequence, and a scoreboard each do, because you wrote all four, and you have
+seen what the framework adds on top. That is a much better starting point than
+a month of tutorials without ever having built one by hand.
 
 ## Turn in
 
@@ -293,6 +386,7 @@ Move the bundle off the chamber, plus:
   how you fixed it, and whether the bug was in the RTL or the model
 - Your vendor bug report, one entry per defect, in the four-part form above
 - Your answer on whether random stimulus found each defect unaided
+- Your three Half B answers
 
 ## Done means
 
@@ -305,3 +399,6 @@ Move the bundle off the chamber, plus:
   question 5a
 - **Your testbench catches every defect in the vendor PE.** This is binary and
   it is the main thing week 5 is graded on.
+- The UVM version runs and reports the same numbers as yours
+- You can say what a driver, a monitor, a sequence, and a scoreboard each do,
+  without looking anything up

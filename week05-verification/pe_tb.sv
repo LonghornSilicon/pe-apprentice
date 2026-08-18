@@ -163,18 +163,17 @@ module pe_tb;
   // combinations two signals took together, which is where the interesting
   // corners live.
   //
-  // TODO(week5): add coverpoints and at least two crosses.
-  //
   // One cross is not optional. Week 2 question 5a asked what happens when a
-  // new weight and a switch arrive on the same cycle. Cross pe_accept_w_in
-  // with pe_switch_in and you will find out whether you ever actually
-  // generated that case. Reaching 100% passing with 0% on that bin is the
-  // most useful thing this week can show you.
+  // new weight and a switch arrive on the same cycle. Crossing pe_accept_w_in
+  // with pe_switch_in tells you whether you ever generated that case.
+  // Reaching 100% passing with 0% on that bin is the most useful thing this
+  // week can show you.
   //======================================================================
   covergroup cg @(posedge clk);
-    // cp_switch: coverpoint pe_switch_in;
-    // ...
-    // x_switch_accept: cross cp_switch, cp_accept;
+    cp_switch  : coverpoint pe_switch_in;      // given, as the pattern
+    cp_accept  : coverpoint pe_accept_w_in;
+    // TODO(week5): add coverpoints for pe_valid_in and pe_enabled, then at
+    // least two crosses. One of them must be cp_switch crossed with cp_accept.
   endgroup
 
   cg cov = new();

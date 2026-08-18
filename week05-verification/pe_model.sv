@@ -54,12 +54,10 @@ class pe_model;
     return sum[DW-1:0];
   endfunction
 
-  // ----------------------------------------------------------------------
-  // TODO(week5): reset the model.
-  // What is the state of a PE the cycle after reset releases?
-  // ----------------------------------------------------------------------
+  // Given. The state of a PE the cycle after reset releases.
   function void reset();
-    // your code
+    weight_bg = '0;
+    weight_fg = '0;
   endfunction
 
   // ----------------------------------------------------------------------
