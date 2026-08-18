@@ -2,8 +2,10 @@
 
 Do this once, before week 2. It takes about an hour.
 
-You need: a Cadence chamber account from a lead (this is not your UT EID, it is
-a separate username and password), and the UT Austin VPN connected.
+You need a working Cadence chamber account: a username and password issued to
+you, which is **not** your UT EID. Getting one is covered in the chamber account
+setup doc; ask a lead for it. Everything below assumes it is done and you can log
+in.
 
 If anything below does not work the way it says, stop and ask a lead. Do not
 improvise. The chamber is shared with other universities.
@@ -12,8 +14,8 @@ improvise. The chamber is shared with other universities.
 
 ## 1. Log in
 
-Connect to the UT VPN, then open the ETX portal in your browser (a lead gives
-you the URL) and log in with your chamber username and password.
+Open the ETX portal in your browser (a lead gives you the URL) and log in with
+your chamber username and password.
 
 You land on a machine called `ae03ut01`. That is the login node.
 
@@ -52,9 +54,6 @@ ls -lh /tmp/pe.bundle
 `--all` includes every branch and tag. The file is a few hundred KB.
 
 ### 3b. Connect over SFTP
-
-You must be on the **UT Austin VPN**. The chamber is on a private network and
-nothing below resolves without it.
 
 ```bash
 sftp -P 222 \
@@ -254,6 +253,8 @@ something.
 | `command not found` for genus, xrun, innovus | You forgot `source ~/pe-apprentice/setup.sh` |
 | A tool says `MISSING` in the setup output | `qsh -q normal.q -now n -V`, then source again |
 | Anything about a license | Send a lead the exact message. Not yours to fix. |
+| `sftp` says `no matching host key type found` | You left off the two `-o ssh-rsa` flags in section 3b. |
+| `sftp` connects but `put` is refused | The file already exists. SFTP here is create-only; send under a new name. |
 | `DISPLAY not set`, or a GUI will not open | Your X11 is not forwarding. Ask a lead. |
 | Disk full, or writes failing strangely | `df -h ~`. You get 20 GB. Delete old tool output from week folders you have finished. |
 | You need to edit a file and there is no editor you know | See below. |
