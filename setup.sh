@@ -13,7 +13,13 @@ module load genus/211/21.18.000
 module load innovus/211/21.18.000
 module load xcelium/2403/24.03.005
 module load assura/41/618/04.17.001
-module load ssv/251/25.12.000
+# ssv/251 is in the catalog but does NOT run here: it wants GLIBCXX_3.4.31,
+# GLIBC_2.27 and libssh.so.4, none of which exist on this RHEL 7 image.
+# 23.10 is the newest that actually starts. Verified 2026-08-18.
+module load ssv/231/23.10.000
+
+# klayout, for looking at a GDS outside Innovus.
+export PATH=/grid/common/pkgs/klayout/latest/bin:$PATH
 
 # gsclib045 is the digital standard-cell library. GPDK045 on its own is analog
 # only, which is why this path is so deep.
@@ -41,4 +47,5 @@ echo "  innovus $(command -v innovus || echo MISSING)"
 echo "  xrun    $(command -v xrun    || echo MISSING)"
 echo "  assura  $(command -v assura  || echo MISSING)"
 echo "  tempus  $(command -v tempus  || echo MISSING)"
+echo "  klayout $(command -v klayout || echo MISSING)"
 echo "  GSCLIB  $GSCLIB"
