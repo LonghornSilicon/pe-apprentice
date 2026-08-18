@@ -109,6 +109,39 @@ Then move that bundle off the chamber.
 
 ---
 
+## Editing files on the chamber
+
+There is no VS Code here. You edit with `vi`, and you only need six things.
+
+```
+% vi somefile.txt
+```
+
+| Key | What it does |
+|---|---|
+| `i` | start typing (insert mode) |
+| `Esc` | stop typing (back to command mode) |
+| `:w` | save |
+| `:q` | quit |
+| `:wq` | save and quit |
+| `:q!` | quit and throw away your changes |
+
+The one rule: **`Esc` first, then the colon command.** If typing `:wq` puts the
+letters into your file instead of saving it, you were still in insert mode. Press
+`Esc` and try again.
+
+To read a file without risking editing it, use `less` instead:
+
+```
+% less timing_postroute.rpt
+```
+
+`less` scrolls with arrow keys or space, searches with `/word`, and quits with
+`q`. Use `less` for reports and logs, `vi` only when you actually need to change
+something.
+
+---
+
 ## If something breaks
 
 | What you see | What to do |
@@ -118,3 +151,4 @@ Then move that bundle off the chamber.
 | Anything about a license | Send a lead the exact message. Not yours to fix. |
 | `DISPLAY not set`, or a GUI will not open | Your X11 is not forwarding. Ask a lead. |
 | Disk full, or writes failing strangely | `df -h ~`. You get 20 GB. Delete old tool output from week folders you have finished. |
+| You need to edit a file and there is no editor you know | See below. |

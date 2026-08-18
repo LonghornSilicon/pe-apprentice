@@ -3,7 +3,7 @@
 #   % bash
 #   % qsh -q normal.q -now n -V
 #   % bash
-#   % source ~/pe-apprentice/tools/setup.sh
+#   % source ~/pe-apprentice/setup.sh
 
 if ! type module >/dev/null 2>&1; then
   [ -f "${MODULESHOME}/init/bash" ] && . "${MODULESHOME}/init/bash"
@@ -13,6 +13,7 @@ module load genus/211/21.18.000
 module load innovus/211/21.18.000
 module load xcelium/2403/24.03.005
 module load assura/41/618/04.17.001
+module load ssv/251/25.12.000
 
 # gsclib045 is the digital standard-cell library. GPDK045 on its own is analog
 # only, which is why this path is so deep.
@@ -39,4 +40,5 @@ echo "  genus   $(command -v genus   || echo MISSING)"
 echo "  innovus $(command -v innovus || echo MISSING)"
 echo "  xrun    $(command -v xrun    || echo MISSING)"
 echo "  assura  $(command -v assura  || echo MISSING)"
+echo "  tempus  $(command -v tempus  || echo MISSING)"
 echo "  GSCLIB  $GSCLIB"

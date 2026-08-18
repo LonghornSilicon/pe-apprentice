@@ -120,6 +120,10 @@ Look at what you got:
 % less post-synth.v
 ```
 
+`less` scrolls with space, searches with `/word`, quits with `q`. It never
+changes the file, which is why it is the right tool for reading reports and
+netlists. When you do need to edit something, use `vi` and see `SETUP.md`.
+
 That is your PE as gates. Pick a cell name out of it and look it up:
 
 ```
@@ -128,7 +132,16 @@ That is your PE as gates. Pick a cell name out of it and look it up:
 
 ## 10. Save the commands
 
-Put every `genus:/>` command into `run.tcl`, ending with `exit`. Then make `run`:
+Put every `genus:/>` command into `run.tcl`, ending with `exit`:
+
+```
+% vi run.tcl
+```
+
+`i` to type, `Esc` to stop, `:wq` to save and quit. If the letters `:wq` end up
+in your file, you were still in insert mode: press `Esc` first.
+
+Then make `run`:
 
 ```bash
 #!/usr/bin/env bash

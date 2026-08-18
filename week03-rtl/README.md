@@ -50,7 +50,11 @@ registers, and it is the one most people get wrong.
 
 ## 4. Write it
 
-Open `rtl/pe.sv` and fill in the three `always` blocks. Work from your own week 2
+Open `rtl/pe.sv` and fill in the three `always` blocks.
+
+```
+% vi ~/pe-apprentice/rtl/pe.sv
+``` Work from your own week 2
 timing diagrams, not from memory of code you have seen.
 
 Three rules:
@@ -118,8 +122,11 @@ Now that it works, put it in a script so you never type it again.
 
 ```
 % cd ~/pe-apprentice/week03-rtl
-% code run
+% vi run
 ```
+
+`i` to start typing, `Esc` to stop, `:wq` to save and quit, `:q!` to bail
+without saving. There is no VS Code on the chamber. `SETUP.md` has the rest.
 
 Put this in:
 

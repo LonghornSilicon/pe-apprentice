@@ -20,8 +20,9 @@ is wildly different, that is worth understanding before you continue.
 % df -h ~
 ```
 
-Innovus writes 1 to 3 GB per run and your home is 20 GB. If you are under about
-6 GB free, delete tool output from weeks you have finished before you start.
+A full run of this design leaves about **7.5 MB** behind, most of it the GDS,
+the SPEF, and Innovus's own logs. Disk is not a problem at this scale, but check
+anyway so you know the habit: real designs are thousands of times bigger.
 
 ```
 % mkdir -p ~/pe-apprentice/week09-pnr/work
@@ -302,10 +303,33 @@ report_timing -nworst 1 > timing_postroute.rpt
 report_area > area_postroute.rpt
 ```
 
-Writes your two headline reports to files. Open `timing_postroute.rpt` and find
-the slack line. Compare it against three earlier numbers you have: what Genus
-said, what Innovus said before placement, and what it said after the clock tree.
-Those four numbers are the story of this week.
+Writes your two headline reports to files. Read the timing one:
+
+```
+% less timing_postroute.rpt
+```
+
+`less` scrolls with space and arrow keys, searches with `/Slack`, and quits with
+`q`. Use it for every report and log; it cannot accidentally change the file.
+
+Find the `Slack:=` line near the top. The reference PE lands at **−1.470 ns**.
+
+Now put all four numbers next to each other:
+
+| Stage | Slack | Data path |
+|---|---|---|
+| Genus, after synthesis | 0.000 ns | 2.866 ns |
+| Innovus, before placement | −0.020 ns | 2.882 ns |
+| After clock tree | −1.076 ns | |
+| After routing | **−1.470 ns** | **4.243 ns** |
+
+The data path grew by **1.377 ns**, almost 50%, and every bit of it is wire.
+Same gates, same logic, same netlist. Synthesis estimated those wires from a
+statistical model because it had no idea where anything would sit. Now they are
+drawn and measured.
+
+This is the single most important thing week 9 teaches, and it is why nobody
+signs off timing on a synthesis report.
 
 ## 10. Write the outputs
 
