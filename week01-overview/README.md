@@ -19,7 +19,8 @@ that get you from one to the other. Each stage is handled by a different kind of
 engineer, and each one turns the design into something closer to silicon.
 
 This week is about seeing that whole map. Starting next week we zoom into one
-small piece of it: a single PE.
+small piece of it: a single **PE**, short for processing element. That is the
+unit you will build and carry all the way to a layout.
 
 ## Do
 

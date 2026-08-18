@@ -15,10 +15,10 @@ Do not copy structure from it.
 
 ## Background
 
-Lambda's compute core is a grid of small units called PEs, wired together. Each
-PE does one job over and over: take a number, multiply it by a weight it is
-holding, add that to a running total from its neighbour, and pass everything
-along.
+Lambda's compute core is a grid of small units called **PEs**, short for
+processing elements, wired together. Each PE does one job over and over: take a
+number, multiply it by a weight it is holding, add that to a running total from
+its neighbour, and pass everything along.
 
 The weight matters a lot. Swapping in a new weight without stopping the whole
 grid is the trickiest part of the design. That is why each PE holds **two**
