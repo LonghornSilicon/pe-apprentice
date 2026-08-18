@@ -39,12 +39,17 @@ at a PE somebody else wrote, which has bugs in it.
    specific PE, not a generic checklist. Go back to your week 2 diagrams and
    written answers; the corner cases are sitting in them already.
 
-2. **Draw your testbench as a block diagram.** Four pieces: the PE, something
-   that generates stimulus, a model that computes the expected output in
-   software, and a scoreboard that compares them and flags mismatches.
+2. **Draw your testbench as a block diagram.** All six components above, plus
+   the DUT, with arrows showing what flows between them. Mark which components
+   drive the DUT and which only watch it.
 
 3. **Pick 2 of your corner cases** and hand draw the expected timing diagram for
    each, the same way you did in week 2.
+
+4. **Turn your corner cases into a stimulus recipe.** For each of the four
+   control signals, write down roughly how often it should be asserted and why.
+   Next week those numbers become constraints, and you will have to defend them,
+   so "half the time" needs a reason behind it.
 
 ## Turn in
 
@@ -55,5 +60,6 @@ Handwritten test plan, block diagram, and 2 timing diagrams. One PDF.
 - At least 5 corner cases, grounded in this interface
 - At least one involving `pe_enabled`, and one involving what happens right
   after reset
-- Block diagram shows all 4 pieces
+- Block diagram shows all six components and which of them drive the DUT
+- Your stimulus recipe gives a frequency and a reason for each control signal
 - Both timing diagrams are correct

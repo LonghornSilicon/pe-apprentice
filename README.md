@@ -13,6 +13,7 @@ rtl/
   fxp.sv                given: fixed-point add and multiply
   pe_smoke_tb.sv        given: the week 3 test
   pe_vendor_drop.sv     given: a PE someone else wrote, for week 5
+                        (week 5's own scaffold lives in week05-verification/)
   pe_array_2x2.sv       given: four of your PEs in a grid. Optional stretch.
 ```
 
@@ -25,7 +26,7 @@ Do them in order.
 | `week02-spec/` | 2 | Write the PE's specification and timing diagrams | none |
 | `week03-rtl/` | 3 | **Write `rtl/pe.sv`** and simulate it | Xcelium |
 | `week04-test-plan/` | 4 | Plan how to break it | none |
-| `week05-verification/` | 5 | Build the testbench, hunt bugs | Xcelium |
+| `week05-verification/` | 5 | Build a six-component testbench, hunt bugs | Xcelium |
 | `week06-timing/` | 6 | Learn timing, predict your slow path | none |
 | `week07-synthesis/` | 7 | Turn your RTL into gates | Genus |
 | `week08-floorplan/` | 8 | Plan the physical layout | none |
