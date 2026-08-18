@@ -65,19 +65,63 @@ less $LEF_MACRO
    The `.lib` is what synthesis reads. The `.lef` is what place and route reads.
    Same cell, two views, two different questions.
 
-   Now look at the cell itself:
+   Now look at the cell itself.
 
 ```bash
 klayout -e $STDCELLS_GDS &
 ```
 
-   In the cell list on the left, find `INVX1` and double-click it. You are
-   looking at the actual polygons: diffusion, poly, contacts, metal. The width
-   and height you wrote down from the LEF are the outline of what is on screen,
-   and the pin rectangles are the shapes the router is allowed to touch.
+   The file has 489 cells in it and klayout opens showing none of them. In the
+   **Cells** panel on the left, find `INVX1`, then **right-click it and choose
+   Show As New Top**. Double-clicking does not work; it expands the tree instead.
+   Press `f` to fit the view.
 
-   Everything in this program above this point is an abstraction over these
-   shapes. Worth three minutes to see the bottom of the stack once.
+### What you are looking at
+
+   An inverter is two transistors. Everything on screen is those two, plus the
+   wiring to reach them.
+
+```
+   ┌───────────────────────────────────────────┐
+   │ ███████████  VDD rail  ███████████        │  Metal1, top edge
+   │ ░░░░░░░░░  n-well  ░░░░░░░░░░░░░░░        │  the tub the PMOS sits in
+   │      ▓▓▓▓▓▓   │   ▓▓▓▓▓▓                  │  PMOS source and drain
+   │              ███                          │
+   │              ███  <- poly, the GATE       │  one vertical stripe
+   │   A ────●    ███                          │  input touches the poly
+   │              ███         ●──── Y          │  output taps both drains
+   │      ▓▓▓▓▓▓   │   ▓▓▓▓▓▓                  │  NMOS source and drain
+   │ ███████████  VSS rail  ███████████        │  Metal1, bottom edge
+   └───────────────────────────────────────────┘
+```
+
+   Reading it against the screen:
+
+   - **Red vertical stripe down the middle** is poly. That single shape is the
+     gate of *both* transistors, which is why one input controls both.
+   - **Green rectangles above and below it** are diffusion. Where poly crosses
+     diffusion, you have a transistor. Two crossings, two transistors.
+   - **The purple hatched region over the top half** is the n-well. PMOS has to
+     sit in one; NMOS sits directly in the substrate, so the bottom half has no
+     well.
+   - **Small dark squares** are contacts, the vias down from Metal1 to
+     diffusion or poly.
+   - **Light blue shapes** are Metal1: the two horizontal power rails, plus the
+     short wires tying the drains together into the output.
+   - **`A` and `Y`** are the pin labels. Those exact rectangles are what you
+     read out of the LEF a moment ago, and the only places the router is allowed
+     to connect.
+
+   Now put it together. Input high turns the NMOS on and the PMOS off, so the
+   output is pulled to VSS. Input low does the reverse and pulls it to VDD. That
+   is the inversion, and it is the whole cell.
+
+   Two things worth noticing. The rails run edge to edge so that cells abut and
+   share power without any routing. And the cell is exactly as tall as a row and
+   no taller, which is why placement can pack them like bricks.
+
+   Everything in this program sits on top of these shapes. Worth three minutes
+   to see the bottom of the stack once.
 
 3. **Draft your constraints.** A target clock period, with a reason behind the
    number. Which ports are your primary inputs and outputs. You will type this

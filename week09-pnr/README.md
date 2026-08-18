@@ -148,8 +148,12 @@ create_floorplan -site CoreSite -core_density_size 1.0 0.7 5 5 5 5
 ```
 
 Creates the die and core. The numbers are aspect ratio 1.0 (square), target
-density 0.7, and 5 µm of margin on each side for the power ring. `CoreSite` is
-0.2 × 1.71 µm, so rows come out 1.71 µm tall.
+density 0.7, and 5 µm of margin on each side for the power ring. The reference
+PE lands on a die of about 72 × 72 µm with a core of about 62 × 62 µm.
+
+gsclib045 has two core sites, `CoreSite` at 1.71 µm tall and `CoreSiteDouble` at
+3.42 µm, so Innovus lays down rows of both heights and picks per cell. You can
+see all 53 of them later in the DEF.
 
 Density is a guess at this stage and it will not hold; optimization adds cells.
 The reference PE was asked for 0.7 and finished at 0.93.
@@ -427,9 +431,29 @@ anything you might want to undo.
 write_def post-pnr.def
 ```
 
-Design Exchange Format: the physical data as portable text. Die area, every row,
-every cell's position, every wire. This is what you hand another team or another
-tool. Open it in `less` and you can recognise your own design in it.
+Design Exchange Format: the physical data as portable text. Unlike the GDS, you
+can read it. Open it and look for four things:
+
+```bash
+less post-pnr.def
+```
+
+`DIEAREA ( 0 0 ) ( 144800 143640 )` in database units, 2000 per micron, so your
+die is about 72 x 72 um. `ROW` lines, one per standard-cell row, naming which
+site each uses. `TRACKS` lines, the routing grid for all eleven metal layers.
+Then `COMPONENTS`, one line per cell with its type and exact position:
+
+```
+- FE_RC_427_0 INVX1 + SOURCE TIMING + PLACED ( 59600 88920 ) N
+```
+
+That is an `INVX1`, the cell you looked at in klayout in week 6, at x=29.8 um
+y=44.46 um, oriented normally. `SOURCE TIMING` means Innovus added it during
+optimization rather than Genus putting it in the netlist, which is why your
+component count here is higher than the 1142 Genus reported.
+
+DEF is what you hand another team or another tool. It is also the only physical
+output in this flow you can debug by reading.
 
 ```tcl
 write_netlist post-pnr.v
