@@ -195,7 +195,7 @@ bug this step exists to catch, and finding one is a good day.
 ## 13. Save it
 
 ```
-% code run-glsim
+% vi run-glsim
 ```
 
 ```bash
