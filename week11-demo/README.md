@@ -17,6 +17,11 @@ Two things to include that are easy to skip:
 - **One number you can defend completely.** Meaning you can say where it came
   from, which file, which corner, and why it is that value and not another.
 
+If you took week 10 Part C all the way and actually closed timing, show the
+before and after and walk us through what you changed. That is the strongest
+thing anyone can present, because it means you went back through the whole flow
+a second time with a reason.
+
 ## Turn in
 
 - The presentation

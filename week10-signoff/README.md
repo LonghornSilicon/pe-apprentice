@@ -1,10 +1,11 @@
 # Week 10: Signoff
 
-**Goal:** Prove the design meets timing using a dedicated signoff tool, and
-prove the layout can actually be manufactured.
+**Goal:** Measure the design with a signoff tool, prove the layout can be
+manufactured, then decide what you would do about whatever did not close.
 
-Two questions, two tools. Tempus asks *does it run at the speed you claimed*.
-Innovus asks *can this geometry be built*.
+Three parts. Tempus asks *does it run at the speed you claimed*. Innovus asks
+*can this geometry be built*. Then you answer the one nobody else can: *given
+everything you now know, what would you change*.
 
 Work in pairs. Everything below was run on the chamber and the numbers quoted
 are what the reference PE produced.
@@ -216,9 +217,135 @@ polygons, and nothing else knows or cares that it was ever Verilog.
 
 ---
 
-## 8. Write your signoff summary
+---
 
-One page. It should answer, with numbers:
+# Part C: Close it
+
+Your design does not meet timing. Almost nobody's does on the first pass. This
+part is where you decide what to do about it, and it is the last engineering
+judgement the program asks of you.
+
+## 9. Look at where the time actually goes
+
+Open your timing report and read the path, not just the slack.
+
+```bash
+less ~/pe-apprentice/week09-pnr/work/timing_postroute.rpt
+```
+
+The reference PE's path breaks down roughly like this, and yours will be similar
+because it is the same structure:
+
+| Segment | Time | What it is |
+|---|---|---|
+| `pe_switch_in` to the first multiplier gate | ~0.75 ns | the weight promotion mux |
+| through the `MULT_TC_OP_*` cells | ~2.2 ns | the multiplier |
+| through the `ADD_TC_OP_*` cells and out | ~1.2 ns | the adder and the output flop |
+
+Work out your own three numbers by finding where the cell name prefix changes.
+That is the whole diagnosis: you cannot fix a path you have not divided up.
+
+Notice the first row. **Your critical path starts at a control input**, not at
+`pe_input_in`. That is a direct consequence of a decision you made in week 3.
+
+## 10. Your week 3 decision, revisited
+
+Week 3 asked you to choose whether the weight promotion was combinational or
+sequential, and told you to be ready to defend it. Here is the bill.
+
+If you made it **combinational**, `pe_switch_in` feeds a mux that feeds the
+multiplier, so the switch signal is on the critical path. You bought a
+zero-bubble switch: the array never stalls to change weights.
+
+If you made it **sequential**, the promotion lands in a flop, the path starts at
+`pe_input_in` instead, and you save whatever your first segment costs. You paid
+one bubble every time the weights change.
+
+Neither is wrong. Which is right depends on how often weights change, and for a
+matmul engine streaming a whole matrix through one set of weights, the answer is
+usually "rarely, so take the bubble." For a design switching weights every few
+cycles, it is the opposite.
+
+**This is the question the week ends on.** Answer it with your own numbers.
+
+## 11. Four ways to close the gap
+
+| | Fix | Costs you | Where it happens |
+|---|---|---|---|
+| a | Relax the clock period | speed, which may not be yours to give up | `week07-synthesis/constraints.sdc` |
+| b | Lower the floorplan density | area | `create_floorplan` in week 9 |
+| c | ECO: upsize cells on the path | power and a little area | Innovus, post-route |
+| d | Pipeline the datapath in RTL | one cycle of latency | `rtl/pe.sv`, back to week 3 |
+
+**(b) is the cheapest to test** and you already have the script to do it. Change
+one number and re-run:
+
+```bash
+cd ~/pe-apprentice/week09-pnr/work
+vi run.tcl
+```
+
+Change `0.7` in `create_floorplan` to `0.5`, then:
+
+```bash
+./run
+grep Slack timing_postroute.rpt
+```
+
+More room means shorter wires means better timing, paid for in silicon area.
+Try `0.5` and `0.9` and put the three numbers side by side. That table is a
+design space exploration, and it is most of what a physical design engineer does
+all day.
+
+**Push the density up until something breaks.** At some point placement will
+fail, or the router will leave nets unconnected, or `check_drc` will stop
+returning `No DRC violations were found`. Find that point. When you do:
+
+```tcl
+gui_show
+```
+
+**Tools > Violation Browser.** Double-click a violation and the layout jumps to
+it. Read which rule it broke. This is the only chance in the program to see a
+DRC failure on a design you understand, and knowing what one looks like is worth
+more than never having produced one.
+
+**(d) is the interesting one.** Your multiplier is roughly half the path. Put a
+register between the multiply and the add and you split one long stage into two
+shorter ones, which lets the whole design run at a faster clock. The cost is one
+extra cycle of latency, and a testbench that has to be updated because the answer
+now arrives a cycle later.
+
+That fix is not hypothetical. Lambda's real `mate_pv` block does exactly this,
+and its comments say why: registering the product between the multiply and the
+accumulate splits the long combinational path and lets the block close roughly
+twice the clock frequency. If you arrive at (d) on your own, you have
+rediscovered a decision in the RTL of the chip you are about to work on.
+
+## 12. What to hand in for Part C
+
+**Required.** One page, with numbers:
+
+- Your three path segments and which dominates
+- Whether your week 3 promotion choice was right, argued with the cost you now
+  know it carried
+- Which of the four fixes you would take, why, and your estimate of what it
+  would buy you
+- Why you rejected the other three
+
+An estimate with reasoning behind it is a real answer. "Option d, probably
+faster" is not.
+
+**Optional, and the best thing you can do this semester.** Actually close it.
+The full loop is: change `rtl/pe.sv`, fix `rtl/pe_smoke_tb.sv` for the new
+latency, re-run week 3, re-run week 7, re-run week 9, re-run Part A here. Every
+script you wrote exists so that loop takes an afternoon instead of a week.
+
+Bring the before and after numbers to demo day.
+
+## 13. Write your signoff summary
+
+One page covering Parts A and B. It should answer, with numbers:
 
 - Setup slack and hold slack, each with the corner it came from
 - Which analysis mode and SI setting produced them
@@ -251,6 +378,9 @@ one-page summary.
   is named with a reason it is open
 - You have looked at your own transistors
 - Your summary is honest
+- You can break your critical path into segments and say which one dominates
+- You have a defended position on whether your week 3 promotion choice was right
+- You named a fix, estimated what it buys, and said why you rejected the others
 
 ## Stretch: Assura
 
