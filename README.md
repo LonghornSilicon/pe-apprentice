@@ -7,13 +7,13 @@ layout, on the same Cadence tools the Lambda team uses.
 
 **All Verilog lives in `rtl/`.** The only file you write is `rtl/pe.sv`.
 
-```
+```bash
 rtl/
   pe.sv                 <-- YOU WRITE THIS, in week 3
   fxp.sv                given: fixed-point add and multiply
   pe_smoke_tb.sv        given: the week 3 test
   pe_vendor_drop.sv     given: a PE someone else wrote, for week 5
-  pe_array_2x2.sv       given: four of your PEs in a grid, for weeks 9 and 10
+  pe_array_2x2.sv       given: four of your PEs in a grid. Optional stretch.
 ```
 
 **One folder per week.** Each has a `README.md` that is that week's lab handout.

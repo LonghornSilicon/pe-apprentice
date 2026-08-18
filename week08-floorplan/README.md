@@ -29,31 +29,41 @@ floorplan after routing costs far more than fixing it before placement starts.
 
 ## What you are planning
 
-```
-% less ~/pe-apprentice/rtl/pe_array_2x2.sv
-```
+Your PE. One of them, the same design you synthesized in week 7.
 
-Four of your PEs wired into a grid. Read the header: activations flow west to
-east, partial sums flow north to south, weights come in from the north.
+The thing that makes this a real decision is not how many cells there are, it is
+where the signals enter and leave. Your PE has four edges and every port belongs
+to one of them: activations arrive from the west, partial sums arrive from the
+north and leave to the south, activations continue east. Next week you will
+place those pins yourself, and where you put them changes how far every wire has
+to travel.
 
-Four instead of one because floorplanning a single cell is not a decision. With
-four there is a wrong answer and a right answer.
+Look at the interface again with that in mind:
+
+```bash
+less ~/pe-apprentice/rtl/pe.sv
+```
 
 ## Do
 
-1. **Floorplan sketch.** Where would you put the four PEs relative to each other,
-   given how data actually moves between them? Where would the power rings and
-   straps run? Where would the pins land on each edge?
+1. **Floorplan sketch.** Draw the core as a rectangle. Mark which edge each
+   group of ports goes on, and why. Mark where the power ring runs and where the
+   stripes cross the core.
 
-   Activations enter from the west and results leave to the south. Your pin
-   placement should show that.
+   Every port has a natural side, given how a PE sits in a grid: its north
+   neighbour feeds it partial sums, its west neighbour feeds it activations, and
+   it feeds the PE below and to the right. Put each one where its neighbour
+   would be.
+
+   You will type this into Innovus next week, so be specific enough to
+   implement.
 
 2. **Notes.** Name at least 2 things that go wrong with a bad floorplan, and why
    catching them now is cheaper than catching them at routing.
 
-3. **One prediction.** Which of the four PEs will have the longest wire to its
-   neighbour under your floorplan, and roughly how much longer? Week 9 tells you
-   whether you were right.
+3. **One prediction.** With your pin placement, which port will have the longest
+   wire to the logic it drives? Week 9 gives you a total wire length you can
+   check it against.
 
 ## Turn in
 
@@ -61,8 +71,7 @@ Floorplan sketch and notes. One PDF.
 
 ## Done means
 
-- The sketch shows a specific layout choice with reasoning, not a rectangle with
-  PEs scattered in it
-- Pin placement matches the direction data flows
+- The sketch assigns every port group to a specific edge, with a reason
+- Pin placement matches the direction data flows in a grid of PEs
 - At least 2 named risks (congestion, IR drop, long critical nets are the usual)
 - You committed to a prediction in task 3

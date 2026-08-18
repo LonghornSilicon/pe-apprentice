@@ -7,12 +7,12 @@ Two halves. Part A is Genus. Part B is simulating what Genus produced.
 
 ## 1. Get on the chamber
 
-```
-% bash
-% qsh -q normal.q -now n -V
-% bash
-% source ~/pe-apprentice/setup.sh
-% cd ~/pe-apprentice/week07-synthesis
+```bash
+bash
+qsh -q normal.q -now n -V
+bash
+source ~/pe-apprentice/setup.sh
+cd ~/pe-apprentice/week07-synthesis
 ```
 
 ---
@@ -27,8 +27,8 @@ You run Genus by hand first. That is on purpose.
 
 ## 2. Set your clock period
 
-```
-% less constraints.sdc
+```bash
+less constraints.sdc
 ```
 
 The period in there is a placeholder. Replace it with the number you argued for
@@ -36,15 +36,15 @@ in week 6.
 
 ## 3. Start Genus
 
-```
-% genus
+```bash
+genus
 ```
 
 You get a `genus:/>` prompt. Everything below is one command at a time.
 
 ## 4. Load the library
 
-```
+```bash
 genus:/> set_db library $env(LIB_SS)
 ```
 
@@ -54,7 +54,7 @@ setup against.
 
 ## 5. Read and elaborate
 
-```
+```bash
 genus:/> read_hdl -sv ../rtl/fxp.sv ../rtl/pe.sv
 genus:/> elaborate pe
 ```
@@ -68,13 +68,13 @@ something on every path.
 
 ## 6. Apply your constraints
 
-```
+```bash
 genus:/> read_sdc constraints.sdc
 ```
 
 ## 7. Synthesize, in three stages
 
-```
+```bash
 genus:/> syn_generic
 genus:/> report_timing -nworst 1
 genus:/> syn_map
@@ -94,7 +94,7 @@ fastest way to see what synthesis actually does.
 
 ## 8. Reports
 
-```
+```bash
 genus:/> report_area
 genus:/> report_timing
 genus:/> report_power
@@ -108,7 +108,7 @@ you will spend week 9 debugging a week 7 mistake.
 
 ## 9. Write the outputs
 
-```
+```bash
 genus:/> write_hdl -mapped > post-synth.v
 genus:/> write_sdc         > post-synth.sdc
 genus:/> exit
@@ -116,8 +116,8 @@ genus:/> exit
 
 Look at what you got:
 
-```
-% less post-synth.v
+```bash
+less post-synth.v
 ```
 
 `less` scrolls with space, searches with `/word`, quits with `q`. It never
@@ -126,16 +126,16 @@ netlists. When you do need to edit something, use `vi` and see `SETUP.md`.
 
 That is your PE as gates. Pick a cell name out of it and look it up:
 
-```
-% grep -A 20 "cell (INVX1)" $LIB_SS
+```bash
+grep -A 20 "cell (INVX1)" $LIB_SS
 ```
 
 ## 10. Save the commands
 
 Put every `genus:/>` command into `run.tcl`, ending with `exit`:
 
-```
-% vi run.tcl
+```bash
+vi run.tcl
 ```
 
 `i` to type, `Esc` to stop, `:wq` to save and quit. If the letters `:wq` end up
@@ -148,9 +148,9 @@ Then make `run`:
 genus -no_gui -files run.tcl
 ```
 
-```
-% chmod +x run
-% ./run
+```bash
+chmod +x run
+./run
 ```
 
 You should get the same result you got by hand.
@@ -167,17 +167,17 @@ delay comes much later.
 
 ## 11. Look at the cell models
 
-```
-% less $STDCELLS_V
+```bash
+less $STDCELLS_V
 ```
 
 Behavioural Verilog for every cell in the library. Find `INVX1`.
 
 ## 12. Simulate
 
-```
-% cd ~/pe-apprentice/week07-synthesis
-% xrun -sv -access +rwc \
+```bash
+cd ~/pe-apprentice/week07-synthesis
+xrun -sv -access +rwc \
     +delay_mode_zero \
     $STDCELLS_V \
     post-synth.v \
@@ -194,8 +194,8 @@ bug this step exists to catch, and finding one is a good day.
 
 ## 13. Save it
 
-```
-% vi run-glsim
+```bash
+vi run-glsim
 ```
 
 ```bash
@@ -207,19 +207,19 @@ xrun -sv -access +rwc \
   ../rtl/pe_smoke_tb.sv
 ```
 
-```
-% chmod +x run-glsim
-% ./run-glsim
+```bash
+chmod +x run-glsim
+./run-glsim
 ```
 
 ## Turn in
 
-```
-% cd ~/pe-apprentice
-% git add week07-synthesis/constraints.sdc week07-synthesis/run.tcl \
+```bash
+cd ~/pe-apprentice
+git add week07-synthesis/constraints.sdc week07-synthesis/run.tcl \
           week07-synthesis/run week07-synthesis/run-glsim
-% git commit -m "week 7: synthesis"
-% git bundle create ~/<your-username>-week7.bundle main..<your-username>
+git commit -m "week 7: synthesis"
+git bundle create ~/<your-username>-week7.bundle main..<your-username>
 ```
 
 Move the bundle off the chamber, plus your area and timing reports, and a short

@@ -35,12 +35,12 @@ Every one of those numbers comes out of a file. Task 2 is you opening it.
 
 2. **Open the library.** On the chamber:
 
-```
-% bash
-% qsh -q normal.q -now n -V
-% bash
-% source ~/pe-apprentice/setup.sh
-% less $LIB_SS
+```bash
+bash
+qsh -q normal.q -now n -V
+bash
+source ~/pe-apprentice/setup.sh
+less $LIB_SS
 ```
 
    Search for `cell (INVX1)` by typing `/cell (INVX1)` and hitting enter. This is
@@ -56,14 +56,28 @@ Every one of those numbers comes out of a file. Task 2 is you opening it.
 
    Now the physical view:
 
-```
-% less $LEF_MACRO
+```bash
+less $LEF_MACRO
 ```
 
    Find `MACRO INVX1`. Write down its width and height, and where its pins are.
 
    The `.lib` is what synthesis reads. The `.lef` is what place and route reads.
    Same cell, two views, two different questions.
+
+   Now look at the cell itself:
+
+```bash
+klayout -e $STDCELLS_GDS &
+```
+
+   In the cell list on the left, find `INVX1` and double-click it. You are
+   looking at the actual polygons: diffusion, poly, contacts, metal. The width
+   and height you wrote down from the LEF are the outline of what is on screen,
+   and the pin rectangles are the shapes the router is allowed to touch.
+
+   Everything in this program above this point is an abstraction over these
+   shapes. Worth three minutes to see the bottom of the stack once.
 
 3. **Draft your constraints.** A target clock period, with a reason behind the
    number. Which ports are your primary inputs and outputs. You will type this
@@ -76,6 +90,7 @@ Every one of those numbers comes out of a file. Task 2 is you opening it.
 ## Turn in
 
 Notes, your library findings, draft constraints, and your prediction. One PDF.
+Include one sentence on what surprised you about the INVX1 layout.
 
 ## Done means
 

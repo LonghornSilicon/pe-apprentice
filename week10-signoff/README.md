@@ -11,13 +11,13 @@ are what the reference PE produced.
 
 ## 1. Setup
 
-```
-% bash
-% qsh -q normal.q -now n -V
-% bash
-% source ~/pe-apprentice/setup.sh
-% mkdir -p ~/pe-apprentice/week10-signoff/work
-% cd ~/pe-apprentice/week10-signoff/work
+```bash
+bash
+qsh -q normal.q -now n -V
+bash
+source ~/pe-apprentice/setup.sh
+mkdir -p ~/pe-apprentice/week10-signoff/work
+cd ~/pe-apprentice/week10-signoff/work
 ```
 
 Check the banner shows `tempus` and `klayout` with real paths. If either says
@@ -25,8 +25,8 @@ Check the banner shows `tempus` and `klayout` with real paths. If either says
 
 You need three files from week 9. Confirm they exist:
 
-```
-% ls ~/pe-apprentice/week09-pnr/work/post-pnr.{v,spef,gds}
+```bash
+ls ~/pe-apprentice/week09-pnr/work/post-pnr.{v,spef,gds}
 ```
 
 `post-pnr.v` is the netlist as it stands after every buffer and clock-tree cell
@@ -46,8 +46,8 @@ more carefully. When a company signs off a chip, this is the number they sign.
 
 ## 2. Start Tempus
 
-```
-% tempus
+```bash
+tempus
 ```
 
 You get a `tempus 1>` prompt. Same Tcl shell as Innovus and Genus.
@@ -89,7 +89,7 @@ update_timing
 
 Builds the timing graph and propagates delays. Read the header it prints:
 
-```
+```bash
 # Design Mode: 65nm
 # Analysis Mode: MMMC OCV
 # Parasitics Mode: SPEF/RCDB
@@ -130,7 +130,7 @@ identical inputs:
 
 | | Innovus post-route | Tempus |
 |---|---|---|
-| Setup slack | −1.470 ns | −1.406 ns |
+| Setup slack | see your own report | see your own report |
 | Setup time used | 0.107 ns | 0.134 ns |
 | Analysis mode | MMMC Non-OCV | MMMC OCV |
 | Signal integrity | On | Off |
@@ -162,9 +162,9 @@ the single most useful thing to take out of this week.
 
 Reopen your routed design in Innovus:
 
-```
-% cd ~/pe-apprentice/week09-pnr/work
-% innovus -stylus
+```bash
+cd ~/pe-apprentice/week09-pnr/work
+innovus -stylus
 ```
 
 ```tcl
@@ -202,19 +202,17 @@ oxide. This finds wires long enough to do that. Week 9 reported zero.
 
 ## 7. Look at the GDS with no tool behind it
 
+```bash
+klayout -e ~/pe-apprentice/week09-pnr/work/post-pnr.gds &
 ```
-% klayout -e ~/pe-apprentice/week09-pnr/work/post-pnr.gds &
-```
 
-klayout is an open-source layout viewer. It knows nothing about your netlist,
-your timing, or your constraints. It reads polygons.
+You met klayout in week 6 looking at a single `INVX1`. This is the same viewer
+pointed at your own design.
 
-Zoom in until individual cells resolve, then keep zooming. The shapes you end up
-looking at came from `gsclib045.gds`, merged in by `-merge` during streamout.
-Those are transistors.
-
-This is worth three minutes. Everything else this semester has been an
-abstraction over these shapes, and this is the layer where the abstractions stop.
+Zoom in until individual cells resolve, then keep zooming until you recognise the
+inverter you studied in week 6. It arrived here through `-merge` during
+streamout. Everything you built this semester is somewhere in this file as
+polygons, and nothing else knows or cares that it was ever Verilog.
 
 ---
 
@@ -234,11 +232,11 @@ someone in trouble at a real company.
 
 ## Turn in
 
-```
-% cd ~/pe-apprentice
-% git add week10-signoff/work/
-% git commit -m "week 10: signoff"
-% git bundle create ~/<your-username>-week10.bundle main..<your-username>
+```bash
+cd ~/pe-apprentice
+git add week10-signoff/work/
+git commit -m "week 10: signoff"
+git bundle create ~/<your-username>-week10.bundle main..<your-username>
 ```
 
 Plus `sta_setup.rpt`, `sta_hold.rpt`, `drc.rpt`, `conn.rpt`, `antenna.rpt`, a

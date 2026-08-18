@@ -21,10 +21,10 @@ You land on a machine called `ae03ut01`. That is the login node.
 
 The login node is shared and slow. Real work goes on a compute node.
 
-```
-% bash
-% qsh -q normal.q -now n -V
-% bash
+```bash
+bash
+qsh -q normal.q -now n -V
+bash
 ```
 
 Your prompt should now show something like `ip-10-2-6-219`. That is how you know
@@ -39,31 +39,31 @@ bundle.
 
 On your laptop:
 
-```
-% git clone git@github.com:LonghornSilicon/pe-apprentice.git
-% cd pe-apprentice
-% git bundle create pe-apprentice.bundle --all
+```bash
+git clone git@github.com:LonghornSilicon/pe-apprentice.git
+cd pe-apprentice
+git bundle create pe-apprentice.bundle --all
 ```
 
 Move `pe-apprentice.bundle` to the chamber using the ETX file transfer panel.
 Then on the chamber:
 
-```
-% cd ~
-% git clone pe-apprentice.bundle pe-apprentice
-% cd pe-apprentice
-% git checkout -b <your-username>
+```bash
+cd ~
+git clone pe-apprentice.bundle pe-apprentice
+cd pe-apprentice
+git checkout -b <your-username>
 ```
 
 ## 4. Load the tools
 
-```
-% source ~/pe-apprentice/setup.sh
+```bash
+source ~/pe-apprentice/setup.sh
 ```
 
 It prints where each tool was found. Every line should show a path:
 
-```
+```bash
 pe-apprentice environment loaded
   genus   /apps/GENUS211/21.18.000/tools/bin/genus
   innovus /apps/INNOVUS211/21.18.000/bin/innovus
@@ -78,9 +78,9 @@ Source this every session, after step 2.
 
 ## 5. Check that it works
 
-```
-% cd ~/pe-apprentice/week03-rtl
-% xrun -sv ../rtl/fxp.sv ../rtl/pe.sv ../rtl/pe_smoke_tb.sv
+```bash
+cd ~/pe-apprentice/week03-rtl
+xrun -sv ../rtl/fxp.sv ../rtl/pe.sv ../rtl/pe_smoke_tb.sv
 ```
 
 This runs the week 3 test against the empty `pe.sv` you have not written yet, so
@@ -98,11 +98,11 @@ submission.**
 
 For code, package your commits into a bundle:
 
-```
-% cd ~/pe-apprentice
-% git add <the files that week's README tells you to>
-% git commit -m "week 3: pe.sv"
-% git bundle create ~/<your-username>-week3.bundle main..<your-username>
+```bash
+cd ~/pe-apprentice
+git add <the files that week's README tells you to>
+git commit -m "week 3: pe.sv"
+git bundle create ~/<your-username>-week3.bundle main..<your-username>
 ```
 
 Then move that bundle off the chamber.
@@ -113,8 +113,8 @@ Then move that bundle off the chamber.
 
 There is no VS Code here. You edit with `vi`, and you only need six things.
 
-```
-% vi somefile.txt
+```bash
+vi somefile.txt
 ```
 
 | Key | What it does |
@@ -132,8 +132,8 @@ letters into your file instead of saving it, you were still in insert mode. Pres
 
 To read a file without risking editing it, use `less` instead:
 
-```
-% less timing_postroute.rpt
+```bash
+less timing_postroute.rpt
 ```
 
 `less` scrolls with arrow keys or space, searches with `/word`, and quits with

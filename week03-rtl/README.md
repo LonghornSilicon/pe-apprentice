@@ -7,20 +7,20 @@ semester. Everything else is given to you.
 
 ## 1. Get on the chamber
 
-```
-% bash
-% qsh -q normal.q -now n -V
-% bash
-% source ~/pe-apprentice/setup.sh
+```bash
+bash
+qsh -q normal.q -now n -V
+bash
+source ~/pe-apprentice/setup.sh
 ```
 
 Every session. If you skip this, `xrun` will not be found.
 
 ## 2. Look at what you are filling in
 
-```
-% cd ~/pe-apprentice
-% less rtl/pe.sv
+```bash
+cd ~/pe-apprentice
+less rtl/pe.sv
 ```
 
 The ports, the two weight registers, and the multiplier and adder are already
@@ -28,14 +28,14 @@ wired up. You fill in the three `always` blocks marked `TODO`.
 
 The multiplier and adder come from here:
 
-```
-% less rtl/fxp.sv
+```bash
+less rtl/fxp.sv
 ```
 
 ## 3. Look at the test
 
-```
-% less rtl/pe_smoke_tb.sv
+```bash
+less rtl/pe_smoke_tb.sv
 ```
 
 Four checks:
@@ -52,9 +52,9 @@ registers, and it is the one most people get wrong.
 
 Open `rtl/pe.sv` and fill in the three `always` blocks.
 
+```bash
+vi ~/pe-apprentice/rtl/pe.sv
 ```
-% vi ~/pe-apprentice/rtl/pe.sv
-``` Work from your own week 2
 timing diagrams, not from memory of code you have seen.
 
 Three rules:
@@ -69,9 +69,9 @@ spec. Go fix the spec first, then come back.
 
 ## 5. Simulate
 
-```
-% cd ~/pe-apprentice/week03-rtl
-% xrun -sv -access +rwc \
+```bash
+cd ~/pe-apprentice/week03-rtl
+xrun -sv -access +rwc \
     ../rtl/fxp.sv \
     ../rtl/pe.sv \
     ../rtl/pe_smoke_tb.sv
@@ -83,7 +83,7 @@ elaborate, and simulate all happen in this one command.
 
 You are looking for:
 
-```
+```bash
 === 1. reset leaves every output defined ===
   [ ok ] pe_psum_out                    0 (0.0000)
   ...
@@ -95,8 +95,8 @@ what you produced.
 
 ## 6. Look at the waveform
 
-```
-% simvision waves.shm &
+```bash
+simvision waves.shm &
 ```
 
 SimVision opens with an **empty waveform pane and a time axis reading
@@ -120,9 +120,9 @@ diagram, and that is worth knowing.
 
 Now that it works, put it in a script so you never type it again.
 
-```
-% cd ~/pe-apprentice/week03-rtl
-% vi run
+```bash
+cd ~/pe-apprentice/week03-rtl
+vi run
 ```
 
 `i` to start typing, `Esc` to stop, `:wq` to save and quit, `:q!` to bail
@@ -140,9 +140,9 @@ xrun -sv -access +rwc \
 
 Then:
 
-```
-% chmod +x run
-% ./run
+```bash
+chmod +x run
+./run
 ```
 
 Every tool week from here works this way: get it right by hand, then save it.
@@ -150,11 +150,11 @@ A script you wrote before you understood it is a script you cannot debug.
 
 ## Turn in
 
-```
-% cd ~/pe-apprentice
-% git add rtl/pe.sv week03-rtl/run
-% git commit -m "week 3: pe.sv"
-% git bundle create ~/<your-username>-week3.bundle main..<your-username>
+```bash
+cd ~/pe-apprentice
+git add rtl/pe.sv week03-rtl/run
+git commit -m "week 3: pe.sv"
+git bundle create ~/<your-username>-week3.bundle main..<your-username>
 ```
 
 Move the bundle off the chamber, plus a screenshot of the passing test with the
