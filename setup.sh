@@ -31,6 +31,9 @@ export ASSURA_RULES=/process/hosted/gpdk/gpdk045/oa/v6p0/assura
 
 export PE_PYTHON=/grid/common/bin/python3
 
+# Innovus assumes 90nm unless told. In Innovus, after init_design:
+#   set_db design_process_node 45
+
 echo "pe-apprentice environment loaded"
 echo "  genus   $(command -v genus   || echo MISSING)"
 echo "  innovus $(command -v innovus || echo MISSING)"

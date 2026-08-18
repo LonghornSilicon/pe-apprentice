@@ -2,7 +2,6 @@
 `define PE_V
 
 `timescale 1ns/1ps
-`default_nettype none
 
 module pe #(
   parameter  QI = 8,
@@ -79,5 +78,4 @@ module pe #(
 
 endmodule
 
-`default_nettype wire
 `endif

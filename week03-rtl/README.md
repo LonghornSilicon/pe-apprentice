@@ -67,16 +67,15 @@ spec. Go fix the spec first, then come back.
 
 ```
 % cd ~/pe-apprentice/week03-rtl
-% xrun -sv -xprop=tmerge -access +rwc \
+% xrun -sv -access +rwc \
     ../rtl/fxp.sv \
     ../rtl/pe.sv \
     ../rtl/pe_smoke_tb.sv
 ```
 
-`-xprop=tmerge` keeps unknown values pessimistic instead of letting the
-simulator guess at them. Without it, a flop you forgot to reset can look like it
-works. `-access +rwc` lets the waveform viewer see every signal; leave it off
-and your waveform is empty.
+`-sv` says the files are SystemVerilog. `-access +rwc` lets the waveform viewer
+read every signal; leave it off and your waveform comes up empty. Compile,
+elaborate, and simulate all happen in this one command.
 
 You are looking for:
 
@@ -96,8 +95,18 @@ what you produced.
 % simvision waves.shm &
 ```
 
-Put `pe_switch_in`, `pe_psum_out`, and both weight registers next to each other
-and step through check 3.
+SimVision opens with an **empty waveform pane and a time axis reading
+0 to 1,000,000,000 ns**. That is the default, not a bug. Five clicks to fix it:
+
+1. Click **`dut`** in the Design Browser tree on the left.
+2. Signal names appear in the lower pane.
+3. Ctrl-click the ones you want: `pe_switch_in`, `pe_psum_out`,
+   `pe_accept_w_in`, `pe_valid_in`, `weight_bg`, `weight_active`.
+4. Click the down-arrow button at the bottom, **Click and add to waveform area**.
+5. **View > Zoom > Full** to rescale the axis to your actual 110 ns.
+
+Now step through check 3. You should see `pe_weight_in` go to 768 (3.0) around
+20 ns, then 1280 (5.0) around 65 ns, with `pe_switch_in` pulsing between them.
 
 Compare it to your week 2 timing diagram 2. If they disagree, one of them is
 wrong. Work out which one before you change any code. Sometimes it is the
@@ -116,7 +125,7 @@ Put this in:
 
 ```bash
 #!/usr/bin/env bash
-xrun -sv -xprop=tmerge -access +rwc \
+xrun -sv -access +rwc \
   ../rtl/fxp.sv \
   ../rtl/pe.sv \
   ../rtl/pe_smoke_tb.sv

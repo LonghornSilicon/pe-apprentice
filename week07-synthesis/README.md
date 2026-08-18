@@ -164,7 +164,7 @@ Behavioural Verilog for every cell in the library. Find `INVX1`.
 
 ```
 % cd ~/pe-apprentice/week07-synthesis
-% xrun -sv -xprop=tmerge -access +rwc \
+% xrun -sv -access +rwc \
     +delay_mode_zero \
     $STDCELLS_V \
     post-synth.v \
@@ -187,7 +187,7 @@ bug this step exists to catch, and finding one is a good day.
 
 ```bash
 #!/usr/bin/env bash
-xrun -sv -xprop=tmerge -access +rwc \
+xrun -sv -access +rwc \
   +delay_mode_zero \
   $STDCELLS_V \
   post-synth.v \

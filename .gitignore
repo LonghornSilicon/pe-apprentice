@@ -24,3 +24,14 @@ post-pnr.sdf
 __pycache__/
 *.pyc
 .DS_Store
+
+# Innovus / Genus run output
+fv/
+*.cmd
+*.cmd.gz
+timingReports/
+work/*.rcdb*
+work/*.dat
+work/innovus_temp*
+*.spef
+*.sdf
