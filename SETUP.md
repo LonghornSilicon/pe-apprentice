@@ -32,28 +32,117 @@ it worked.
 
 **Do this every time you log in.** Every command in every week assumes it.
 
-## 3. Get the repo
+## 3. Get the repo onto the chamber
 
-The chamber cannot reach GitHub, so the repo travels as a single file called a
-bundle.
+The chamber cannot reach GitHub. Nothing on it can `git clone` from the
+internet. So the repo travels as a **git bundle**: one binary file containing
+the entire repository and its history, which you then clone from as if it were
+a normal remote.
 
-On your laptop:
+### 3a. Make the bundle, on your laptop
 
 ```bash
-git clone git@github.com:LonghornSilicon/pe-apprentice.git
+cd /tmp
+git clone https://github.com/LonghornSilicon/pe-apprentice.git
 cd pe-apprentice
-git bundle create pe-apprentice.bundle --all
+git bundle create /tmp/pe.bundle --all
+ls -lh /tmp/pe.bundle
 ```
 
-Move `pe-apprentice.bundle` to the chamber using the ETX file transfer panel.
-Then on the chamber:
+`--all` includes every branch and tag. The file is a few hundred KB.
+
+### 3b. Connect over SFTP
+
+You must be on the **UT Austin VPN**. The chamber is on a private network and
+nothing below resolves without it.
+
+```bash
+sftp -P 222 \
+     -o HostKeyAlgorithms=+ssh-rsa \
+     -o PubkeyAcceptedAlgorithms=+ssh-rsa \
+     <your-chamber-username>@10.2.6.6
+```
+
+Four things in that command, and you need all of them:
+
+- **`-P 222`** is a capital P. SFTP is on port 222, not the usual 22. Lowercase
+  `-p` means something else entirely and will not work.
+- **`10.2.6.6`** is the file-transfer address. It is not `ae03ut01`, which is
+  the name of the login node you see inside ETX.
+- **`HostKeyAlgorithms=+ssh-rsa`** and **`PubkeyAcceptedAlgorithms=+ssh-rsa`**
+  re-enable an older key algorithm. OpenSSH 8.8 and later turn `ssh-rsa` off by
+  default, and the chamber runs RHEL 7 which only offers it. Without these two
+  flags a recent macOS or Linux machine fails with
+  `no matching host key type found`, which sounds like a network problem and is
+  not.
+
+First connection warns about an unknown host key. Type `yes`. If you ever see
+that warning again on a later connection, stop and get a lead; do not type `yes`
+a second time.
+
+Then your chamber password, and you land at:
+
+```
+sftp>
+```
+
+### 3c. Upload
+
+```
+sftp> pwd
+sftp> put /tmp/pe.bundle
+sftp> ls -l pe.bundle
+sftp> bye
+```
+
+`pwd` shows your remote directory, which is your chamber home. `put` sends the
+file there. `ls -l` confirms the size matches what you saw on your laptop; if it
+is smaller, the transfer was cut short and you should re-send.
+
+**The chamber's SFTP is create-only.** You can write a file that does not exist.
+You cannot overwrite one that does, and you cannot delete. If you need to send a
+corrected bundle, give it a different name:
+
+```
+sftp> put /tmp/pe.bundle pe-v2.bundle
+```
+
+This is also why bundles are named with a timestamp or commit hash in any
+automated setup: every push produces a filename that has never existed.
+
+### 3d. Clone from it, on the chamber
+
+Back in ETX:
 
 ```bash
 cd ~
-git clone pe-apprentice.bundle pe-apprentice
+ls -lh pe.bundle
+git clone pe.bundle pe-apprentice
 cd pe-apprentice
-git checkout -b <your-username>
+git log -1 --oneline
+git checkout -b <your-chamber-username>
 ```
+
+`git clone` on a bundle works exactly like cloning a URL. You now have a real
+repository with full history that happens to have no live remote. The branch you
+just created is where your work goes.
+
+### 3e. Getting updates later
+
+When a lead ships a fix, you get another bundle rather than the whole repo
+again. Same `put`, then:
+
+```bash
+cd ~/pe-apprentice
+git fetch ~/update-weekN.bundle main:update-weekN
+git merge update-weekN
+```
+
+### Windows
+
+`sftp` ships with macOS and Linux. On Windows use the OpenSSH client in
+PowerShell, which takes the same flags, or WinSCP with port 222 and the same
+host.
 
 ## 4. Load the tools
 
@@ -92,9 +181,25 @@ you can fix. Copy the exact message and send it to a lead.
 
 ## 6. Turning in work
 
-Written work (photos or scans of your handwritten weeks) and code both leave the
-chamber the same way. **Ask a lead for the current route before your first
-submission.**
+Getting files **off** the chamber is not the reverse of getting them on. The
+same SFTP connection that accepts `put` has historically refused `get`, so the
+route out is the one part of this document most likely to have changed. **Ask a
+lead before your first submission.**
+
+If `get` is working, it is the same connection as section 3b:
+
+```bash
+sftp -P 222 -o HostKeyAlgorithms=+ssh-rsa \
+     -o PubkeyAcceptedAlgorithms=+ssh-rsa \
+     <your-chamber-username>@10.2.6.6
+```
+
+```
+sftp> get <your-username>-week3.bundle
+sftp> bye
+```
+
+If it refuses, ETX has a file-transfer panel, and a lead will show you.
 
 For code, package your commits into a bundle:
 
