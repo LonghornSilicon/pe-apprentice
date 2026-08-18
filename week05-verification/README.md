@@ -38,15 +38,39 @@ framework is around them.
 | Coverage | says whether you tested enough | `covergroup` |
 
 ```
-  generator ──► gen2drv ──► driver ──► [ DUT ] ──► monitor
-                              │                       │
-                              └──► drv2scb        mon2scb
-                                      │               │
-                                      ▼               ▼
-                                    ┌───────────────────┐
-                                    │    scoreboard     │◄── model
-                                    └───────────────────┘
+  ┌────────────┐              ┌────────────┐                ┌──────────┐
+  │ GENERATOR  │─ gen2drv ───►│   DRIVER   │─── pins ──────►│   DUT    │
+  │            │              │            │                │  pe.sv   │
+  │ invents    │  a mailbox   │ wiggles    │                │          │
+  │ operations │              │ pins       │                └────┬─────┘
+  └────────────┘              └─────┬──────┘                     │
+                                    │                            │ pins
+                                    │ drv2scb                    ▼
+                                    │ "here is what        ┌──────────┐
+                                    │  I sent"             │ MONITOR  │
+                                    │                      │          │
+                                    │                      │ watches, │
+                                    │                      │ drives   │
+                                    │                      │ nothing  │
+                                    │                      └────┬─────┘
+                                    │                           │ mon2scb
+                                    │                           │ "here is what
+                                    │                           │  came back"
+                                    ▼                           ▼
+                          ┌──────────────────────────────────────────┐
+                          │              SCOREBOARD                  │
+                          │                                          │
+       ┌─────────┐        │   expected = MODEL.step(what I sent)     │
+       │  MODEL  │───────►│   if (what came back != expected)        │
+       │         │        │       count an error and print why       │
+       │ the spec│        │                                          │
+       │ in code │        └──────────────────────────────────────────┘
+       └─────────┘
 ```
+
+Read it left to right. A transaction is invented, driven onto pins, observed
+coming back out, and checked against what the model said it should be. Nobody
+looks at a waveform unless something failed.
 
 They talk through **mailboxes**, never by reaching into each other's variables.
 That separation is the point. You can swap the generator without touching the
@@ -354,20 +378,15 @@ answered by someone who built the simple version first.
    use `uvm_config_db` to pass the interface handle. Why does that matter when
    the driver is four levels down a hierarchy that somebody else wrote?
 
-## What you have and have not learned
+## What this did and did not cover
 
-You have seen a real UVM environment and written a piece of one. That is a
-taste, not fluency, and the difference is worth being honest about.
+You have run a real UVM environment and written a piece of one. Plenty is left:
+agents, the register abstraction layer, virtual sequences, callbacks, TLM
+sockets, and most of the phase list are all real topics you have not touched.
 
-Not covered, and each is a real topic: agents, the register abstraction layer,
-virtual sequences, callbacks, TLM sockets, and most of the phase list. Teams
-budget a month to get someone productive in UVM and reckon they use about a
-fifth of it day to day.
-
-What you do have is the part that transfers: you know what a driver, a monitor,
-a sequence, and a scoreboard each do, because you wrote all four, and you have
-seen what the framework adds on top. That is a much better starting point than
-a month of tutorials without ever having built one by hand.
+What you do have is the part that transfers. You know what a driver, a monitor,
+a sequence, and a scoreboard each do, because you wrote all four yourself before
+seeing what the framework does with them.
 
 ## Turn in
 

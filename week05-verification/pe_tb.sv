@@ -67,18 +67,21 @@ module pe_tb;
   // Makes transactions and hands them to the driver. It knows nothing about
   // pins, clocks, or the DUT.
   //
-  // TODO(week5): fill in the loop.
-  //   - make a new pe_txn
-  //   - randomize it, and check that randomization succeeded
-  //   - put it in gen2drv
-  //
-  // `assert (t.randomize())` is the idiom. If your constraints contradict
-  // each other the solver cannot find a legal value, randomize() returns 0,
-  // and without the assert your testbench silently drives whatever was in the
-  // object before. That failure is very hard to find later.
+  // In UVM this is uvm_sequence::body(). Same three lines, same order.
   //======================================================================
   task automatic generator(int n);
-    // your code
+    pe_txn t;
+    repeat (n) begin
+      t = new();
+
+      // TODO(week5): randomize t, then put it in gen2drv.
+      //
+      // Use `assert (t.randomize())`, not a bare call. If your constraints
+      // contradict each other the solver cannot find a legal value,
+      // randomize() returns 0, and without the assert the testbench silently
+      // drives whatever was in the object before and reports a pass.
+
+    end
   endtask
 
   //======================================================================
@@ -87,23 +90,27 @@ module pe_tb;
   // Takes one transaction and makes it happen on the wires. It is the only
   // component that drives anything.
   //
-  // TODO(week5): fill in the body.
-  //   - get a transaction from gen2drv
-  //   - wait for @(negedge clk)
-  //   - drive every input pin from the transaction's fields
-  //   - put the same transaction into drv2scb so the scoreboard knows what
-  //     was sent
+  // In UVM this is uvm_driver::run_phase(), and it looks almost identical.
   //
-  // Drive on the negative edge so the values are stable well before the
-  // positive edge the DUT samples on. Driving on the same edge the design
-  // captures on is a classic way to write a testbench that passes in
-  // simulation and fails in silicon.
+  // Note the @(negedge clk). The DUT samples on posedge, so driving on the
+  // opposite edge leaves the values stable well before it looks at them.
+  // Driving on the same edge the design captures on is a race, and it is a
+  // classic way to write a testbench that passes and a chip that does not.
   //======================================================================
   task automatic driver();
     pe_txn t;
     forever begin
-      // your code
+      gen2drv.get(t);
       @(negedge clk);
+
+      pe_weight_in   <= t.weight;
+      pe_input_in    <= t.activation;
+
+      // TODO(week5): drive the five remaining inputs from t, then put t into
+      // drv2scb so the scoreboard knows what was sent. The driver is the only
+      // component allowed to drive anything; that restriction is what keeps
+      // the monitor honest.
+
     end
   endtask
 
@@ -133,22 +140,24 @@ module pe_tb;
   // Pairs what was sent with what came back, asks the model what should have
   // come back, and counts.
   //
-  // TODO(week5): fill in the body.
-  //   - get the transaction from drv2scb
-  //   - get the observed value from mon2scb
-  //   - ask the model what it should have been
-  //   - compare, count, and on a mismatch print enough to debug from
-  //
-  // A failure message earns its keep or it does not. "MISMATCH" tells you
-  // nothing at 1am. Print the cycle, the transaction (t.show() is there for
-  // this), what you expected, and what you got.
+  // In UVM this is a uvm_scoreboard, and the model inside it is the same
+  // pe_model you are about to write. Frameworks change; the model does not.
   //======================================================================
   task automatic scoreboard();
     pe_txn t;
     bit signed [DW-1:0] observed, expected;
     forever begin
-      // your code
-      @(negedge clk);
+      drv2scb.get(t);          // what we sent
+      mon2scb.get(observed);   // what came back
+
+      // TODO(week5): ask the model what it should have been, compare it
+      // against `observed`, and count.
+      //
+      // On a mismatch, print enough to debug from. "MISMATCH" tells you
+      // nothing at 1am; print the check number, `t.show()`, the expected
+      // value and the observed one. Increment n_checked every time and
+      // n_errors only on a failure, because the run loop waits on n_checked.
+
     end
   endtask
 
@@ -172,8 +181,18 @@ module pe_tb;
   covergroup cg @(posedge clk);
     cp_switch  : coverpoint pe_switch_in;      // given, as the pattern
     cp_accept  : coverpoint pe_accept_w_in;
-    // TODO(week5): add coverpoints for pe_valid_in and pe_enabled, then at
-    // least two crosses. One of them must be cp_switch crossed with cp_accept.
+    cp_valid   : coverpoint pe_valid_in;
+    cp_enabled : coverpoint pe_enabled;
+
+    // TODO(week5): add two crosses.
+    //
+    // A coverpoint records the values one signal took. A cross records the
+    // combinations two signals took together, which is where the corners
+    // live. Syntax:  x_name : cross cp_one, cp_two;
+    //
+    // One of yours must cross cp_switch with cp_accept. That is week 2
+    // question 5a made measurable: it tells you whether a weight and a
+    // switch ever arrived on the same cycle in 500 transactions.
   endgroup
 
   cg cov = new();

@@ -98,22 +98,26 @@ class pe_seq extends uvm_sequence #(pe_item);
     super.new(name);
   endfunction
 
-  // ------------------------------------------------------------------
-  // TODO(week5): write the body.
-  //
-  // Repeat n times:
-  //   pe_item it = pe_item::type_id::create("it");
-  //   start_item(it);
-  //   assert (it.randomize());
-  //   finish_item(it);
-  //
-  // Note `type_id::create` rather than `new`. That is the factory. It looks
-  // up which class to actually build, so a test can substitute a different
-  // item type without this line changing. `new` would hardcode the type and
-  // give up that flexibility.
-  // ------------------------------------------------------------------
   task body();
-    // your code
+    pe_item it;
+    repeat (n) begin
+      it = pe_item::type_id::create("it");
+
+      // TODO(week5): three lines. start_item(it), randomize it the same way
+      // your generator did, then finish_item(it).
+      //
+      // Two things in this block are the whole reason Half B exists.
+      //
+      // `type_id::create` instead of `new`. That is the factory: it asks
+      // which class to actually build rather than hardcoding one, so a test
+      // can substitute a different item type without editing this line.
+      //
+      // start_item blocks until the driver is ready; finish_item blocks
+      // until the driver is done. Your mailbox only had the first half of
+      // that. The second half is what lets a sequence wait for a result and
+      // decide what to send next.
+
+    end
   endtask
 endclass
 

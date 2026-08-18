@@ -31,36 +31,38 @@ class pe_txn;
   rand bit enabled;
 
   // ----------------------------------------------------------------------
-  // TODO(week5): write your constraints.
+  // With no constraints, every field is uniform random across its full range.
+  // That sounds thorough and is not: a uniformly random 16-bit weight is
+  // almost never a small number, `enabled` is low half the time so the PE
+  // barely runs, and a switch landing on the same cycle as a weight load
+  // happens only by luck.
   //
-  // With no constraints at all, every field is uniform random across its full
-  // range. That sounds thorough and is not: a 16-bit signed weight picked
-  // uniformly is almost never a small number, `enabled` is low half the time
-  // so the PE barely runs, and interesting combinations like switch and
-  // accept_w on the same cycle come up only by luck.
-  //
-  // Your job is to describe the space you actually want explored. Two kinds
-  // of constraint do most of the work:
-  //
-  //   inside {[a:b]}          restrict a field to a range
-  //   dist { 1 := 9, 0 := 1 } pick 1 about nine times as often as 0
-  //
-  // Questions your constraints have to answer, and your week 4 test plan
-  // should already have opinions on all four:
-  //
-  //   - What range of activations and weights is worth testing? Remember Q8.8
-  //     saturates around +-128, so large values tell you about saturation and
-  //     small ones tell you about arithmetic.
-  //   - How often should `enabled` be low? Rarely enough that the PE runs, but
-  //     often enough that you find out what happens when it does.
-  //   - How often should `switch` fire? A switch every cycle is not realistic
-  //     and a switch that never fires tests nothing.
-  //   - Do you want accept_w and switch to land on the same cycle sometimes?
-  //     That is week 2 question 5a. If you never generate it, you never test
-  //     it, and the coverage report at the end will say so.
+  // Constraints are how you describe the space you actually want explored.
+  // One is written for you as the pattern.
   // ----------------------------------------------------------------------
 
-  // constraint c_... { ... }
+  constraint c_values {
+    activation inside {[-8*ONE : 8*ONE]};    // +-8.0, small enough not to saturate
+    weight     inside {[-8*ONE : 8*ONE]};
+    psum_in    inside {[-8*ONE : 8*ONE]};
+  }
+
+  // TODO(week5): constrain the four control bits.
+  //
+  //   dist { 1 := 9, 0 := 1 }   picks 1 about nine times as often as 0
+  //
+  // Your week 4 stimulus recipe should already answer all four:
+  //
+  //   valid     how often is the PE actually streaming?
+  //   enabled   rarely low enough that the PE runs, often enough that you
+  //             find out what happens when it is
+  //   accept_w  weights have to be loaded often enough to matter
+  //   switch    a switch every cycle is not realistic, never is not a test
+  //
+  // Every number you write here needs a reason you can say out loud. You
+  // will be asked.
+
+  // constraint c_control { ... }
 
 
   // Given. Used in scoreboard failure messages so you can see what was being
