@@ -27,11 +27,46 @@ out your expected answers from the spec, not from your RTL.** If your model and
 your design both come from the same understanding, they will agree with each
 other and both can be wrong.
 
+## The six components
+
+Every industrial verification environment is built from the same six pieces, and
+next week you build all six. Learn the names now.
+
+| Component | Job | Called this in UVM |
+|---|---|---|
+| Generator | invents operations to try | `uvm_sequence` |
+| Driver | turns an operation into pin wiggles | `uvm_driver` |
+| Monitor | watches the DUT and drives nothing | `uvm_monitor` |
+| Model | says what the answer should be | reference model |
+| Scoreboard | compares, counts, reports | `uvm_scoreboard` |
+| Coverage | says whether you tested enough | `covergroup` |
+
+UVM is the SystemVerilog verification library used across the industry. You will
+not use it next week; you will build the six ideas it is made of, which is the
+faster route to understanding it later.
+
+The split between driver and monitor is the one people find odd at first. A
+driver makes things happen; a monitor only observes. Keeping them apart is what
+lets you attach a monitor to a bus you do not control, or between two blocks
+talking to each other, without disturbing anything.
+
+## Directed versus constrained random
+
+Every test you have written so far was **directed**: you chose the inputs and
+you knew the answer. Directed tests find the bugs you thought of.
+
+Next week you write **constrained random** stimulus instead. You describe the
+space of legal inputs and how often you want each kind, and the simulator picks
+the values. It produces combinations you would not have written, which is why it
+finds bugs you would not have looked for.
+
+The price is that you no longer know the answer in advance. That is what the
+model is for, and it is why the two ideas always arrive together.
+
 ## What week 5 does with this
 
-Your plan turns into three things: a Python model that computes the expected
-answer, stimulus and a scoreboard in SystemVerilog, and then all of it pointed
-at a PE somebody else wrote, which has bugs in it.
+Your plan turns into a working testbench, run first against your own PE and then
+against one somebody else wrote, which has defects in it.
 
 ## Do
 
