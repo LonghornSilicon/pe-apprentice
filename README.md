@@ -41,16 +41,6 @@ chamber. They alternate on purpose: you learn the idea, then you do it.
 
 Read `SETUP.md` and get the chamber working. Do that before week 2.
 
-## Keep this open
-
-[chipverify.com](https://chipverify.com) is the reference to keep in a tab all
-semester. Verilog and SystemVerilog syntax, testbench patterns, UVM. When a
-week points you at a concept and you want more than the handout gives you, look
-it up there first.
-
-Nothing in this program is built around it. It is a dictionary, not a
-curriculum.
-
 ## How each tool week works
 
 Same shape every time:

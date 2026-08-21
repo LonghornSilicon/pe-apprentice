@@ -11,6 +11,16 @@ No tools this week. Reading and paper.
 SemiAnalysis. Read at least through the Physical Design section. This is not a
 light explainer. Take your time with it.
 
+## Keep this open
+
+[chipverify.com](https://chipverify.com) is the reference to keep in a tab all
+semester. Verilog and SystemVerilog syntax, testbench patterns, UVM. When a week
+points you at a concept and you want more than the handout gives you, look it up
+there first.
+
+Nothing in this program is built around it. It is a dictionary, not a
+curriculum.
+
 ## Background
 
 A chip starts as an idea and ends up as a physical object smaller than your
