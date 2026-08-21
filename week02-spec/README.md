@@ -10,9 +10,6 @@ No tools this week. Handwritten only. No typed diagrams, no code.
 Watch [EEVblog #1249, Timing Diagrams Explained](https://www.youtube.com/watch?v=AUGRBhfAabY).
 Do this first. You cannot do this week without knowing how to read a waveform.
 
-For Verilog syntax questions only, [chipverify.com](https://chipverify.com/verilog).
-Do not copy structure from it.
-
 ## Background
 
 Lambda's compute core is a grid of small units called **PEs**, short for

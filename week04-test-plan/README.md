@@ -5,12 +5,8 @@ actually catch a bug in your PE.
 
 No tools this week. Handwritten.
 
-## Read
-
-[Self Checking Testbench](https://chipverify.com/verification/self-checking-testbench),
-chipverify.com. This is the exact pattern you build next week: a model computes
-what the output should be, a scoreboard compares it against what your PE
-produced, and it runs without you reading a log.
+If you want a worked example of the pattern before you plan your own, look up
+"self checking testbench" on chipverify.
 
 ## Background
 

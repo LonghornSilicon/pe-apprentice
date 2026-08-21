@@ -41,9 +41,19 @@ chamber. They alternate on purpose: you learn the idea, then you do it.
 
 Read `SETUP.md` and get the chamber working. Do that before week 2.
 
+## Keep this open
+
+[chipverify.com](https://chipverify.com) is the reference to keep in a tab all
+semester. Verilog and SystemVerilog syntax, testbench patterns, UVM. When a
+week points you at a concept and you want more than the handout gives you, look
+it up there first.
+
+Nothing in this program is built around it. It is a dictionary, not a
+curriculum.
+
 ## How each tool week works
 
-Same shape every time, borrowed from Cornell ECE 6745:
+Same shape every time:
 
 1. Run the tool by hand, one command at a time, and look at what happens.
 2. Once it works, save the commands into a `run` script in that week's folder.
@@ -53,3 +63,9 @@ You build those scripts yourself. Nothing is handed to you finished.
 
 Each week works inside its own folder. Week 9 reads
 `../week07-synthesis/post-synth.v`. That is the whole dependency model.
+
+---
+
+The structure of this program owes a lot to Cornell's ECE 6745 and Berkeley's
+EECS 151, both of which put students in front of real tools early and let the
+flow do the teaching.
