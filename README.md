@@ -1,7 +1,6 @@
 # pe-apprentice
 
-You write one processing element and take it all the way to a GDS: a real chip
-layout, on the same Cadence tools the Lambda team uses.
+You write one processing element and take it all the way to a GDS
 
 ## Where things are
 
