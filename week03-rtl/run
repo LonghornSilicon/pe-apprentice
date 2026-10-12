@@ -1,0 +1,6 @@
+#!/usr/bin/env bash
+set -e
+verilator --lint-only -Wall -Wno-fatal --top pe ../rtl/fxp.sv ../rtl/pe.sv
+iverilog -g2012 -DNO_SHM -o sim ../rtl/fxp.sv ../rtl/pe.sv \
+  ../rtl/pe_smoke_tb.sv waves.sv
+vvp -n sim
