@@ -182,10 +182,12 @@ grep -A4 "^LAYER Metal3$" $LEF_TECH
 
 `DIRECTION` says which way wires on that layer prefer to run. A pin on the west
 or east edge is reached by a horizontal wire, so it goes on the horizontal
-layer; a north or south pin goes on the vertical one. `PITCH` is the track
-spacing. Two tracks between pins is the usual minimum that lets the router
-reach a pin without touching its neighbour. `setup.sh` names the two layers as
-`PIN_LAYER_H` and `PIN_LAYER_V`; check them against what you just read.
+layer; a north or south pin goes on the vertical one. `PITCH` and `OFFSET`
+define the routing tracks: track `n` sits at `OFFSET + n × PITCH`. A pin
+belongs on a track, and two tracks between pins is the usual minimum that lets
+the router reach a pin without touching its neighbour. `setup.sh` names the two
+layers as `PIN_LAYER_H` and `PIN_LAYER_V`; check them against what you just
+read, and copy the four numbers into the block below.
 
 The other thing a PE's pins have to do is line up with the PE next door: bit
 `i` of `pe_input_in` on the west edge at the same height as bit `i` of
@@ -200,37 +202,41 @@ set vL $env(PIN_LAYER_V)
 set bb [get_db designs .bbox]
 if {[llength $bb] == 1} { set bb [lindex $bb 0] }
 set dieW [lindex $bb 2] ; set dieH [lindex $bb 3]
-set pH 0.40 ;# two tracks on the horizontal layer: replace with 2 x the PITCH you read
-set pV 0.40 ;# two tracks on the vertical layer
-set x0 12.0 ; set y0 12.0 ;# first pin, past the ring and clear of the corner
+set pitchH 0.20 ; set offH 0.10 ;# replace both: PITCH and OFFSET of PIN_LAYER_H, from the grep above
+set pitchV 0.20 ; set offV 0.10 ;# replace both: same two numbers for PIN_LAYER_V
+set n0 [expr {int(ceil((12.0 - $offH) / $pitchH))}] ;# first track past the ring and the corner
+set m0 [expr {int(ceil((12.0 - $offV) / $pitchV))}]
+proc trk {off pitch n} { return [expr {$off + $n * $pitch}] }
 
 proc pin_at {name side layer x y} {
-  edit_pin -pin $name -side $side -layer $layer -assign [list $x $y] -fixed_pin -snap track
+  edit_pin -pin $name -side $side -layer $layer -assign [list $x $y] -fixed_pin
 }
 for {set i 0} {$i < 16} {incr i} {
-  set y [expr {$y0 + $i*$pH}]
+  set y [trk $offH $pitchH [expr {$n0 + 2*$i}]]
   pin_at "pe_input_in\[$i\]"  Left  $hL 0     $y
   pin_at "pe_input_out\[$i\]" Right $hL $dieW $y
-  set x [expr {$x0 + $i*$pV}]
+  set x [trk $offV $pitchV [expr {$m0 + 2*$i}]]
   pin_at "pe_psum_in\[$i\]"   Top    $vL $x $dieH
   pin_at "pe_psum_out\[$i\]"  Bottom $vL $x 0
-  set x [expr {$x0 + (18+$i)*$pV}]
+  set x [trk $offV $pitchV [expr {$m0 + 2*(18+$i)}]]
   pin_at "pe_weight_in\[$i\]"  Top    $vL $x $dieH
   pin_at "pe_weight_out\[$i\]" Bottom $vL $x 0
 }
-set y [expr {$y0 + 17*$pH}] ; pin_at pe_valid_in  Left $hL 0 $y ; pin_at pe_valid_out  Right $hL $dieW $y
-set y [expr {$y0 + 18*$pH}] ; pin_at pe_switch_in Left $hL 0 $y ; pin_at pe_switch_out Right $hL $dieW $y
-set x [expr {$x0 + 36*$pV}] ; pin_at pe_accept_w_in Top $vL $x $dieH
-set y [expr {$y0 + 20*$pH}] ; pin_at pe_enabled Left $hL 0 $y
-set y [expr {$y0 + 21*$pH}] ; pin_at clk        Left $hL 0 $y
-set y [expr {$y0 + 22*$pH}] ; pin_at rst        Left $hL 0 $y
+set y [trk $offH $pitchH [expr {$n0 + 2*17}]] ; pin_at pe_valid_in  Left $hL 0 $y ; pin_at pe_valid_out  Right $hL $dieW $y
+set y [trk $offH $pitchH [expr {$n0 + 2*18}]] ; pin_at pe_switch_in Left $hL 0 $y ; pin_at pe_switch_out Right $hL $dieW $y
+set x [trk $offV $pitchV [expr {$m0 + 2*36}]] ; pin_at pe_accept_w_in Top $vL $x $dieH
+set y [trk $offH $pitchH [expr {$n0 + 2*20}]] ; pin_at pe_enabled Left $hL 0 $y
+set y [trk $offH $pitchH [expr {$n0 + 2*21}]] ; pin_at clk        Left $hL 0 $y
+set y [trk $offH $pitchH [expr {$n0 + 2*22}]] ; pin_at rst        Left $hL 0 $y
 ```
 
 West in, north in, south out, east out, matching how a PE sits in the grid.
 `clk`, `rst` and `pe_enabled` have no neighbour on the other side; in an array
 they arrive from a tree, not from the PE to the left, so they sit apart from
 the bus. `-fixed_pin` locks every pin so later optimization cannot move it.
-`-snap track` puts it on a routing track.
+The coordinates are computed on tracks rather than snapped afterwards: with
+`-snap track`, Innovus rounded the two edges in different directions and bit
+`i` in and bit `i` out ended up one track apart.
 
 ```tcl
 gui_fit
