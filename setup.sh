@@ -38,6 +38,13 @@ export STDCELLS_GDS=$GSCLIB/gds/gsclib045.gds
 export STREAM_MAP=/process/hosted/gpdk/gpdk045/oa/v6p0/soce/streamOut.map
 export ASSURA_RULES=/process/hosted/gpdk/gpdk045/oa/v6p0/assura
 
+# Pin layers for week 9: the lowest layer whose preferred DIRECTION is
+# HORIZONTAL (west/east pins) and the lowest that is VERTICAL (north/south
+# pins), read from $LEF_TECH. Metal3/Metal2 is the Cadence convention for this
+# kit; confirm with  grep -A4 "^LAYER Metal3$" $LEF_TECH  before week 9.
+export PIN_LAYER_H=Metal3
+export PIN_LAYER_V=Metal2
+
 export PE_PYTHON=/grid/common/bin/python3
 
 # Innovus assumes 90nm unless told. In Innovus, after init_design:

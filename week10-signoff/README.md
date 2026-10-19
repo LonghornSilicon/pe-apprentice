@@ -47,8 +47,12 @@ more carefully. When a company signs off a chip, this is the number they sign.
 
 ## 2. Start Tempus
 
+Start it from the week 9 work directory, because the MMMC file you wrote
+there names the SDC by a relative path:
+
 ```bash
-tempus
+cd ~/pe-apprentice/week09-pnr/work
+tempus -stylus
 ```
 
 You get a `tempus 1>` prompt. Same Tcl shell as Innovus and Genus.
@@ -56,33 +60,33 @@ You get a `tempus 1>` prompt. Same Tcl shell as Innovus and Genus.
 ## 3. Load the design
 
 ```tcl
-read_lib $env(LIB_SS)
+read_mmmc mmmc.tcl
+read_physical -lef [list $env(LEF_TECH) $env(LEF_MACRO)]
+read_netlist post-pnr.v -top pe
+init_design
 ```
 
-Reads the slow-corner Liberty. Setup timing is checked at the slow corner
-because slow silicon is when data arrives latest.
+The same four lines that opened Innovus in week 9, and for the same reason:
+both corners, with the slow one checking setup and the fast one checking hold.
+A signoff run that loads only the slow library reports a hold number too, but
+it is the answer to a different question. The netlist is the post-route one,
+with every buffer and clock cell that place and route added.
 
 ```tcl
-read_verilog ~/pe-apprentice/week09-pnr/work/post-pnr.v
-set_top_module pe
+set_db design_process_node 45
 ```
 
-Reads the post-route netlist and names the top module. This is not the netlist
-Genus wrote in week 7; place and route added cells to it.
+Tempus guesses 65 nm otherwise, and the guess changes its delay models. You
+set the same thing in Innovus; a comparison between two tools is only fair if
+both were told the same facts.
 
 ```tcl
-read_spef ~/pe-apprentice/week09-pnr/work/post-pnr.spef
+read_spef post-pnr.spef
 ```
 
 Reads the parasitics. This is the whole point: every wire's actual resistance
 and capacitance, measured off the geometry that got built. Without this, Tempus
 would be guessing the same way synthesis did.
-
-```tcl
-read_sdc ~/pe-apprentice/week07-synthesis/post-synth.sdc
-```
-
-Reads your constraints, so the tool knows what "fast enough" means.
 
 ```tcl
 update_timing
@@ -91,15 +95,14 @@ update_timing
 Builds the timing graph and propagates delays. Read the header it prints:
 
 ```bash
-# Design Mode: 65nm
+# Design Mode: 45nm
 # Analysis Mode: MMMC OCV
 # Parasitics Mode: SPEF/RCDB
 # Signoff Settings: SI Off
 ```
 
 Four facts about how this run is configured. `SPEF/RCDB` confirms your
-parasitics loaded. Note `65nm`, which is wrong; nobody told Tempus this is a
-45 nm process. Note also `OCV`.
+parasitics loaded. Note `OCV`, and note `SI Off`.
 
 ## 4. Report
 
@@ -107,8 +110,9 @@ parasitics loaded. Note `65nm`, which is wrong; nobody told Tempus this is a
 report_timing -late -max_paths 1
 ```
 
-`-late` means setup: is data arriving in time. The reference PE reports
-**slack −1.406 ns**, on the path from `pe_switch_in` to `pe_psum_out_reg[7]/D`.
+`-late` means setup: is data arriving in time. The reference PE reported
+**slack −1.406 ns**, on the path from `pe_switch_in` to `pe_psum_out_reg[7]/D`,
+in a run that had not yet set the process node; yours will be close, not equal.
 
 ```tcl
 report_timing -early -max_paths 1
@@ -116,29 +120,33 @@ report_timing -early -max_paths 1
 
 `-early` means hold: is data arriving *too soon* and racing through a flop
 before it captures the previous value. Setup and hold fail for opposite reasons
-and need opposite corners, which is why they are two separate reports.
+and need opposite corners, which is why they are two separate reports. Check
+the `View:` line in each: setup should say `setup_view`, hold `hold_view`.
 
 ```tcl
-report_timing -late -max_paths 1 > sta_setup.rpt
-report_timing -early -max_paths 1 > sta_hold.rpt
+report_timing -late  -max_paths 1 > ../../week10-signoff/work/sta_setup.rpt
+report_timing -early -max_paths 1 > ../../week10-signoff/work/sta_hold.rpt
 exit
 ```
 
 ## 5. Compare the two tools
 
 You now have the same design measured by two signoff-capable tools with
-identical inputs:
+identical inputs. Fill the table from your own two reports:
 
 | | Innovus post-route | Tempus |
 |---|---|---|
-| Setup slack | see your own report | see your own report |
-| Setup time used | 0.107 ns | 0.134 ns |
+| Setup slack | your `timing_postroute.rpt` | your `sta_setup.rpt` |
+| Hold slack | your `timing_postroute_hold.rpt` | your `sta_hold.rpt` |
+| Setup time used | the `Setup` line in each report | |
 | Analysis mode | MMMC Non-OCV | MMMC OCV |
 | Signal integrity | On | Off |
-| Process node assumed | 90 nm | 65 nm |
+| Process node | 45 nm, set by you | 45 nm, set by you |
 
-Same start point, same endpoint, same netlist, same SPEF, and the answers differ
-by **64 ps**. Three reasons are visible in the table.
+Same start point, same endpoint, same netlist, same SPEF, same corners, and the
+two setup numbers still differ. On the reference PE, before the process node
+was set in either tool, they differed by **64 ps**. Two reasons remain in the
+table.
 
 **OCV** stands for on-chip variation. Transistors on opposite corners of a die
 are not identical, so a careful analysis pessimises one path against another.
@@ -147,8 +155,10 @@ Innovus ran without it, Tempus ran with it.
 **Signal integrity** models a switching wire coupling into its neighbour and
 shifting its delay. Innovus had it on post-route, Tempus had it off.
 
-**Process node** was guessed by both tools and both guessed wrong, because
-nobody set it. That changes the delay models.
+A third reason used to be in this table: the process node, which both tools
+guess when nobody sets it, and they guessed differently. You removed that one
+by setting it in both. Had you not, you would be comparing numbers computed
+against two different delay models and calling the difference "tool error".
 
 None of these tools is lying. They answered slightly different questions and
 nobody told them to answer the same one. **A timing number without its analysis

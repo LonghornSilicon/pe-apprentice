@@ -55,6 +55,16 @@ less ~/pe-apprentice/rtl/pe.sv
    it feeds the PE below and to the right. Put each one where its neighbour
    would be.
 
+   Two more things the sketch has to settle, because next week's commands
+   need them. First, a pin on the west or east edge is reached by a wire
+   running east-west, so it belongs on a metal layer whose preferred direction
+   is horizontal; north and south pins belong on a vertical layer. Say which
+   layer each edge uses. Second, bit `i` of `pe_input_in` on the west edge
+   should sit at the same height as bit `i` of `pe_input_out` on the east, and
+   likewise for the north/south pairs, so two PEs side by side connect with
+   straight wires. Mark the shared offsets on the sketch. `clk`, `rst` and
+   `pe_enabled` have no partner on the far side; note where they go and why.
+
    You will type this into Innovus next week, so be specific enough to
    implement.
 

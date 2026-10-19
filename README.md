@@ -13,7 +13,8 @@ rtl/
   pe_smoke_tb.sv        given: the week 3 test
   pe_vendor_drop.sv     given: a PE someone else wrote, for week 5
                         (week 5's own scaffold lives in week05-verification/)
-  pe_array_2x2.sv       given: four of your PEs in a grid. Optional stretch.
+  pe_array.sv           given: N x N of your PEs in a grid. N=2 is a stretch,
+  pe_array_tb.sv        N=8 is CHALLENGE.md, and this test drives either.
 ```
 
 **One folder per week.** Each has a `README.md` that is that week's lab handout.
@@ -32,6 +33,7 @@ Do them in order.
 | `week09-pnr/` | 9 | Place and route it | Innovus |
 | `week10-signoff/` | 10 | Timing, DRC, LVS | Tempus, Assura |
 | `week11-demo/` | 11 | Present it | none |
+| `CHALLENGE.md` | after | Optional: the 8×8 array, spec to GDS | all of them |
 
 Weeks with no tool are reading and paper. Weeks with a tool are hands on the
 chamber. They alternate on purpose: you learn the idea, then you do it.
