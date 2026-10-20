@@ -49,18 +49,24 @@ elaborate pe_array -parameters {{N 8}}
 ```
 
 Record cell count, area and worst slack next to your single-PE numbers. Is the
-array 64 PEs' worth of area? Is its critical path the same path?
+array 64 PEs' worth of area? Is its critical path the same path? Look at the
+first `module` line of `post-synth.v`: Genus names a parameterized top after
+its parameters, so the module is `pe_array_N8`, not `pe_array`, and that is
+the name `read_netlist -top` needs next.
 
 ## 4. Place and route
 
-Week 9's flow with four changes: the top is `pe_array`, the floorplan is
+Week 9's flow with four changes: the top is `pe_array_N8`, the floorplan is
 bigger, the pins are buses of 128, and the pin placement now matters more
 than anything else you type. Each 128-bit edge bus is 8 groups of 16; keep the
 groups in row and column order so row `r`'s activations enter at the height
 of PE row `r`. Two tracks between pins. Layer by edge direction, as in week 9.
 
 Then compare to your single PE: density, wire length, worst slack, where the
-critical path runs now, and how long the run took.
+critical path runs now, and how long the run took. If the critical path now
+starts at a `switch_in` pin and the slack is several nanoseconds worse than
+the PE's, look at where that pin is and where PE(0,0) was placed. The fix is
+in the floorplan, not the logic.
 
 ## Turn in, if you want it looked at
 
