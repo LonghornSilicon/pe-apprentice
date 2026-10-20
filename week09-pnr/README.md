@@ -211,19 +211,26 @@ proc trk {off pitch n} { return [expr {$off + $n * $pitch}] }
 proc pin_at {name side layer x y} {
   edit_pin -pin $name -side $side -layer $layer -assign [list $x $y] -fixed_pin
 }
+# Place the input pin, read back where Innovus actually put it, and give its
+# output partner on the far edge that exact coordinate.
+proc pin_pair {in side_in out side_out layer x y} {
+  global dieW dieH
+  pin_at $in $side_in $layer $x $y
+  set loc [get_db [get_db ports $in] .location]
+  if {[llength $loc] == 1} { set loc [lindex $loc 0] }
+  if {$side_in eq "Left"} { pin_at $out $side_out $layer $dieW [lindex $loc 1] } \
+  else                    { pin_at $out $side_out $layer [lindex $loc 0] 0 }
+}
 for {set i 0} {$i < 16} {incr i} {
   set y [trk $offH $pitchH [expr {$n0 + 2*$i}]]
-  pin_at "pe_input_in\[$i\]"  Left  $hL 0     $y
-  pin_at "pe_input_out\[$i\]" Right $hL $dieW $y
+  pin_pair "pe_input_in\[$i\]"  Left "pe_input_out\[$i\]"  Right  $hL 0  $y
   set x [trk $offV $pitchV [expr {$m0 + 2*$i}]]
-  pin_at "pe_psum_in\[$i\]"   Top    $vL $x $dieH
-  pin_at "pe_psum_out\[$i\]"  Bottom $vL $x 0
+  pin_pair "pe_psum_in\[$i\]"   Top  "pe_psum_out\[$i\]"   Bottom $vL $x $dieH
   set x [trk $offV $pitchV [expr {$m0 + 2*(18+$i)}]]
-  pin_at "pe_weight_in\[$i\]"  Top    $vL $x $dieH
-  pin_at "pe_weight_out\[$i\]" Bottom $vL $x 0
+  pin_pair "pe_weight_in\[$i\]" Top  "pe_weight_out\[$i\]" Bottom $vL $x $dieH
 }
-set y [trk $offH $pitchH [expr {$n0 + 2*17}]] ; pin_at pe_valid_in  Left $hL 0 $y ; pin_at pe_valid_out  Right $hL $dieW $y
-set y [trk $offH $pitchH [expr {$n0 + 2*18}]] ; pin_at pe_switch_in Left $hL 0 $y ; pin_at pe_switch_out Right $hL $dieW $y
+set y [trk $offH $pitchH [expr {$n0 + 2*17}]] ; pin_pair pe_valid_in  Left pe_valid_out  Right $hL 0 $y
+set y [trk $offH $pitchH [expr {$n0 + 2*18}]] ; pin_pair pe_switch_in Left pe_switch_out Right $hL 0 $y
 set x [trk $offV $pitchV [expr {$m0 + 2*36}]] ; pin_at pe_accept_w_in Top $vL $x $dieH
 set y [trk $offH $pitchH [expr {$n0 + 2*20}]] ; pin_at pe_enabled Left $hL 0 $y
 set y [trk $offH $pitchH [expr {$n0 + 2*21}]] ; pin_at clk        Left $hL 0 $y
@@ -234,9 +241,15 @@ West in, north in, south out, east out, matching how a PE sits in the grid.
 `clk`, `rst` and `pe_enabled` have no neighbour on the other side; in an array
 they arrive from a tree, not from the PE to the left, so they sit apart from
 the bus. `-fixed_pin` locks every pin so later optimization cannot move it.
-The coordinates are computed on tracks rather than snapped afterwards: with
-`-snap track`, Innovus rounded the two edges in different directions and bit
-`i` in and bit `i` out ended up one track apart.
+
+Why the read-back: Innovus keeps its own routing tracks, and they are not
+always the LEF's. On the lab's kit it built Metal3 tracks at a different pitch
+from the one in the tech LEF and then rounded the west and east edges in
+opposite directions, so two pins assigned the same `y` landed one track apart.
+Asking the tool where it put the first pin and copying that to the partner is
+the only way to be sure they share a track. Check it in `post-pnr.def` later:
+the `PINS` entries for `pe_input_in[0]` and `pe_input_out[0]` must carry the
+same `y`.
 
 ```tcl
 gui_fit
