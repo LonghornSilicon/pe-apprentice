@@ -9,6 +9,9 @@ genus.log*
 genus.cmd*
 innovus.log*
 innovus.cmd*
+tempus.log*
+tempus.cmd*
+CDS.log
 fv/
 post-synth.v
 post-synth.sdc

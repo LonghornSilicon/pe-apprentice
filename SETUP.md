@@ -65,41 +65,56 @@ ls -lh /tmp/pe.bundle
 ### 3b. Upload it
 
 There is no SFTP into this chamber. Files go in through the hub: the
-**Files** icon in the left sidebar of the room opens an upload panel. Upload
-`/tmp/pe.bundle`. It lands at `/uploads/<your-username>/pe.bundle`.
-
-### 3c. Clone from it, on the chamber
-
-In your compute-node shell:
+**Files** icon in the left sidebar of the room opens an upload panel. The
+panel refuses `.bundle` files, so rename first:
 
 ```bash
-mkdir -p /projects/library/$USER
-cd /projects/library/$USER
-ls -lh /uploads/$USER/pe.bundle
-git clone /uploads/$USER/pe.bundle pe-apprentice
-ln -s /projects/library/$USER/pe-apprentice ~/pe-apprentice
-cd ~/pe-apprentice
-git log -1 --oneline
-git checkout -b $USER
+mv /tmp/pe.bundle /tmp/pe.txt
 ```
 
-Two things happened there. The repo lives on the project volume, which is the
-one we were given and where run output belongs; your home directory is small
-and may be cleaned up. And `~/pe-apprentice` is a link to it, so every path in
-every week's README still works.
+Upload `/tmp/pe.txt`. It lands at `/uploads/<your-username>/pe.txt`. git
+does not care what the file is called.
 
-`git clone` on a bundle works exactly like cloning a URL. You now have a real
-repository with full history that happens to have no live remote. The branch
-you just created is where your work goes.
+### 3c. Copy it to the project volume
 
-### 3d. Getting updates later
+`/uploads` is read-only and only the **login node** can see it. So before
+you `srun`, still on `sj24lo04`:
+
+```bash
+mkdir -p /projects/library/<your-username>
+cp /uploads/<your-username>/pe.txt /projects/library/<your-username>/pe.bundle
+ls -lh /projects/library/<your-username>/
+```
+
+The project volume is the one we were given, every node can see it, and it
+is where run output belongs. Your home directory is small and may be cleaned
+up.
+
+### 3d. Clone from it, on a compute node
+
+```bash
+srun --pty bash
+cd /projects/library/<your-username>
+git clone pe.bundle pe-apprentice
+ln -s /projects/library/<your-username>/pe-apprentice ~/pe-apprentice
+cd ~/pe-apprentice
+git log -1 --oneline
+git checkout -b <your-username>
+```
+
+`~/pe-apprentice` is now a link to the project volume, so every path in every
+week's README works unchanged. `git clone` on a bundle works exactly like
+cloning a URL: a real repository with full history and no live remote. The
+branch you just created is where your work goes.
+
+### 3e. Getting updates later
 
 When a lead ships a fix, you get another bundle rather than the whole repo
-again. Same upload, then:
+again. Same upload and copy, then:
 
 ```bash
 cd ~/pe-apprentice
-git fetch /uploads/$USER/update-weekN.bundle main:update-weekN
+git fetch /projects/library/<your-username>/update-weekN.bundle main:update-weekN
 git merge update-weekN
 ```
 
@@ -159,12 +174,15 @@ For code, package your commits into a bundle so it is ready when the route is:
 cd ~/pe-apprentice
 git add <the files that week's README tells you to>
 git commit -m "week 3: pe.sv"
-git bundle create /projects/library/$USER/$USER-week3.bundle main..$USER
+git bundle create /projects/library/<your-username>/<your-username>-week3.bundle main..<your-username>
 ```
 
 Reports and other small text can also be pasted: open them with `less`, and
 the hub's clipboard icon (left sidebar) moves text between the chamber and
 your laptop.
+
+Never leave a job's only copy in `/tmp`: it is local to one node and gone
+when the node is reimaged.
 
 ---
 
@@ -209,6 +227,9 @@ something.
 | `module: Command not found` | You are in `csh` on the login node. `srun --pty bash`, then source. |
 | A tool says `MISSING` in the setup output | `exit`, `srun --pty bash`, then source again |
 | `User/host on EXCLUDE list`, `LMF-` | You ran the tool on the login node. `exit` or `srun --pty bash` first; the login node is not allowed to check out licenses. If it happens on a compute node, send a lead the exact message. |
+| `/uploads/...: No such file or directory` | You are on a compute node. `/uploads` exists only on the login node; use the copy in `/projects/library`. |
+| The Files panel refuses your file | It filters on extension. Rename to `.txt`; the contents do not matter. |
+| `genus.log`, `innovus.cmd`, `xrun.history` piling up in your home | Tools write logs where you launch them. Launch from the week's `work` directory, never from `~`. |
 | `srun` hangs with `job queued and waiting for resources` | The farm is full. Wait, or `Ctrl-C` and try later. `sinfo` shows node states. |
 | `DISPLAY not set`, or a GUI will not open | Open the Terminal from the KDE desktop, not from somewhere else, and `srun --pty bash` from inside it. If it still fails, ask a lead. |
 | Disk full, or writes failing strangely | `df -h /projects/library`. The volume is 190 GB for everyone. Delete old tool output from week folders you have finished. |
