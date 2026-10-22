@@ -208,7 +208,7 @@ something.
 | `command not found` for genus, xrun, innovus | You forgot `source ~/pe-apprentice/setup.sh`, or you are still on the login node in `csh`. `srun --pty bash` first. |
 | `module: Command not found` | You are in `csh` on the login node. `srun --pty bash`, then source. |
 | A tool says `MISSING` in the setup output | `exit`, `srun --pty bash`, then source again |
-| Anything about a license, `EXCLUDE list`, `LMF-` | Send a lead the exact message. Not yours to fix. |
+| `User/host on EXCLUDE list`, `LMF-` | You ran the tool on the login node. `exit` or `srun --pty bash` first; the login node is not allowed to check out licenses. If it happens on a compute node, send a lead the exact message. |
 | `srun` hangs with `job queued and waiting for resources` | The farm is full. Wait, or `Ctrl-C` and try later. `sinfo` shows node states. |
 | `DISPLAY not set`, or a GUI will not open | Open the Terminal from the KDE desktop, not from somewhere else, and `srun --pty bash` from inside it. If it still fails, ask a lead. |
 | Disk full, or writes failing strangely | `df -h /projects/library`. The volume is 190 GB for everyone. Delete old tool output from week folders you have finished. |
