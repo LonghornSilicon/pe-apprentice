@@ -43,9 +43,8 @@ this program and lets six or more people share one machine.
 
 Two Slurm habits:
 
-- `exit` when you are done. `srun -c 4 --mem=16G --pty bash` holds a slot on the node until
-  you leave it.
-- `squeue -u $USER` lists what you have running. If you closed a browser tab
+- `exit` when you are done. Your slice of the node is held until you leave.
+- `squeue -u <your-username>` lists what you have running. If you closed a browser tab
   with a shell still open, this is how you find it; `scancel <jobid>` ends it.
 
 ## 3. Get the repo onto the chamber
@@ -112,6 +111,25 @@ week's README works unchanged. `git clone` on a bundle works exactly like
 cloning a URL: a real repository with full history and no live remote. The
 branch you just created is where your work goes.
 
+Where everything ends up:
+
+```
+/projects/library/<you>/            your directory, on the 190 GB project disk
+├── pe.bundle                       the repo as one file, copied from /uploads
+└── pe-apprentice/                  the repo; ~/pe-apprentice points here
+    ├── setup.sh                    loads the tools; source it every session
+    ├── rtl/                        pe.sv, fxp.sv, the vendor drop
+    ├── week03-rtl/                 tool output lands in the week you launch from
+    ├── week05-verification/
+    └── week09-pnr/work/            big runs go in work/, which git ignores
+
+/home/<you>/                        small, may be purged; holds only the link
+└── pe-apprentice -> /projects/library/<you>/pe-apprentice
+
+/uploads/<you>/                     read-only inbox, login node only
+/tmp, /scratch                      local to one node, gone when you change node
+```
+
 ### 3e. Getting updates later
 
 When a lead ships a fix, you get another bundle rather than the whole repo
@@ -144,7 +162,7 @@ pe-apprentice environment loaded on sj24lo08
   work    /projects/library/<you>
 ```
 
-If a tool line says `MISSING`, `exit`, `srun -c 4 --mem=16G --pty bash` again to get a
+If a tool line says `MISSING`, `exit`, `srun` again (section 2) to get a
 different node and try again. If it still says `MISSING`, get a lead.
 
 If the `GSCLIB` line says `MISSING`, that is expected until Cadence installs
@@ -228,14 +246,14 @@ something.
 
 | What you see | What to do |
 |---|---|
-| `command not found` for genus, xrun, innovus | You forgot `source ~/pe-apprentice/setup.sh`, or you are still on the login node in `csh`. `srun -c 4 --mem=16G --pty bash` first. |
-| `module: Command not found` | You are in `csh` on the login node. `srun -c 4 --mem=16G --pty bash`, then source. |
-| A tool says `MISSING` in the setup output | `exit`, `srun -c 4 --mem=16G --pty bash`, then source again |
-| `User/host on EXCLUDE list`, `LMF-` | You ran the tool on the login node. `exit` or `srun -c 4 --mem=16G --pty bash` first; the login node is not allowed to check out licenses. If it happens on a compute node, send a lead the exact message. |
+| `command not found` for genus, xrun, innovus | You forgot `source ~/pe-apprentice/setup.sh`, or you are still on the login node in `csh`. `srun` first (section 2). |
+| `module: Command not found` | You are in `csh` on the login node. `srun` (section 2), then source. |
+| A tool says `MISSING` in the setup output | `exit`, `srun` again (section 2), then source again |
+| `User/host on EXCLUDE list`, `LMF-` | You ran the tool on the login node. `srun` first (section 2); the login node is not allowed to check out licenses. If it happens on a compute node, send a lead the exact message. |
 | `/uploads/...: No such file or directory` | You are on a compute node. `/uploads` exists only on the login node; use the copy in `/projects/library`. |
 | The Files panel refuses your file | It filters on extension. Rename to `.txt`; the contents do not matter. |
 | `genus.log`, `innovus.cmd`, `xrun.history` piling up in your home | Tools write logs where you launch them. Launch from the week's `work` directory, never from `~`. |
 | `srun` hangs with `job queued and waiting for resources` | The farm is full. Wait, or `Ctrl-C` and try later. `sinfo` shows node states. |
-| `DISPLAY not set`, or a GUI will not open | Open the Terminal from the KDE desktop, not from somewhere else, and `srun -c 4 --mem=16G --pty bash` from inside it. If it still fails, ask a lead. |
+| `DISPLAY not set`, or a GUI will not open | Open the Terminal from the KDE desktop, not from somewhere else, and `srun` (section 2) from inside it. If it still fails, ask a lead. |
 | Disk full, or writes failing strangely | `df -h /projects/library`. The volume is 190 GB for everyone. Delete old tool output from week folders you have finished. |
 | You need to edit a file and there is no editor you know | See above. |
