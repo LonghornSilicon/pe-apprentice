@@ -8,9 +8,7 @@ Two halves. Part A is Genus. Part B is simulating what Genus produced.
 ## 1. Get on the chamber
 
 ```bash
-bash
-qsh -q normal.q -now n -V
-bash
+srun --pty bash
 source ~/pe-apprentice/setup.sh
 cd ~/pe-apprentice/week07-synthesis
 ```

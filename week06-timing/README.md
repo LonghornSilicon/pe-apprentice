@@ -36,9 +36,7 @@ Every one of those numbers comes out of a file. Task 2 is you opening it.
 2. **Open the library.** On the chamber:
 
 ```bash
-bash
-qsh -q normal.q -now n -V
-bash
+srun --pty bash
 source ~/pe-apprentice/setup.sh
 less $LIB_SS
 ```

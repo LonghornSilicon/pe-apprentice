@@ -13,9 +13,7 @@ understand why before continuing.
 ## 1. Setup
 
 ```bash
-bash
-qsh -q normal.q -now n -V
-bash
+srun --pty bash
 source ~/pe-apprentice/setup.sh
 mkdir -p ~/pe-apprentice/week09-pnr/work
 cd ~/pe-apprentice/week09-pnr/work

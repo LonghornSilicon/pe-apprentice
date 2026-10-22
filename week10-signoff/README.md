@@ -13,9 +13,7 @@ are what the reference PE produced.
 ## 1. Setup
 
 ```bash
-bash
-qsh -q normal.q -now n -V
-bash
+srun --pty bash
 source ~/pe-apprentice/setup.sh
 mkdir -p ~/pe-apprentice/week10-signoff/work
 cd ~/pe-apprentice/week10-signoff/work
@@ -394,8 +392,8 @@ one-page summary.
 
 ## Stretch: Assura
 
-gsclib045 ships full Assura DRC and LVS rule decks at
-`/process/hosted/gpdk/gpdk045/oa/v6p0/assura/`, and Assura is installed.
+gsclib045 ships full Assura DRC and LVS rule decks under `$ASSURA_RULES`
+(set by `setup.sh`), and Assura is installed.
 
 Assura is a signoff physical-verification tool, and unlike the Innovus checks
 above it runs the foundry's own rule deck. LVS in particular is something
