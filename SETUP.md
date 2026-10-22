@@ -27,18 +27,23 @@ The login node is shared. Real work goes on a compute node, and the chamber
 uses **Slurm** to hand them out:
 
 ```bash
-srun --pty bash
+srun -c 4 --mem=16G --pty bash
 ```
 
 Your prompt changes to another `sj24loNN` and you are in `bash`. That is how
-you know it worked. The node has 24 to 44 cores and 128 GB or more; one run
-of anything in this program fits with room to spare.
+you know it worked.
+
+The two flags matter. Slurm gives each job a slice of one node: some cores
+and some memory. Without `--mem`, this chamber hands your job **all** the
+memory on the node, and nobody else can use that node until you leave, even
+though you are using one core. 4 cores and 16 GB is plenty for every week in
+this program and lets six or more people share one machine.
 
 **Do this every time you log in.** Every command in every week assumes it.
 
 Two Slurm habits:
 
-- `exit` when you are done. `srun --pty bash` holds a slot on the node until
+- `exit` when you are done. `srun -c 4 --mem=16G --pty bash` holds a slot on the node until
   you leave it.
 - `squeue -u $USER` lists what you have running. If you closed a browser tab
   with a shell still open, this is how you find it; `scancel <jobid>` ends it.
@@ -93,7 +98,7 @@ up.
 ### 3d. Clone from it, on a compute node
 
 ```bash
-srun --pty bash
+srun -c 4 --mem=16G --pty bash
 cd /projects/library/<your-username>
 git clone pe.bundle pe-apprentice
 ln -s /projects/library/<your-username>/pe-apprentice ~/pe-apprentice
@@ -139,7 +144,7 @@ pe-apprentice environment loaded on sj24lo08
   work    /projects/library/<you>
 ```
 
-If a tool line says `MISSING`, `exit`, `srun --pty bash` again to get a
+If a tool line says `MISSING`, `exit`, `srun -c 4 --mem=16G --pty bash` again to get a
 different node and try again. If it still says `MISSING`, get a lead.
 
 If the `GSCLIB` line says `MISSING`, that is expected until Cadence installs
@@ -223,14 +228,14 @@ something.
 
 | What you see | What to do |
 |---|---|
-| `command not found` for genus, xrun, innovus | You forgot `source ~/pe-apprentice/setup.sh`, or you are still on the login node in `csh`. `srun --pty bash` first. |
-| `module: Command not found` | You are in `csh` on the login node. `srun --pty bash`, then source. |
-| A tool says `MISSING` in the setup output | `exit`, `srun --pty bash`, then source again |
-| `User/host on EXCLUDE list`, `LMF-` | You ran the tool on the login node. `exit` or `srun --pty bash` first; the login node is not allowed to check out licenses. If it happens on a compute node, send a lead the exact message. |
+| `command not found` for genus, xrun, innovus | You forgot `source ~/pe-apprentice/setup.sh`, or you are still on the login node in `csh`. `srun -c 4 --mem=16G --pty bash` first. |
+| `module: Command not found` | You are in `csh` on the login node. `srun -c 4 --mem=16G --pty bash`, then source. |
+| A tool says `MISSING` in the setup output | `exit`, `srun -c 4 --mem=16G --pty bash`, then source again |
+| `User/host on EXCLUDE list`, `LMF-` | You ran the tool on the login node. `exit` or `srun -c 4 --mem=16G --pty bash` first; the login node is not allowed to check out licenses. If it happens on a compute node, send a lead the exact message. |
 | `/uploads/...: No such file or directory` | You are on a compute node. `/uploads` exists only on the login node; use the copy in `/projects/library`. |
 | The Files panel refuses your file | It filters on extension. Rename to `.txt`; the contents do not matter. |
 | `genus.log`, `innovus.cmd`, `xrun.history` piling up in your home | Tools write logs where you launch them. Launch from the week's `work` directory, never from `~`. |
 | `srun` hangs with `job queued and waiting for resources` | The farm is full. Wait, or `Ctrl-C` and try later. `sinfo` shows node states. |
-| `DISPLAY not set`, or a GUI will not open | Open the Terminal from the KDE desktop, not from somewhere else, and `srun --pty bash` from inside it. If it still fails, ask a lead. |
+| `DISPLAY not set`, or a GUI will not open | Open the Terminal from the KDE desktop, not from somewhere else, and `srun -c 4 --mem=16G --pty bash` from inside it. If it still fails, ask a lead. |
 | Disk full, or writes failing strangely | `df -h /projects/library`. The volume is 190 GB for everyone. Delete old tool output from week folders you have finished. |
 | You need to edit a file and there is no editor you know | See above. |

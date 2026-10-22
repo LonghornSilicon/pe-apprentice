@@ -8,7 +8,7 @@ Two halves. Part A is Genus. Part B is simulating what Genus produced.
 ## 1. Get on the chamber
 
 ```bash
-srun --pty bash
+srun -c 4 --mem=16G --pty bash
 source ~/pe-apprentice/setup.sh
 cd ~/pe-apprentice/week07-synthesis
 ```

@@ -13,7 +13,7 @@ understand why before continuing.
 ## 1. Setup
 
 ```bash
-srun --pty bash
+srun -c 4 --mem=16G --pty bash
 source ~/pe-apprentice/setup.sh
 mkdir -p ~/pe-apprentice/week09-pnr/work
 cd ~/pe-apprentice/week09-pnr/work

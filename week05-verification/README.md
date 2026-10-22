@@ -92,7 +92,7 @@ reference model is for, and it is why the two ideas always arrive together.
 ## 1. Get on the chamber
 
 ```bash
-srun --pty bash
+srun -c 4 --mem=16G --pty bash
 source ~/pe-apprentice/setup.sh
 cd ~/pe-apprentice/week05-verification
 ls

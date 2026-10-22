@@ -36,7 +36,7 @@ Every one of those numbers comes out of a file. Task 2 is you opening it.
 2. **Open the library.** On the chamber:
 
 ```bash
-srun --pty bash
+srun -c 4 --mem=16G --pty bash
 source ~/pe-apprentice/setup.sh
 less $LIB_SS
 ```

@@ -1,10 +1,11 @@
 # Source this once per session, after you get onto a compute node.
 #
-#   % srun --pty bash
+#   % srun -c 4 --mem=16G --pty bash
 #   $ source ~/pe-apprentice/setup.sh
 #
-# The login shell on SJ24 is csh. `srun --pty bash` gives you a bash shell on
-# a compute node; this file is written for that bash.
+# The login shell on SJ24 is csh. srun gives you a bash shell on a compute
+# node; this file is written for that bash. Always pass -c and --mem: without
+# --mem Slurm here allocates the whole node's memory to you.
 
 if ! type module >/dev/null 2>&1; then
   : "${MODULESHOME:=/apps/modules-v3.2.6a-64bit/Modules}"

@@ -13,7 +13,7 @@ are what the reference PE produced.
 ## 1. Setup
 
 ```bash
-srun --pty bash
+srun -c 4 --mem=16G --pty bash
 source ~/pe-apprentice/setup.sh
 mkdir -p ~/pe-apprentice/week10-signoff/work
 cd ~/pe-apprentice/week10-signoff/work
