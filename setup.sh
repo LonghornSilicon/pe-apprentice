@@ -64,6 +64,9 @@ export PE_PYTHON=/bin/python3
 # repo here and symlinks ~/pe-apprentice to it.
 export PE_WORK=/projects/library/$USER
 mkdir -p "$PE_WORK" 2>/dev/null
+# 2750: you read and write, the roster (group librarysj24) reads, nobody
+# else sees it. The leading 2 keeps new files in the group.
+chmod 2750 "$PE_WORK" 2>/dev/null
 
 # Innovus assumes 90nm unless told. In Innovus, after init_design:
 #   set_db design_process_node 45
