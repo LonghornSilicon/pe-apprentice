@@ -62,7 +62,12 @@ class pe_txn;
   // Every number you write here needs a reason you can say out loud. You
   // will be asked.
 
-  // constraint c_control { ... }
+  constraint c_control {
+    valid    dist {1 := 9, 0 := 1};
+    enabled  dist {1 := 9, 0 := 1};
+    accept_w dist {1 := 3, 0 := 7};
+    switch   dist {1 := 3, 0 := 7};
+  }
 
 
   // Given. Used in scoreboard failure messages so you can see what was being

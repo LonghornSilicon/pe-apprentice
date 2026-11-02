@@ -31,6 +31,7 @@ class pe_model;
   // real PE carries.
   bit signed [DW-1:0] weight_bg;    // background, loaded but not in use
   bit signed [DW-1:0] weight_fg;    // foreground, what the multiplier reads
+  bit signed [DW-1:0] last_psum;    // registered output, held when disabled
 
   // ----------------------------------------------------------------------
   // Given: Q8.8 arithmetic that matches rtl/fxp.sv exactly.
@@ -58,6 +59,7 @@ class pe_model;
   function void reset();
     weight_bg = '0;
     weight_fg = '0;
+    last_psum = '0;
   endfunction
 
   // ----------------------------------------------------------------------
@@ -83,8 +85,31 @@ class pe_model;
   // weight_bg before you use it you have modelled a PE that does not exist.
   // ----------------------------------------------------------------------
   function bit signed [DW-1:0] step(pe_txn t);
-    // your code
-    return '0;
+    bit signed [DW-1:0] old_bg;
+    bit signed [DW-1:0] old_fg;
+    bit signed [DW-1:0] result;
+
+    // A disabled PE freezes its registered outputs and weight state.
+    if (!t.enabled)
+      return last_psum;
+
+    old_bg = weight_bg;
+    old_fg = weight_fg;
+
+    // MAC reads foreground weight from BEFORE this clock edge.
+    if (t.valid)
+      result = q_add(q_mul(t.activation, old_fg), t.psum_in);
+    else
+      result = '0;
+
+    // Nonblocking-style state updates: promotion uses the OLD background.
+    if (t.accept_w)
+      weight_bg = t.weight;
+    if (t.switch)
+      weight_fg = old_bg;
+
+    last_psum = result;
+    return result;
   endfunction
 
 endclass
