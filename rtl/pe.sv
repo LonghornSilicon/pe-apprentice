@@ -46,19 +46,21 @@ module pe #(
   fxp_add #(QI,QF) u_add (mult_out,    pe_psum_in,    mac_out,  );
 
   // TODO: weight promotion. Which register does the multiplier read?
-
-  always_ff @ (posedge clk or posedge rst) begin
-    if (rst) weight_active <= '0;
-    else if (pe_switch_in) weight_active <= weight_bg;
+  logic signed [DW-1:0] weight_fg;
+  always_comb begin
+    weight_active = pe_switch_in ? weight_bg : weight_fg;
   end
 
   // TODO: weight staging. When does weight_bg capture pe_weight_in?
-
   always_ff @( posedge clk or posedge rst ) begin
-    if ( rst )
+    if ( rst ) begin
       weight_bg <= '0;
-    else if (pe_accept_w_in)
-      weight_bg <= pe_weight_in;
+      weight_fg <= '0;
+    end
+    else if ( pe_enabled ) begin
+      if ( pe_switch_in )   weight_fg <= weight_bg;
+      if ( pe_accept_w_in ) weight_bg <= pe_weight_in;
+    end
   end
 
   // TODO: streaming datapath. Drive all five outputs.

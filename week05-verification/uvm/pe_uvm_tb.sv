@@ -18,6 +18,7 @@
 `include "uvm_macros.svh"
 import uvm_pkg::*;
 
+`include "pe_txn.sv"
 `include "pe_model.sv"      // your reference model from Half A, unchanged
 
 //------------------------------------------------------------------------
@@ -116,6 +117,9 @@ class pe_seq extends uvm_sequence #(pe_item);
       // until the driver is done. Your mailbox only had the first half of
       // that. The second half is what lets a sequence wait for a result and
       // decide what to send next.
+      start_item(it);
+      assert (it.randomize()) else `uvm_fatal("SEQ", "randomize() failed")
+      finish_item(it);
 
     end
   endtask
@@ -152,6 +156,7 @@ class pe_driver extends uvm_driver #(pe_item);
   task run_phase(uvm_phase phase);
     pe_item it;
     forever begin
+      wait (vif.rst == 0);  // no driving during reset
       seq_item_port.get_next_item(it);
       @(negedge vif.clk);
       vif.pe_weight_in   <= it.weight;
@@ -202,7 +207,6 @@ class pe_monitor extends uvm_monitor;
       it.switch     = vif.pe_switch_in;
       it.valid      = vif.pe_valid_in;
       it.enabled    = vif.pe_enabled;
-      @(negedge vif.clk);          // the response lands one cycle later
       it.psum_out   = vif.pe_psum_out;
       ap.write(it);
     end
@@ -231,19 +235,19 @@ class pe_scoreboard extends uvm_subscriber #(pe_item);
     model.reset();
   endfunction
 
-  function void write(pe_item it);
+  function void write(pe_item t);
     bit signed [15:0] expected;
-    pe_txn t = new();
-    t.weight = it.weight; t.activation = it.activation; t.psum_in = it.psum_in;
-    t.accept_w = it.accept_w; t.switch = it.switch;
-    t.valid = it.valid; t.enabled = it.enabled;
+    pe_txn tx = new();
+    tx.weight = t.weight; tx.activation = t.activation; tx.psum_in = t.psum_in;
+    tx.accept_w = t.accept_w; tx.switch = t.switch;
+    tx.valid = t.valid; tx.enabled = t.enabled;
 
-    expected = model.step(t);
+    expected = model.step(tx);
     n_checked++;
-    if (it.psum_out !== expected) begin
+    if (t.psum_out !== expected) begin
       n_errors++;
       `uvm_error("SCB", $sformatf("#%0d %s exp=%0d got=%0d",
-                 n_checked, it.convert2string(), expected, it.psum_out))
+                 n_checked, t.convert2string(), expected, t.psum_out))
     end
   endfunction
 

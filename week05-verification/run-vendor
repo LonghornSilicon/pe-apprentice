@@ -1,0 +1,2 @@
+#!/usr/bin/env bash
+xrun -sv -access +rwc +define+DUT_VENDOR ../rtl/fxp.sv ../rtl/pe_vendor_drop.sv pe_tb.sv

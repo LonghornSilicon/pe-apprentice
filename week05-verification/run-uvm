@@ -1,0 +1,2 @@
+#!/usr/bin/env bash
+xrun -sv -uvm -access +rwc ../rtl/fxp.sv ../rtl/pe.sv uvm/pe_uvm_tb.sv

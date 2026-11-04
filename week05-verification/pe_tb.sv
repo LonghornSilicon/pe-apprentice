@@ -80,6 +80,8 @@ module pe_tb;
       // contradict each other the solver cannot find a legal value,
       // randomize() returns 0, and without the assert the testbench silently
       // drives whatever was in the object before and reports a pass.
+      assert (t.randomize()) else $fatal(1, "randomize() failed");
+      gen2drv.put(t);
 
     end
   endtask
@@ -110,6 +112,12 @@ module pe_tb;
       // drv2scb so the scoreboard knows what was sent. The driver is the only
       // component allowed to drive anything; that restriction is what keeps
       // the monitor honest.
+      pe_psum_in     <= t.psum_in;
+      pe_accept_w_in <= t.accept_w;
+      pe_switch_in   <= t.switch;
+      pe_valid_in    <= t.valid;
+      pe_enabled     <= t.enabled;
+      drv2scb.put(t);
 
     end
   endtask
@@ -130,7 +138,7 @@ module pe_tb;
     @(negedge clk);
     forever begin
       @(negedge clk);
-      mon2scb.put(pe_psum_out);
+      begin bit signed [DW-1:0] v = pe_psum_out; mon2scb.put(v); end
     end
   endtask
 
@@ -157,6 +165,13 @@ module pe_tb;
       // nothing at 1am; print the check number, `t.show()`, the expected
       // value and the observed one. Increment n_checked every time and
       // n_errors only on a failure, because the run loop waits on n_checked.
+      expected = model.step(t);
+      if (observed !== expected) begin
+        n_errors++;
+        $display("[MISMATCH] #%0d @%0t %s exp %0d got %0d",
+                 n_checked+1, $time, t.show(), expected, observed);
+      end
+      n_checked++;
 
     end
   endtask
@@ -193,6 +208,9 @@ module pe_tb;
     // One of yours must cross cp_switch with cp_accept. That is week 2
     // question 5a made measurable: it tells you whether a weight and a
     // switch ever arrived on the same cycle in 500 transactions.
+    x_switch_accept : cross cp_switch, cp_accept;
+    x_valid_enabled : cross cp_valid,  cp_enabled;
+
   endgroup
 
   cg cov = new();

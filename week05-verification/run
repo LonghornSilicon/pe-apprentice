@@ -1,0 +1,2 @@
+#!/usr/bin/env bash
+xrun -sv -access +rwc -covoverwrite -coverage all ../rtl/fxp.sv ../rtl/pe.sv pe_tb.sv

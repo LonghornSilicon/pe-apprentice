@@ -1,0 +1,364 @@
+TOOL:	xrun(64)	24.03-s013: Started on Nov 04, 2026 at 02:02:45 PST
+xrun(64): 24.03-s013: (c) Copyright 1995-2025 Cadence Design Systems, Inc.
+file: ../rtl/fxp.sv
+	module worklib.fxp_add:sv
+		errors: 0, warnings: 0
+	module worklib.fxp_mul:sv
+		errors: 0, warnings: 0
+		Caching library 'worklib' ....... Done
+	Elaborating the design hierarchy:
+	Top level design units:
+		$unit_0x70160de3
+		pe_tb
+	Building instance overlay tables: .................... Done
+	Generating native compiled code:
+		worklib.fxp_add:sv <0x4a94ab0e>
+			streams:   3, words:   732
+		worklib.fxp_mul:sv <0x41cfd263>
+			streams:   2, words:   587
+	Building instance specific data structures.
+	Loading native compiled code:     .................... Done
+	Design hierarchy summary:
+		                     Instances  Unique
+		Modules:                     4       4
+		Registers:                  56      66
+		Scalar wires:               12       -
+		Vectored wires:             14       -
+		Always blocks:               3       3
+		Initial blocks:             11      11
+		Parallel blocks:             1       1
+		Cont. assignments:           5       6
+		Pseudo assignments:         15       -
+		Assertions:                  1       1
+		Covergroup Instances:        0       1
+		Compilation units:           1       1
+		SV Class declarations:       2       2
+		SV Class specializations:    2       2
+		Process Clocks:              1       1
+		Simulation timescale:      1ps
+	Writing initial simulation snapshot: worklib.pe_tb:sv
+Loading snapshot worklib.pe_tb:sv .................... Done
+SVSEED default: 1
+xcelium> source /apps/XCELIUM2403/24.03.013/tools/xcelium/files/xmsimrc
+xcelium> run
+[MISMATCH] #11 @140000 w=   195 a=  1198 p=   605 | acc=1 sw=0 vld=1 en=1 exp 436 got 605
+[MISMATCH] #13 @160000 w=  1831 a= -1383 p=   597 | acc=0 sw=0 vld=1 en=1 exp 791 got -457
+[MISMATCH] #14 @170000 w= -1108 a=  2026 p=   525 | acc=0 sw=0 vld=1 en=1 exp 240 got 2068
+[MISMATCH] #15 @180000 w=  1196 a= -1231 p=    58 | acc=0 sw=0 vld=1 en=1 exp 231 got -880
+[MISMATCH] #22 @250000 w= -1022 a=  -683 p=  -236 | acc=0 sw=0 vld=1 en=1 exp -757 got -3577
+[MISMATCH] #25 @280000 w= -1030 a=  1230 p= -1017 | acc=1 sw=0 vld=1 en=1 exp -81 got 4998
+[MISMATCH] #26 @290000 w=     1 a=  -113 p=  -635 | acc=0 sw=0 vld=1 en=0 exp -81 got 4998
+[MISMATCH] #27 @300000 w=   795 a=  1081 p=  1890 | acc=0 sw=0 vld=1 en=1 exp 2713 got 1890
+[MISMATCH] #28 @310000 w=  -457 a=  -261 p= -1259 | acc=0 sw=0 vld=1 en=1 exp -1458 got -1259
+[MISMATCH] #30 @330000 w=  1166 a=   449 p=  -762 | acc=0 sw=0 vld=1 en=1 exp -420 got -762
+[MISMATCH] #31 @340000 w= -1408 a=  1421 p=  1229 | acc=1 sw=0 vld=1 en=1 exp 2311 got 1229
+[MISMATCH] #32 @350000 w=  1179 a= -1169 p=   836 | acc=0 sw=0 vld=1 en=1 exp -55 got 7265
+[MISMATCH] #33 @360000 w= -1665 a=  -397 p= -1215 | acc=0 sw=0 vld=1 en=1 exp -1518 got 968
+[MISMATCH] #34 @370000 w=  1545 a=  -150 p=   723 | acc=0 sw=0 vld=1 en=1 exp 608 got 1548
+[MISMATCH] #35 @380000 w=  -476 a=  1296 p=   196 | acc=0 sw=0 vld=1 en=1 exp 1183 got -6932
+[MISMATCH] #38 @410000 w= -1990 a= -1589 p=  1916 | acc=0 sw=0 vld=1 en=1 exp 705 got 1916
+[MISMATCH] #39 @420000 w= -1021 a=  -744 p=  -790 | acc=0 sw=0 vld=1 en=1 exp -1357 got -790
+[MISMATCH] #40 @430000 w=  -525 a=  1470 p=  1911 | acc=1 sw=0 vld=1 en=1 exp 3030 got 1911
+[MISMATCH] #41 @440000 w=  1957 a= -1717 p=  1607 | acc=0 sw=0 vld=1 en=1 exp 299 got 5128
+[MISMATCH] #42 @450000 w=   887 a=   733 p=  1148 | acc=0 sw=0 vld=1 en=1 exp 1706 got -356
+[MISMATCH] #43 @460000 w=  -217 a= -1709 p=   373 | acc=0 sw=0 vld=1 en=1 exp -929 got 3877
+[MISMATCH] #44 @470000 w=  -141 a=  1603 p=   409 | acc=0 sw=0 vld=1 en=1 exp 1630 got -2879
+[MISMATCH] #45 @480000 w= -2015 a=   -55 p= -1739 | acc=0 sw=0 vld=1 en=1 exp -1781 got -1627
+[MISMATCH] #46 @490000 w=  -977 a=   892 p=   382 | acc=1 sw=0 vld=1 en=1 exp 1061 got -1448
+[MISMATCH] #47 @500000 w=   952 a= -1832 p= -1340 | acc=0 sw=0 vld=1 en=1 exp -2736 got 5651
+[MISMATCH] #48 @510000 w= -1100 a=    48 p=  -306 | acc=0 sw=0 vld=1 en=1 exp -270 got -490
+[MISMATCH] #49 @520000 w=  -638 a= -1682 p=  -877 | acc=0 sw=0 vld=1 en=1 exp -2159 got 5542
+[MISMATCH] #50 @530000 w=  -861 a=   322 p=   303 | acc=0 sw=0 vld=1 en=1 exp 548 got -926
+[MISMATCH] #51 @540000 w= -1997 a=  -259 p= -1365 | acc=1 sw=0 vld=1 en=1 exp -1563 got -377
+[MISMATCH] #52 @550000 w=   692 a=  -806 p=   707 | acc=0 sw=0 vld=1 en=1 exp 93 got 6994
+[MISMATCH] #53 @560000 w=   856 a=  1993 p=  -415 | acc=1 sw=0 vld=1 en=0 exp 93 got 6994
+[MISMATCH] #54 @570000 w=  1774 a=  1249 p=   371 | acc=0 sw=0 vld=1 en=1 exp 1322 got 371
+[MISMATCH] #55 @580000 w=   947 a= -1472 p= -2013 | acc=1 sw=0 vld=1 en=1 exp -3135 got -2013
+[MISMATCH] #56 @590000 w=  -976 a= -1747 p= -1203 | acc=0 sw=1 vld=1 en=0 exp -3135 got -2013
+[MISMATCH] #57 @600000 w=  -571 a= -1708 p=  -218 | acc=0 sw=0 vld=1 en=1 exp -1520 got -218
+[MISMATCH] #60 @630000 w=   681 a=  1415 p=  1168 | acc=1 sw=0 vld=1 en=1 exp 2245 got 1168
+[MISMATCH] #63 @660000 w= -1046 a= -1210 p= -1833 | acc=0 sw=0 vld=1 en=1 exp -2755 got -5052
+[MISMATCH] #64 @670000 w= -1982 a=   492 p=  -817 | acc=1 sw=0 vld=1 en=1 exp -443 got 491
+[MISMATCH] #65 @680000 w=  -257 a=  -743 p= -1557 | acc=0 sw=0 vld=1 en=1 exp -2123 got 4195
+[MISMATCH] #67 @700000 w=  1916 a=  -501 p=   843 | acc=0 sw=0 vld=1 en=1 exp 461 got 2747
+[MISMATCH] #68 @710000 w=  2014 a= -1393 p=   341 | acc=0 sw=0 vld=0 en=0 exp 461 got 2747
+[MISMATCH] #70 @730000 w=   185 a=  1932 p=  -334 | acc=1 sw=0 vld=1 en=1 exp 1137 got -334
+[MISMATCH] #71 @740000 w=  -158 a= -1969 p=   401 | acc=0 sw=0 vld=1 en=1 exp -1099 got -1022
+[MISMATCH] #72 @750000 w= -1500 a= -1689 p= -1924 | acc=1 sw=0 vld=0 en=0 exp -1099 got -1022
+[MISMATCH] #74 @770000 w= -1778 a= -1812 p=  -597 | acc=0 sw=0 vld=1 en=1 exp -1978 got -597
+[MISMATCH] #75 @780000 w= -1489 a= -1888 p=  1457 | acc=0 sw=0 vld=1 en=1 exp 18 got 1457
+[MISMATCH] #76 @790000 w= -1605 a=  1596 p=    14 | acc=1 sw=1 vld=1 en=1 exp 1167 got 14
+[MISMATCH] #82 @850000 w=  1903 a=  -318 p=  1214 | acc=1 sw=0 vld=1 en=1 exp 3207 got 1214
+[MISMATCH] #83 @860000 w= -1598 a=   877 p=  1800 | acc=0 sw=0 vld=1 en=1 exp -3699 got 8319
+[MISMATCH] #84 @870000 w=  -516 a=  1178 p=  -634 | acc=0 sw=0 vld=1 en=1 exp -8020 got 8122
+[MISMATCH] #85 @880000 w=   241 a=   895 p=  1675 | acc=1 sw=0 vld=1 en=1 exp -3937 got 8328
+[MISMATCH] #86 @890000 w=   186 a=  1470 p=   448 | acc=1 sw=0 vld=1 en=1 exp -8769 got 1831
+[MISMATCH] #87 @900000 w= -1935 a=   476 p=   430 | acc=0 sw=0 vld=1 en=1 exp -2555 got 775
+[MISMATCH] #89 @920000 w= -1901 a= -1363 p=   589 | acc=0 sw=0 vld=1 en=1 exp 9134 got -402
+[MISMATCH] #90 @930000 w=  -808 a=  1460 p= -1040 | acc=0 sw=0 vld=1 en=1 exp -10194 got 20
+[MISMATCH] #91 @940000 w=  2005 a=   713 p=  -127 | acc=0 sw=0 vld=0 en=0 exp -10194 got 20
+[MISMATCH] #92 @950000 w=  -532 a=  1038 p= -1836 | acc=1 sw=0 vld=1 en=1 exp -8344 got -1836
+[MISMATCH] #94 @970000 w=  -179 a=  2009 p=  1813 | acc=1 sw=0 vld=1 en=1 exp -10783 got -2362
+[MISMATCH] #95 @980000 w=  1429 a=  -121 p=  1634 | acc=0 sw=0 vld=1 en=1 exp 2392 got 1718
+[MISMATCH] #96 @990000 w=  -572 a=  1571 p=  1700 | acc=0 sw=0 vld=1 en=1 exp -8150 got 601
+[MISMATCH] #99 @1020000 w=   661 a=   757 p= -1638 | acc=0 sw=0 vld=1 en=1 exp -6385 got -1638
+[MISMATCH] #101 @1040000 w=  -747 a= -1364 p=   442 | acc=1 sw=0 vld=1 en=1 exp 8993 got 442
+[MISMATCH] #104 @1070000 w=   -27 a= -1998 p=   873 | acc=0 sw=0 vld=1 en=1 exp 13399 got 873
+[MISMATCH] #106 @1090000 w=  1020 a=    85 p= -1095 | acc=0 sw=0 vld=1 en=1 exp -1628 got -1095
+[MISMATCH] #107 @1100000 w= -1337 a= -1751 p=  1640 | acc=0 sw=0 vld=1 en=1 exp 12617 got 1640
+[MISMATCH] #108 @1110000 w=   374 a= -1948 p= -1941 | acc=0 sw=0 vld=1 en=1 exp 10272 got -1941
+[MISMATCH] #109 @1120000 w= -1170 a= -1765 p=  -773 | acc=0 sw=0 vld=1 en=1 exp 10292 got -773
+[MISMATCH] #110 @1130000 w=  1946 a= -1327 p= -1510 | acc=1 sw=0 vld=1 en=1 exp 6809 got -1510
+[MISMATCH] #111 @1140000 w=  1997 a= -1157 p=  -134 | acc=0 sw=0 vld=1 en=1 exp 7119 got -8930
+[MISMATCH] #112 @1150000 w=  1274 a= -1518 p= -1554 | acc=0 sw=0 vld=1 en=1 exp 7963 got -13094
+[MISMATCH] #114 @1170000 w=  1597 a=  -105 p=  -219 | acc=0 sw=0 vld=1 en=1 exp 439 got -9
+[MISMATCH] #115 @1180000 w= -1958 a=   331 p=   151 | acc=0 sw=0 vld=1 en=1 exp -1925 got -514
+[MISMATCH] #116 @1190000 w=  -315 a=  1950 p= -1726 | acc=1 sw=0 vld=1 en=1 exp -13952 got -5642
+[MISMATCH] #117 @1200000 w= -1619 a=   109 p=  -378 | acc=0 sw=0 vld=1 en=1 exp -1062 got -513
+[MISMATCH] #123 @1260000 w=  1949 a=  -604 p=   866 | acc=0 sw=0 vld=1 en=1 exp 1868 got 2298
+[MISMATCH] #125 @1280000 w=   292 a=  1844 p=   464 | acc=0 sw=0 vld=1 en=1 exp -3909 got 13134
+[MISMATCH] #127 @1300000 w=  1211 a=  1548 p= -1647 | acc=0 sw=0 vld=1 en=1 exp -5318 got 8989
+[MISMATCH] #128 @1310000 w=  1669 a=  -564 p=  1981 | acc=1 sw=0 vld=1 en=1 exp 3318 got -1895
+[MISMATCH] #129 @1320000 w= -1448 a= -1859 p=    50 | acc=0 sw=0 vld=1 en=1 exp 4457 got -12070
+[MISMATCH] #131 @1340000 w= -1550 a=   480 p= -1975 | acc=0 sw=0 vld=1 en=1 exp -3114 got 1154
+[MISMATCH] #132 @1350000 w=  1761 a= -1153 p= -1021 | acc=0 sw=0 vld=1 en=1 exp 1712 got -8539
+[MISMATCH] #133 @1360000 w= -1924 a=   939 p= -1262 | acc=0 sw=0 vld=1 en=1 exp -3489 got 4859
+[MISMATCH] #134 @1370000 w=   468 a=  -751 p= -1343 | acc=1 sw=0 vld=1 en=1 exp 437 got -6240
+[MISMATCH] #144 @1470000 w= -1093 a=  -117 p= -2018 | acc=0 sw=0 vld=1 en=1 exp -2232 got -2096
+[MISMATCH] #145 @1480000 w= -1740 a=  -962 p=    34 | acc=1 sw=0 vld=1 en=1 exp -1725 got -605
+[MISMATCH] #146 @1490000 w= -2044 a=  -664 p= -1952 | acc=0 sw=0 vld=0 en=0 exp -1725 got -605
+[MISMATCH] #147 @1500000 w= -1911 a=  -901 p=   250 | acc=0 sw=0 vld=1 en=0 exp -1725 got -605
+[MISMATCH] #148 @1510000 w= -1438 a=   -15 p= -1144 | acc=0 sw=0 vld=1 en=0 exp -1725 got -605
+[MISMATCH] #149 @1520000 w=  1441 a= -1812 p=  1050 | acc=1 sw=0 vld=1 en=1 exp -2263 got 1050
+[MISMATCH] #151 @1540000 w= -2019 a=  -511 p= -1975 | acc=1 sw=0 vld=1 en=1 exp -2910 got -4852
+[MISMATCH] #152 @1550000 w=  -499 a=   930 p= -1450 | acc=0 sw=0 vld=1 en=1 exp 250 got -8785
+[MISMATCH] #153 @1560000 w=  1884 a=    -5 p=  -739 | acc=0 sw=0 vld=1 en=1 exp -749 got -700
+[MISMATCH] #154 @1570000 w= -1639 a=  1416 p= -1512 | acc=0 sw=0 vld=1 en=1 exp 1076 got -12680
+[MISMATCH] #155 @1580000 w=  -250 a= -1819 p= -1471 | acc=0 sw=0 vld=1 en=1 exp -4797 got 12874
+[MISMATCH] #160 @1630000 w=  -821 a= -1539 p=   211 | acc=0 sw=0 vld=1 en=1 exp 12348 got 211
+[MISMATCH] #161 @1640000 w=  1575 a= -1442 p=  1293 | acc=0 sw=0 vld=1 en=1 exp 12665 got 1293
+[MISMATCH] #162 @1650000 w=  -635 a= -2006 p=   137 | acc=0 sw=0 vld=1 en=1 exp 15957 got 137
+[MISMATCH] #164 @1670000 w=  -990 a=  -302 p= -1938 | acc=0 sw=0 vld=1 en=1 exp 443 got -1938
+[MISMATCH] #165 @1680000 w=  1722 a=   371 p= -1343 | acc=0 sw=0 vld=1 en=1 exp -4269 got -1343
+[MISMATCH] #166 @1690000 w=  1624 a=   720 p=  1375 | acc=0 sw=0 vld=1 en=1 exp -4304 got 1375
+[MISMATCH] #167 @1700000 w=    55 a=  1301 p=  -660 | acc=0 sw=0 vld=1 en=1 exp -10921 got -660
+[MISMATCH] #168 @1710000 w=  1118 a=  -937 p= -1376 | acc=0 sw=0 vld=0 en=0 exp -10921 got -660
+[MISMATCH] #169 @1720000 w=   923 a= -1926 p= -1000 | acc=0 sw=0 vld=1 en=1 exp 14189 got -1000
+[MISMATCH] #170 @1730000 w=  -680 a= -1815 p=   826 | acc=0 sw=0 vld=1 en=1 exp 15140 got 826
+[MISMATCH] #171 @1740000 w=  -348 a=  -122 p=   -32 | acc=0 sw=1 vld=1 en=1 exp 379 got -32
+[MISMATCH] #172 @1750000 w=  1483 a= -1638 p=  -876 | acc=0 sw=0 vld=1 en=1 exp 4645 got -876
+[MISMATCH] #173 @1760000 w=  1585 a=  -947 p= -1962 | acc=0 sw=0 vld=0 en=0 exp 4645 got -876
+[MISMATCH] #174 @1770000 w=    17 a=  1584 p=  1037 | acc=0 sw=0 vld=1 en=1 exp -4303 got 1037
+[MISMATCH] #176 @1790000 w=   562 a=  -845 p=   534 | acc=0 sw=0 vld=1 en=1 exp 3382 got 534
+[MISMATCH] #177 @1800000 w=  1106 a= -1220 p=  1231 | acc=0 sw=0 vld=1 en=1 exp 5343 got 1231
+[MISMATCH] #179 @1820000 w= -1212 a=  1339 p=  1598 | acc=0 sw=1 vld=1 en=1 exp -2916 got 1598
+[MISMATCH] #180 @1830000 w=   148 a=  -358 p= -1262 | acc=0 sw=0 vld=1 en=1 exp -56 got -1262
+[MISMATCH] #181 @1840000 w=   703 a=  1159 p=   269 | acc=0 sw=0 vld=1 en=1 exp -3639 got 269
+[MISMATCH] #182 @1850000 w= -1358 a= -1636 p=  1422 | acc=1 sw=0 vld=1 en=0 exp -3639 got 269
+[MISMATCH] #184 @1870000 w=  -159 a= -1032 p=  1305 | acc=0 sw=0 vld=1 en=1 exp 4783 got 1305
+[MISMATCH] #185 @1880000 w=   151 a=  1486 p=   302 | acc=0 sw=0 vld=1 en=1 exp -4708 got 302
+[MISMATCH] #186 @1890000 w= -1405 a= -1996 p=  1374 | acc=0 sw=0 vld=1 en=1 exp 8102 got 1374
+[MISMATCH] #187 @1900000 w=   873 a=  1209 p=  -508 | acc=0 sw=0 vld=1 en=1 exp -4584 got -508
+[MISMATCH] #188 @1910000 w=   807 a= -1587 p= -1745 | acc=0 sw=0 vld=1 en=1 exp 3604 got -1745
+[MISMATCH] #189 @1920000 w= -1504 a=  1112 p= -1767 | acc=1 sw=0 vld=1 en=1 exp -5516 got -1767
+[MISMATCH] #190 @1930000 w=  -443 a=   675 p=   884 | acc=0 sw=0 vld=1 en=1 exp -1392 got -3082
+[MISMATCH] #191 @1940000 w=  -251 a= -1878 p=  1692 | acc=0 sw=0 vld=1 en=1 exp 8022 got 12725
+[MISMATCH] #197 @2000000 w= -1221 a= -1465 p= -1797 | acc=0 sw=0 vld=1 en=1 exp 6809 got -1797
+[MISMATCH] #198 @2010000 w=    79 a=   209 p=  1518 | acc=0 sw=1 vld=1 en=1 exp 290 got 1518
+[MISMATCH] #199 @2020000 w= -1258 a=  1193 p=  1908 | acc=0 sw=1 vld=1 en=1 exp -5101 got 1908
+[MISMATCH] #200 @2030000 w=   171 a= -1989 p=  1854 | acc=0 sw=0 vld=1 en=0 exp -5101 got 1908
+[MISMATCH] #201 @2040000 w=  1666 a= -1539 p=   952 | acc=1 sw=0 vld=1 en=1 exp 9993 got 952
+[MISMATCH] #202 @2050000 w=  1315 a=    59 p=  1055 | acc=1 sw=0 vld=1 en=1 exp 708 got 1438
+[MISMATCH] #203 @2060000 w=  1065 a= -1538 p=  -515 | acc=0 sw=0 vld=1 en=1 exp 8520 got -8416
+[MISMATCH] #204 @2070000 w= -1315 a= -1720 p= -1574 | acc=0 sw=0 vld=1 en=0 exp 8520 got -8416
+[MISMATCH] #205 @2080000 w=  1103 a= -1643 p=  1826 | acc=0 sw=0 vld=1 en=1 exp 11478 got 1826
+[MISMATCH] #206 @2090000 w= -1256 a=  1572 p= -1901 | acc=0 sw=0 vld=1 en=1 exp -11137 got -1901
+[MISMATCH] #207 @2100000 w=   877 a=  1323 p=  -653 | acc=0 sw=0 vld=1 en=1 exp -8426 got -653
+[MISMATCH] #208 @2110000 w= -1620 a=   -52 p=   326 | acc=0 sw=0 vld=1 en=0 exp -8426 got -653
+[MISMATCH] #210 @2130000 w=   679 a=  1033 p= -1055 | acc=0 sw=0 vld=1 en=1 exp -7124 got -1055
+[MISMATCH] #212 @2150000 w=  1158 a= -1698 p=  1650 | acc=0 sw=0 vld=1 en=1 exp 11625 got 1650
+[MISMATCH] #213 @2160000 w= -1292 a=   349 p=  1837 | acc=0 sw=0 vld=1 en=1 exp -214 got 1837
+[MISMATCH] #214 @2170000 w=  -825 a=   745 p=  1730 | acc=0 sw=0 vld=1 en=1 exp -2647 got 1730
+[MISMATCH] #215 @2180000 w=   289 a= -1048 p=  1096 | acc=1 sw=0 vld=1 en=1 exp 7253 got 1096
+[MISMATCH] #216 @2190000 w= -1546 a= -1600 p=  1717 | acc=0 sw=0 vld=1 en=1 exp 11117 got -90
+[MISMATCH] #217 @2200000 w=  1556 a=    36 p=  1021 | acc=0 sw=0 vld=1 en=1 exp 809 got 1061
+[MISMATCH] #224 @2270000 w= -1683 a=  1770 p= -1862 | acc=0 sw=0 vld=1 en=1 exp 136 got 4312
+[MISMATCH] #225 @2280000 w=  -455 a= -1074 p=   157 | acc=1 sw=0 vld=1 en=1 exp -1056 got -3590
+[MISMATCH] #226 @2290000 w=   548 a=  1327 p= -1331 | acc=1 sw=0 vld=1 en=1 exp 167 got -3690
+[MISMATCH] #227 @2300000 w=  -726 a=   726 p=  1160 | acc=0 sw=0 vld=1 en=1 exp 1979 got 2714
+[MISMATCH] #228 @2310000 w=  1886 a=  1145 p=  1527 | acc=0 sw=0 vld=1 en=1 exp 2819 got 3978
+[MISMATCH] #230 @2330000 w= -1336 a=   -64 p= -1948 | acc=0 sw=0 vld=1 en=1 exp -2021 got -1709
+[MISMATCH] #231 @2340000 w=  -437 a=  1939 p=   355 | acc=0 sw=0 vld=1 en=1 exp 2543 got -6902
+[MISMATCH] #232 @2350000 w= -1959 a=  -965 p= -1892 | acc=0 sw=0 vld=1 en=1 exp -2982 got 1719
+[MISMATCH] #233 @2360000 w=   673 a= -1126 p=    77 | acc=0 sw=0 vld=1 en=1 exp -1195 got 4290
+[MISMATCH] #234 @2370000 w=  -134 a=   818 p=   461 | acc=0 sw=0 vld=1 en=1 exp 1384 got -2601
+[MISMATCH] #235 @2380000 w=    95 a=  -360 p= -1934 | acc=0 sw=0 vld=1 en=1 exp -2341 got -587
+[MISMATCH] #236 @2390000 w=   546 a= -1225 p=  -398 | acc=0 sw=0 vld=1 en=1 exp -1781 got 4186
+[MISMATCH] #237 @2400000 w=  2023 a=   198 p= -1813 | acc=0 sw=0 vld=1 en=1 exp -1590 got -2554
+[MISMATCH] #238 @2410000 w=    41 a= -1422 p= -1139 | acc=0 sw=0 vld=1 en=1 exp -2745 got 4182
+[MISMATCH] #239 @2420000 w= -1021 a=  1134 p= -1260 | acc=1 sw=0 vld=1 en=1 exp 20 got -5504
+[MISMATCH] #241 @2440000 w=  1982 a=  -269 p=    21 | acc=0 sw=0 vld=1 en=1 exp -283 got 1093
+[MISMATCH] #242 @2450000 w= -1932 a=  -610 p=  1949 | acc=0 sw=0 vld=1 en=1 exp 1260 got 4381
+[MISMATCH] #243 @2460000 w=  1885 a=   102 p=  1376 | acc=0 sw=0 vld=1 en=1 exp 1491 got 969
+[MISMATCH] #245 @2480000 w=   554 a=   964 p= -2010 | acc=1 sw=0 vld=1 en=1 exp -922 got -9112
+[MISMATCH] #246 @2490000 w=  -975 a=  1101 p= -1702 | acc=0 sw=0 vld=1 en=1 exp -460 got 680
+[MISMATCH] #247 @2500000 w=   394 a=   215 p= -1776 | acc=0 sw=0 vld=1 en=1 exp -1534 got -1311
+[MISMATCH] #248 @2510000 w= -1437 a= -1641 p=   420 | acc=0 sw=0 vld=1 en=1 exp -1433 got -3132
+[MISMATCH] #249 @2520000 w=  1999 a=   632 p=  -405 | acc=0 sw=0 vld=0 en=0 exp -1433 got -3132
+[MISMATCH] #250 @2530000 w=  -922 a=  1348 p=  1276 | acc=0 sw=0 vld=1 en=1 exp 2797 got 1276
+[MISMATCH] #253 @2560000 w= -1957 a= -1155 p=  1999 | acc=1 sw=0 vld=1 en=1 exp 695 got 1999
+[MISMATCH] #273 @2760000 w= -1830 a=  1835 p=     1 | acc=0 sw=0 vld=1 en=1 exp -14027 got -243
+[MISMATCH] #274 @2770000 w= -1077 a= -1533 p= -1823 | acc=0 sw=0 vld=1 en=1 exp 9896 got -1620
+[MISMATCH] #275 @2780000 w= -1751 a=  1269 p=  1949 | acc=0 sw=0 vld=1 en=0 exp 9896 got -1620
+[MISMATCH] #276 @2790000 w=   538 a=  -506 p=  1650 | acc=0 sw=0 vld=1 en=1 exp 5518 got 1650
+[MISMATCH] #278 @2810000 w=  1570 a=  1558 p=  1965 | acc=0 sw=0 vld=1 en=1 exp -9946 got 1965
+[MISMATCH] #281 @2840000 w=  -942 a= -1245 p=  1226 | acc=1 sw=0 vld=1 en=1 exp 10869 got 5812
+[MISMATCH] #282 @2850000 w=   754 a=  -734 p=  1246 | acc=0 sw=0 vld=1 en=1 exp 6931 got 3946
+[MISMATCH] #283 @2860000 w=  -250 a= -1143 p=  1057 | acc=0 sw=0 vld=1 en=0 exp 6931 got 3946
+[MISMATCH] #284 @2870000 w= -1178 a= -1089 p=  1889 | acc=0 sw=0 vld=1 en=1 exp 10324 got 1889
+[MISMATCH] #285 @2880000 w= -1510 a=  1762 p=   398 | acc=1 sw=0 vld=1 en=1 exp -13251 got 398
+[MISMATCH] #286 @2890000 w= -1854 a= -1790 p= -1463 | acc=1 sw=0 vld=1 en=1 exp 12402 got 9095
+[MISMATCH] #287 @2900000 w=   231 a=  1856 p= -1234 | acc=0 sw=0 vld=1 en=1 exp -15611 got -14676
+[MISMATCH] #288 @2910000 w=   -14 a=  1163 p= -1167 | acc=0 sw=0 vld=1 en=1 exp -10176 got -9590
+[MISMATCH] #289 @2920000 w=  -842 a=  -362 p=  -108 | acc=1 sw=0 vld=1 en=1 exp 2696 got 2513
+[MISMATCH] #290 @2930000 w=   879 a=  1723 p=  1211 | acc=1 sw=0 vld=1 en=1 exp -12136 got -4457
+[MISMATCH] #291 @2940000 w= -1399 a= -1182 p=  -572 | acc=1 sw=0 vld=1 en=1 exp 8583 got -4631
+[MISMATCH] #292 @2950000 w=  -355 a=  -372 p=  -126 | acc=1 sw=0 vld=1 en=1 exp 2755 got 1906
+[MISMATCH] #293 @2960000 w=  -331 a=  -898 p=  -794 | acc=0 sw=0 vld=1 en=1 exp 6161 got 451
+[MISMATCH] #294 @2970000 w= -1918 a=  -549 p=   388 | acc=0 sw=0 vld=1 en=1 exp 4640 got 1149
+[MISMATCH] #295 @2980000 w=   132 a= -1281 p=   207 | acc=1 sw=0 vld=0 en=0 exp 4640 got 1149
+[MISMATCH] #296 @2990000 w=  -433 a=  1596 p= -1912 | acc=0 sw=0 vld=1 en=1 exp -14275 got -1912
+[MISMATCH] #297 @3000000 w=  1828 a=   873 p= -1748 | acc=0 sw=0 vld=1 en=1 exp -8511 got -1748
+[MISMATCH] #299 @3020000 w= -1734 a=  1932 p=  1340 | acc=0 sw=0 vld=1 en=1 exp -13626 got 1340
+[MISMATCH] #300 @3030000 w= -1747 a=   304 p=    93 | acc=0 sw=0 vld=1 en=1 exp -2262 got 93
+[MISMATCH] #302 @3050000 w= -1171 a=  1895 p= -1674 | acc=0 sw=0 vld=1 en=1 exp -4302 got -1674
+[MISMATCH] #303 @3060000 w=  1795 a= -1867 p= -1527 | acc=0 sw=0 vld=1 en=1 exp 1062 got -1527
+[MISMATCH] #304 @3070000 w= -2038 a=  1614 p= -1269 | acc=0 sw=0 vld=1 en=1 exp -3508 got -1269
+[MISMATCH] #305 @3080000 w=   -83 a=  -817 p= -1872 | acc=0 sw=1 vld=1 en=1 exp -740 got -1872
+[MISMATCH] #306 @3090000 w=   681 a= -1304 p=  -842 | acc=1 sw=0 vld=1 en=0 exp -740 got -1872
+[MISMATCH] #308 @3110000 w= -1323 a=   -68 p=  -473 | acc=1 sw=0 vld=1 en=1 exp -379 got -473
+[MISMATCH] #309 @3120000 w=   822 a=  -735 p=  -343 | acc=0 sw=0 vld=1 en=1 exp 676 got 3455
+[MISMATCH] #310 @3130000 w=    43 a=   503 p= -1421 | acc=0 sw=0 vld=1 en=1 exp -2119 got -4021
+[MISMATCH] #313 @3160000 w=  1616 a= -1875 p=  1132 | acc=1 sw=0 vld=1 en=1 exp 10821 got 1132
+[MISMATCH] #314 @3170000 w= -1529 a=   370 p=   940 | acc=1 sw=0 vld=1 en=1 exp -973 got 3275
+[MISMATCH] #316 @3190000 w= -1418 a=  1693 p=  1120 | acc=1 sw=0 vld=1 en=1 exp -7630 got -8992
+[MISMATCH] #317 @3200000 w=   -63 a=   706 p=  1831 | acc=0 sw=0 vld=1 en=0 exp -7630 got -8992
+[MISMATCH] #319 @3220000 w=  -973 a=   118 p=  -517 | acc=0 sw=0 vld=1 en=1 exp -1171 got -517
+[MISMATCH] #320 @3230000 w=  1041 a= -1335 p=  1666 | acc=0 sw=0 vld=1 en=1 exp 9060 got 1666
+[MISMATCH] #322 @3250000 w=  1673 a=  1468 p=  -316 | acc=0 sw=0 vld=1 en=1 exp -8448 got -316
+[MISMATCH] #323 @3260000 w=  -960 a=   724 p=  -904 | acc=1 sw=0 vld=1 en=1 exp -4915 got -904
+[MISMATCH] #325 @3280000 w=  -269 a=  -723 p=  1491 | acc=0 sw=0 vld=1 en=1 exp 5495 got 5303
+[MISMATCH] #328 @3310000 w=   -19 a=  -787 p=   -47 | acc=0 sw=0 vld=1 en=1 exp 4103 got 3220
+[MISMATCH] #329 @3320000 w=  -580 a=  -649 p=  -982 | acc=0 sw=0 vld=1 en=1 exp 2440 got 1712
+[MISMATCH] #331 @3340000 w=  -515 a= -1144 p= -1241 | acc=1 sw=0 vld=1 en=1 exp 3509 got 3875
+[MISMATCH] #332 @3350000 w=   367 a=  -977 p=  -351 | acc=0 sw=0 vld=1 en=1 exp 3705 got 1614
+[MISMATCH] #333 @3360000 w= -1160 a=  1123 p=   638 | acc=0 sw=0 vld=1 en=1 exp -4026 got -1622
+[MISMATCH] #334 @3370000 w=   317 a=  -763 p=   797 | acc=0 sw=0 vld=1 en=0 exp -4026 got -1622
+[MISMATCH] #335 @3380000 w=  -911 a=  -515 p=   890 | acc=0 sw=1 vld=1 en=0 exp -4026 got -1622
+[MISMATCH] #337 @3400000 w= -1016 a=  -460 p=   820 | acc=0 sw=0 vld=1 en=1 exp 2730 got 820
+[MISMATCH] #338 @3410000 w=  -142 a=   710 p=    90 | acc=0 sw=0 vld=1 en=1 exp -2859 got 90
+[MISMATCH] #339 @3420000 w= -1478 a=  1795 p=  1755 | acc=0 sw=0 vld=1 en=1 exp -5699 got 1755
+[MISMATCH] #341 @3440000 w=   571 a=  1494 p=  -408 | acc=0 sw=0 vld=1 en=1 exp -6612 got -408
+[MISMATCH] #342 @3450000 w=   848 a=   414 p=  -845 | acc=0 sw=0 vld=1 en=1 exp -2565 got -845
+[MISMATCH] #343 @3460000 w=  -129 a=  1750 p=  1737 | acc=1 sw=0 vld=1 en=1 exp -5530 got 1737
+[MISMATCH] #344 @3470000 w=  1041 a=  1283 p=  1865 | acc=0 sw=0 vld=1 en=1 exp -3463 got 1218
+[MISMATCH] #349 @3520000 w=  1467 a=  1091 p=   995 | acc=0 sw=0 vld=1 en=1 exp 445 got 995
+[MISMATCH] #350 @3530000 w= -1647 a=  1169 p=   881 | acc=0 sw=0 vld=1 en=1 exp 291 got 881
+[MISMATCH] #352 @3550000 w= -1903 a=  1856 p=   912 | acc=0 sw=0 vld=1 en=1 exp -24 got 912
+[MISMATCH] #353 @3560000 w= -1540 a=  -665 p=   393 | acc=1 sw=0 vld=1 en=1 exp 728 got 393
+[MISMATCH] #356 @3590000 w=  1760 a=  1750 p=  1790 | acc=0 sw=0 vld=1 en=1 exp 908 got 1790
+[MISMATCH] #358 @3610000 w=  -480 a=  1215 p=  -526 | acc=1 sw=1 vld=1 en=1 exp -7835 got -526
+[MISMATCH] #366 @3690000 w=  1310 a=  1392 p=   934 | acc=1 sw=0 vld=1 en=1 exp -1676 got 934
+[MISMATCH] #367 @3700000 w=   673 a= -1690 p=  -167 | acc=1 sw=0 vld=1 en=1 exp 3001 got -8816
+[MISMATCH] #368 @3710000 w= -1924 a=  -654 p=   -11 | acc=1 sw=0 vld=1 en=1 exp 1215 got -1731
+[MISMATCH] #369 @3720000 w=   937 a=  1085 p=  1266 | acc=1 sw=0 vld=1 en=1 exp -769 got -6889
+[MISMATCH] #370 @3730000 w=  1840 a=   270 p=   -79 | acc=0 sw=0 vld=1 en=1 exp -586 got 909
+[MISMATCH] #376 @3790000 w=   388 a=  1686 p=    39 | acc=1 sw=0 vld=1 en=1 exp 6210 got 39
+[MISMATCH] #377 @3800000 w=   263 a= -1384 p= -1258 | acc=0 sw=0 vld=1 en=1 exp -6324 got -3356
+[MISMATCH] #378 @3810000 w= -1312 a=  1998 p=  -660 | acc=0 sw=0 vld=1 en=1 exp 6652 got 2368
+[MISMATCH] #379 @3820000 w=   899 a=   759 p=  -425 | acc=0 sw=0 vld=1 en=1 exp 2353 got 725
+[MISMATCH] #380 @3830000 w=  1202 a=   436 p=   688 | acc=0 sw=0 vld=1 en=1 exp 2283 got 1348
+[MISMATCH] #385 @3880000 w=  -523 a= -1058 p= -1235 | acc=0 sw=0 vld=1 en=1 exp -2839 got -5906
+[MISMATCH] #386 @3890000 w= -1953 a= -2019 p= -1289 | acc=0 sw=0 vld=1 en=0 exp -2839 got -5906
+[MISMATCH] #387 @3900000 w=  -331 a=  -560 p=  -448 | acc=0 sw=0 vld=1 en=1 exp -1297 got -448
+[MISMATCH] #390 @3930000 w=  -918 a=  -874 p=  -165 | acc=0 sw=0 vld=1 en=1 exp -4023 got -165
+[MISMATCH] #394 @3970000 w=  1988 a=  -507 p=  1562 | acc=0 sw=0 vld=1 en=1 exp -676 got 1562
+[MISMATCH] #395 @3980000 w=  1602 a=   844 p= -1867 | acc=0 sw=0 vld=1 en=1 exp 1858 got -1867
+[MISMATCH] #396 @3990000 w=  1221 a=   891 p=  -230 | acc=0 sw=0 vld=1 en=0 exp 1858 got -1867
+[MISMATCH] #397 @4000000 w= -2039 a=  1107 p= -1851 | acc=1 sw=0 vld=1 en=0 exp 1858 got -1867
+[MISMATCH] #399 @4020000 w=   760 a=   785 p= -1086 | acc=0 sw=1 vld=1 en=1 exp 2379 got -1086
+[MISMATCH] #400 @4030000 w=  -147 a=  1153 p= -1524 | acc=0 sw=0 vld=1 en=0 exp 2379 got -1086
+[MISMATCH] #401 @4040000 w=  1486 a=  -369 p=   836 | acc=0 sw=0 vld=1 en=1 exp -793 got 836
+[MISMATCH] #402 @4050000 w=   -35 a=  1289 p= -1104 | acc=0 sw=1 vld=1 en=1 exp 4585 got -1104
+[MISMATCH] #403 @4060000 w= -1442 a= -1275 p=   952 | acc=0 sw=0 vld=1 en=1 exp -4676 got 952
+[MISMATCH] #404 @4070000 w=  -276 a=  -398 p=  1902 | acc=0 sw=0 vld=1 en=1 exp 145 got 1902
+[MISMATCH] #406 @4090000 w=  -232 a=  1758 p= -1904 | acc=0 sw=0 vld=1 en=1 exp 5855 got -1904
+[MISMATCH] #407 @4100000 w= -1440 a=   303 p= -1076 | acc=0 sw=1 vld=1 en=1 exp 261 got -1076
+[MISMATCH] #408 @4110000 w=  1141 a=  -280 p= -1086 | acc=0 sw=0 vld=1 en=1 exp -2322 got -1086
+[MISMATCH] #409 @4120000 w=  1657 a=  1835 p=  -350 | acc=0 sw=0 vld=1 en=1 exp 7749 got -350
+[MISMATCH] #410 @4130000 w=  1639 a=  -965 p= -1493 | acc=0 sw=0 vld=1 en=1 exp -5753 got -1493
+[MISMATCH] #411 @4140000 w=  1712 a=  -848 p= -1670 | acc=1 sw=0 vld=1 en=1 exp -5414 got -1670
+[MISMATCH] #424 @4270000 w= -1064 a=  1649 p=   145 | acc=0 sw=0 vld=1 en=1 exp 11172 got 145
+[MISMATCH] #425 @4280000 w=  -862 a= -1066 p= -1992 | acc=0 sw=0 vld=1 en=1 exp -9121 got -1992
+[MISMATCH] #426 @4290000 w=   712 a=  1585 p=   405 | acc=0 sw=0 vld=1 en=1 exp 11004 got 405
+[MISMATCH] #430 @4330000 w=  1295 a= -1515 p=  -394 | acc=0 sw=1 vld=1 en=1 exp -10526 got -394
+[MISMATCH] #431 @4340000 w=  -999 a=   645 p= -1186 | acc=0 sw=0 vld=1 en=1 exp 3127 got -1186
+[MISMATCH] #432 @4350000 w= -1157 a=  1632 p=  1348 | acc=0 sw=0 vld=1 en=1 exp 12262 got 1348
+[MISMATCH] #433 @4360000 w=  1182 a=  1990 p=  1439 | acc=0 sw=1 vld=1 en=0 exp 12262 got 1348
+[MISMATCH] #434 @4370000 w=  -740 a=  1471 p=  1622 | acc=0 sw=0 vld=1 en=1 exp 11459 got 1622
+[MISMATCH] #435 @4380000 w= -1384 a=  -470 p=  1387 | acc=0 sw=1 vld=1 en=1 exp -1757 got 1387
+[MISMATCH] #436 @4390000 w=  1234 a=  -803 p=   693 | acc=0 sw=0 vld=1 en=1 exp -4678 got 693
+[MISMATCH] #437 @4400000 w=  -557 a=  1442 p=   871 | acc=1 sw=0 vld=1 en=1 exp 10514 got 871
+[MISMATCH] #438 @4410000 w=  -819 a=   858 p=   193 | acc=0 sw=0 vld=1 en=1 exp 5930 got -1674
+[MISMATCH] #439 @4420000 w= -1431 a= -1161 p=   844 | acc=0 sw=0 vld=1 en=1 exp -6921 got 3370
+[MISMATCH] #441 @4440000 w=   351 a= -1390 p=  1258 | acc=0 sw=0 vld=1 en=1 exp -8038 got 4282
+[MISMATCH] #443 @4460000 w= -1227 a=  1157 p=  1158 | acc=0 sw=0 vld=1 en=1 exp 8895 got -1360
+[MISMATCH] #444 @4470000 w=  -165 a=  1735 p= -1567 | acc=1 sw=0 vld=0 en=0 exp 8895 got -1360
+[MISMATCH] #445 @4480000 w=   256 a=  -173 p=  -200 | acc=0 sw=0 vld=1 en=1 exp -1357 got -200
+[MISMATCH] #446 @4490000 w=  -703 a=   693 p=  -938 | acc=0 sw=1 vld=1 en=1 exp -2446 got -938
+[MISMATCH] #447 @4500000 w=   841 a=  1913 p= -1640 | acc=0 sw=0 vld=1 en=1 exp -5803 got -1640
+[MISMATCH] #449 @4520000 w=   225 a=  -862 p=  1325 | acc=0 sw=0 vld=1 en=1 exp 3200 got 1325
+[MISMATCH] #450 @4530000 w=  1220 a=  -816 p=   886 | acc=1 sw=0 vld=1 en=1 exp 2661 got 886
+[MISMATCH] #451 @4540000 w=   535 a= -1097 p=   479 | acc=0 sw=0 vld=1 en=1 exp 2865 got -4749
+[MISMATCH] #452 @4550000 w=  1372 a= -1915 p= -1425 | acc=0 sw=0 vld=1 en=1 exp 2741 got -10552
+[MISMATCH] #453 @4560000 w= -1370 a=  -426 p=  1219 | acc=1 sw=0 vld=1 en=1 exp 2145 got -812
+[MISMATCH] #454 @4570000 w= -1217 a= -1460 p=  1056 | acc=0 sw=0 vld=1 en=1 exp 4232 got 8869
+[MISMATCH] #455 @4580000 w=  1230 a=  -390 p=  -391 | acc=1 sw=0 vld=1 en=0 exp 4232 got 8869
+[MISMATCH] #457 @4600000 w=   326 a= -2043 p=  1176 | acc=1 sw=0 vld=1 en=1 exp 5621 got 1176
+[MISMATCH] #462 @4650000 w=  -331 a=   775 p=  -462 | acc=0 sw=0 vld=1 en=1 exp 524 got -5667
+[MISMATCH] #463 @4660000 w=  -970 a=   621 p= -1248 | acc=1 sw=1 vld=1 en=0 exp 524 got -5667
+[MISMATCH] #464 @4670000 w=   376 a=  1846 p=   915 | acc=0 sw=0 vld=1 en=1 exp 3265 got 915
+[MISMATCH] #465 @4680000 w=  1428 a=  -136 p=  1656 | acc=0 sw=0 vld=1 en=1 exp 1482 got 1656
+[MISMATCH] #466 @4690000 w= -1589 a= -1407 p=  1189 | acc=1 sw=0 vld=1 en=1 exp -603 got 1189
+[MISMATCH] #467 @4700000 w=  -132 a=   729 p=   487 | acc=0 sw=0 vld=1 en=1 exp 1415 got -4038
+[MISMATCH] #468 @4710000 w= -1886 a=  -557 p=  -853 | acc=0 sw=0 vld=1 en=0 exp 1415 got -4038
+[MISMATCH] #469 @4720000 w=  -930 a=  1860 p=  1278 | acc=0 sw=0 vld=1 en=0 exp 1415 got -4038
+[MISMATCH] #470 @4730000 w= -1574 a=  1358 p=  1483 | acc=0 sw=1 vld=1 en=1 exp -6947 got 1483
+[MISMATCH] #471 @4740000 w=  -215 a=  1002 p= -1252 | acc=0 sw=0 vld=1 en=0 exp -6947 got 1483
+[MISMATCH] #472 @4750000 w=  1897 a= -1322 p=   915 | acc=1 sw=0 vld=1 en=1 exp 9120 got 915
+[MISMATCH] #473 @4760000 w=  2042 a=  1093 p= -1499 | acc=0 sw=0 vld=1 en=1 exp -8284 got 6600
+[MISMATCH] #474 @4770000 w= -1160 a=  1009 p=  -150 | acc=1 sw=0 vld=1 en=1 exp -6413 got 7326
+[MISMATCH] #475 @4780000 w= -1416 a=   474 p=   335 | acc=0 sw=0 vld=1 en=1 exp -2608 got -1813
+[MISMATCH] #476 @4790000 w=  -590 a=   297 p=   833 | acc=0 sw=0 vld=1 en=0 exp -2608 got -1813
+[MISMATCH] #477 @4800000 w=  -271 a=   589 p=  -183 | acc=0 sw=0 vld=1 en=1 exp -3839 got -183
+[MISMATCH] #478 @4810000 w=  1316 a=   812 p= -1837 | acc=0 sw=0 vld=1 en=1 exp -6878 got -1837
+[MISMATCH] #479 @4820000 w=   520 a= -1095 p=  2027 | acc=0 sw=0 vld=1 en=1 exp 8823 got 2027
+[MISMATCH] #480 @4830000 w= -1950 a=   379 p=  -402 | acc=1 sw=0 vld=1 en=1 exp -2755 got -402
+[MISMATCH] #481 @4840000 w= -1973 a=   213 p=   -81 | acc=0 sw=0 vld=1 en=1 exp -1404 got -1704
+[MISMATCH] #497 @5000000 w= -1874 a=  -296 p= -1940 | acc=0 sw=0 vld=1 en=1 exp 314 got -1940
+[MISMATCH] #498 @5010000 w= -1014 a=  1284 p=   373 | acc=0 sw=0 vld=1 en=1 exp -9408 got 373
+[MISMATCH] #499 @5020000 w=  1394 a=  1998 p=   449 | acc=1 sw=0 vld=1 en=1 exp -14771 got 449
+[MISMATCH] #500 @5030000 w= -1218 a=  1424 p=   393 | acc=0 sw=0 vld=1 en=1 exp -10454 got 8147
+
+=======================================================
+ checked : 500
+ errors  : 308
+ coverage: xmsim: *N,COVNSM: (File: ./pe_tb.sv, Line: 250):(Time: 5030 NS + 0) Sampling of covergroup type "cg" (./pe_tb.sv:196), referred in the statement is not enabled. As a result, coverage methods get_coverage(), get_inst_coverage(), get_hitcount(), and get_inst_hitcount() will return 0 coverage.
+0.0%
+=======================================================
+ FAIL
+
+Simulation complete via $finish(1) at time 5030 NS + 0
+./pe_tb.sv:255     $finish;
+xcelium> exit
+TOOL:	xrun(64)	24.03-s013: Exiting on Nov 04, 2026 at 02:02:48 PST  (total: 00:00:03)

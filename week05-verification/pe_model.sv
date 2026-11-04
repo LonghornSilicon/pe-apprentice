@@ -31,6 +31,7 @@ class pe_model;
   // real PE carries.
   bit signed [DW-1:0] weight_bg;    // background, loaded but not in use
   bit signed [DW-1:0] weight_fg;    // foreground, what the multiplier reads
+  bit signed [DW-1:0] psum_q;
 
   // ----------------------------------------------------------------------
   // Given: Q8.8 arithmetic that matches rtl/fxp.sv exactly.
@@ -58,6 +59,7 @@ class pe_model;
   function void reset();
     weight_bg = '0;
     weight_fg = '0;
+    psum_q = '0;
   endfunction
 
   // ----------------------------------------------------------------------
@@ -83,8 +85,13 @@ class pe_model;
   // weight_bg before you use it you have modelled a PE that does not exist.
   // ----------------------------------------------------------------------
   function bit signed [DW-1:0] step(pe_txn t);
-    // your code
-    return '0;
+    bit signed [DW-1:0] w_mult;
+    if (!t.enabled) return psum_q;
+    w_mult = t.switch ? weight_bg : weight_fg;
+    psum_q = t.valid ? q_add(q_mul(t.activation, w_mult), t.psum_in) : '0;
+    if (t.switch)   weight_fg = weight_bg;
+    if (t.accept_w) weight_bg = t.weight;
+    return psum_q;
   endfunction
 
 endclass

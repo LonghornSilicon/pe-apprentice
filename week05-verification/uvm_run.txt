@@ -1,0 +1,105 @@
+TOOL:	xrun(64)	24.03-s013: Started on Nov 04, 2026 at 01:53:15 PST
+xrun(64): 24.03-s013: (c) Copyright 1995-2025 Cadence Design Systems, Inc.
+Recompiling... reason: file './uvm/pe_uvm_tb.sv' is newer than expected.
+	expected: Wed Nov  4 01:50:40 2026
+	actual:   Wed Nov  4 01:53:15 2026
+Compiling UVM packages (uvm_pkg.sv cdns_uvm_pkg.sv) using uvmhome location /apps/XCELIUM2403/24.03.013/tools/methodology/UVM/CDNS-1.1d
+file: uvm/pe_uvm_tb.sv
+	module worklib.pe_uvm_tb:sv
+		errors: 0, warnings: 0
+		Caching library 'worklib' ....... Done
+	Elaborating the design hierarchy:
+	Top level design units:
+		uvm_pkg
+		cdns_uvmapi
+		cdns_assert2uvm_pkg
+		cdns_uvm_pkg
+		$unit_0x0223a967
+		pe_uvm_tb
+	Building instance overlay tables: .................... Done
+	Generating native compiled code:
+		worklib.fxp_add:sv <0x025bf63e>
+			streams:   3, words:   732
+		worklib.fxp_mul:sv <0x1e7e666a>
+			streams:   2, words:   587
+		worklib.pe:sv <0x2848540e>
+			streams:  11, words:  4260
+		worklib.pe_if:sv <0x180dcf82>
+			streams: 534, words: 564203
+	Building instance specific data structures.
+	Loading native compiled code:     .................... Done
+	Design hierarchy summary:
+		                        Instances  Unique
+		Modules:                        4       4
+		Interfaces:                     1       1
+		Verilog packages:               4       4
+		Registers:                 13,920  10,199
+		Scalar wires:                  13       -
+		Vectored wires:                17       -
+		Named events:                   4      12
+		Always blocks:                  4       4
+		Initial blocks:               278     154
+		Parallel blocks:               26      27
+		Cont. assignments:              5       6
+		Pseudo assignments:            18       -
+		Assertions:                     3       3
+		Compilation units:              1       1
+		SV Class declarations:        199     312
+		SV Class specializations:     380     380
+		Process Clocks:                 1       1
+		Simulation timescale:         1ps
+	Writing initial simulation snapshot: worklib.pe_uvm_tb:sv
+Loading snapshot worklib.pe_uvm_tb:sv .................... Done
+SVSEED default: 1
+xcelium> source /apps/XCELIUM2403/24.03.013/tools/xcelium/files/xmsimrc
+xcelium> source /apps/XCELIUM2403/24.03.013/tools/methodology/UVM/CDNS-1.1d/additions/sv/files/tcl/uvm_sim.tcl
+xcelium> run
+----------------------------------------------------------------
+CDNS-UVM-1.1d (24.03-s013)
+(C) 2007-2013 Mentor Graphics Corporation
+(C) 2007-2013 Cadence Design Systems, Inc.
+(C) 2006-2013 Synopsys, Inc.
+(C) 2011-2013 Cypress Semiconductor Corp.
+----------------------------------------------------------------
+
+  ***********       IMPORTANT RELEASE NOTES         ************
+
+  You are using a version of the UVM library that has been compiled
+  with `UVM_NO_DEPRECATED undefined.
+  See http://www.eda.org/svdb/view.php?id=3313 for more details.
+
+  You are using a version of the UVM library that has been compiled
+  with `UVM_OBJECT_MUST_HAVE_CONSTRUCTOR undefined.
+  See http://www.eda.org/svdb/view.php?id=3770 for more details.
+
+      (Specify +UVM_NO_RELNOTES to turn off this notice)
+
+UVM_INFO @ 0: reporter [RNTST] Running test pe_test...
+UVM_INFO /apps/XCELIUM2403/24.03.013/tools/methodology/UVM/CDNS-1.1d/sv/src/base/uvm_objection.svh(1268) @ 5220000: reporter [TEST_DONE] 'run' phase is ready to proceed to the 'extract' phase
+UVM_INFO uvm/pe_uvm_tb.sv(256) @ 5220000: uvm_test_top.env.scb [SCB] checked 522, errors 0
+
+--- UVM Report catcher Summary ---
+
+
+Number of demoted UVM_FATAL reports  :    0
+Number of demoted UVM_ERROR reports  :    0
+Number of demoted UVM_WARNING reports:    0
+Number of caught UVM_FATAL reports   :    0
+Number of caught UVM_ERROR reports   :    0
+Number of caught UVM_WARNING reports :    0
+
+--- UVM Report Summary ---
+
+** Report counts by severity
+UVM_INFO :    3
+UVM_WARNING :    0
+UVM_ERROR :    0
+UVM_FATAL :    0
+** Report counts by id
+[RNTST]     1
+[SCB]     1
+[TEST_DONE]     1
+Simulation complete via $finish(1) at time 5220 NS + 45
+/apps/XCELIUM2403/24.03.013/tools/methodology/UVM/CDNS-1.1d/sv/src/base/uvm_root.svh:457     $finish;
+xcelium> exit
+TOOL:	xrun(64)	24.03-s013: Exiting on Nov 04, 2026 at 01:53:19 PST  (total: 00:00:04)
